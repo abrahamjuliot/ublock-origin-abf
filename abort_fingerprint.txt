@@ -1,0 +1,136 @@
+!*****ABORT BROWSER FINGERPRINTING*****
+
+! BASIC PROTECTION ----------------------
+! Few Sites Break
+
+!#if true  
+! Plugins
+*##+js(aopr, navigator.mimeTypes)
+*##+js(aopr, navigator.plugins)
+!#endif
+
+!#if true  
+! Media
+*##+js(aopr, navigator.mediaDevices.enumerateDevices)
+*##+js(aopr, HTMLMediaElement.prototype.canPlayType)
+!#endif
+
+!#if true  
+! Audio
+*##+js(aopr, AudioBuffer.prototype.getChannelData)
+*##+js(aopr, AudioContext)
+*##+js(aopr, BaseAudioContext.prototype.createOscillator)
+!#endif
+
+!#if false  
+! Battery
+*##+js(aopr, navigator.getBattery)
+!#endif
+
+!#if false  
+! Math
+*##+js(aopr, Math.acos)
+*##+js(aopr, Math.acosh)
+*##+js(aopr, Math.asin)
+*##+js(aopr, Math.asinh)
+*##+js(aopr, Math.cosh)
+*##+js(aopr, Math.expm1)
+*##+js(aopr, Math.sinh)
+!#endif
+
+!#if false
+! Performance
+*##+js(aopr, performance.timing)
+*##+js(aopr, performance.now)
+!#endif
+
+! MODERATE PROTECTION ----------------------
+! Logins and Web Apps Break
+
+!#if false  
+! Device
+*##+js(aopr, navigator.userAgent)
+*##+js(aopr, navigator.appCodeName)
+*##+js(aopr, navigator.appName)
+*##+js(aopr, navigator.appVersion)
+*##+js(aopr, navigator.buildID)
+*##+js(aopr, navigator.language)
+*##+js(aopr, navigator.product)
+*##+js(aopr, navigator.productSub)
+!#endif
+
+!#if true
+! System
+*##+js(aopr, navigator.cpuClass)
+*##+js(aopr, navigator.deviceMemory)
+*##+js(aopr, navigator.hardwareConcurrency)
+*##+js(aopr, navigator.oscpu)
+!#endif
+
+!#if true
+! Iframes
+*##iframe:remove()
+!#endif
+
+!#if true
+! Canvas
+*##+js(aopr, HTMLCanvasElement.prototype.getContext)
+*##+js(aopr, CanvasRenderingContext2D.prototype.fillStyle)
+!#endif
+
+!#if true
+! WebGL
+*##+js(aopr, WebGLRenderingContext.prototype.shaderSource)
+!#endif
+
+!#if false
+! ClientRect
+*##+js(aopr, Element.prototype.getBoundingClientRect)
+*##+js(aopr, Element.prototype.getClientRects)
+*##+js(aopr, Range.prototype.getBoundingClientRect)
+*##+js(aopr, Range.prototype.getClientRects)
+!#endif
+
+!#if true
+! RTCPeerConnection
+*##+js(nowebrtc)
+!#endif
+
+!#if false
+! Workers
+||$csp=worker-src 'none'
+!#endif
+
+!#if false
+! Timezone
+*##+js(aopr, Date.prototype.getTimezoneOffset)
+!#endif
+
+! MAXIMUM PROTECTION ----------------------
+! Frameworks and General Site Scripts Break
+
+!#if false
+! Storage
+*##+js(aopr, localStorage)
+*##+js(aopr, Storage)
+*##+js(aopr, sessionStorage)
+*##+js(aopr, indexedDB)
+!#endif
+
+!#if false
+! Screen
+*##+js(aopr, screen.width)
+*##+js(aopr, screen.height)
+*##+js(aopr, screen.availWidth)
+*##+js(aopr, screen.availHeight)
+*##+js(aopr, innerHeight)
+*##+js(aopr, innerWidth)
+!#endif
+
+!#if false
+! Create
+*##+js(aopr, HTMLDocument.prototype.createElement)
+*##+js(aopr, DOMParser.prototype.parseFromString)
+*##+js(aopw, HTMLElement.prototype.innerHTML)
+*##+js(aopw, HTMLElement.prototype.outerHTML)
+!#endif
