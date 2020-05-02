@@ -49,22 +49,19 @@
 
 !#if false  
 ! Device
-*##+js(aopr, navigator.userAgent)
 *##+js(aopr, navigator.appCodeName)
 *##+js(aopr, navigator.appName)
 *##+js(aopr, navigator.appVersion)
 *##+js(aopr, navigator.buildID)
 *##+js(aopr, navigator.language)
-*##+js(aopr, navigator.product)
-*##+js(aopr, navigator.productSub)
+*##+js(aopr, navigator.userAgent)
 !#endif
 
-!#if true
+!#if true  
 ! System
-*##+js(aopr, navigator.cpuClass)
 *##+js(aopr, navigator.deviceMemory)
 *##+js(aopr, navigator.hardwareConcurrency)
-*##+js(aopr, navigator.oscpu)
+*##+js(aopr, navigator.platform)
 !#endif
 
 !#if true
