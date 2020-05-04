@@ -1,6 +1,6 @@
 !*****ABORT BROWSER FINGERPRINTING*****
 !#if true
-!💣 Block Iframes, RTCPeerConnection, Workers
+!💣 Block
 *##iframe:remove()
 *##+js(nowebrtc)
 ||$csp=worker-src 'none', domain=~youtube.com, google.com
