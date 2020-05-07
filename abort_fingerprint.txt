@@ -1,48 +1,18 @@
-!*****ABORT BROWSER FINGERPRINTING*****
-!#if true
+!*****Privacy Settings*****
+! chrome://flags/#freeze-user-agent
+! chrome://flags/#improved-cookie-controls
+! chrome://flags/#happiness-tracking-surveys-for-desktop-settings-privacy
+! chrome://flags/#dns-over-https
+
+! 🔒 HTTPS Everywhere
+|http:$document
+
 !💣 Block
-*##iframe:remove()
 *##+js(nowebrtc)
-||$csp=worker-src 'none', domain=~youtube.com, google.com
-*##+js(window.name-defuser)
-!#endif
-
-!#if true
-!😶 Undefined
-*##+js(set, navigator.mimeTypes, undefined)
-*##+js(set, navigator.plugins, undefined)
-*##+js(set, navigator.mediaDevices.enumerateDevices, falseFunc)
-*##+js(set, HTMLMediaElement.prototype.canPlayType, falseFunc)
-*##+js(set, speechSynthesis.getVoices, falseFunc)
-*##+js(set, Date.prototype.getTimezoneOffset, falseFunc)
-!*##+js(set, localStorage, undefined)
-!*##+js(set, sessionStorage, undefined)
-!*##+js(set, indexedDB, undefined)
-!*##+js(set, Storage, undefined)
-!#endif
-
-!#if true  
+ 
 !😡 Abort
-*##+js(aopr, navigator.deviceMemory)
-*##+js(aopr, navigator.hardwareConcurrency)
-*##+js(aopr, navigator.platform)
 *##+js(aopr, HTMLCanvasElement.prototype.toDataURL)
 *##+js(aopr, CanvasRenderingContext2D.prototype.getImageData)
 *##+js(aopr, CanvasRenderingContext2D.prototype.isPointInPath)
 *##+js(aopr, CanvasRenderingContext2D.prototype.isPointInStroke)
-*##+js(aopr, SVGTextContentElement.prototype.getComputedTextLength)
-*##+js(aopr, SVGPathElement.prototype.getTotalLength)
 *##+js(aopr, WebGLRenderingContext.prototype.shaderSource)
-*##+js(aopr, AudioBuffer.prototype.getChannelData)
-*##+js(aopr, AudioContext)
-*##+js(aopr, BaseAudioContext.prototype.createOscillator)
-*##+js(aopr, Element.prototype.getBoundingClientRect)
-*##+js(aopr, Element.prototype.getClientRects)
-*##+js(aopr, Range.prototype.getBoundingClientRect)
-*##+js(aopr, Range.prototype.getClientRects)
-*##+js(aopr, navigator.getBattery)
-!*##+js(aopr, HTMLDocument.prototype.createElement)
-!*##+js(aopr, DOMParser.prototype.parseFromString)
-!*##+js(aopw, HTMLElement.prototype.innerHTML)
-!*##+js(aopw, HTMLElement.prototype.outerHTML)
-!#endif
