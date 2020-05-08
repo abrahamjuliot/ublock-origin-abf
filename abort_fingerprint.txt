@@ -4,9 +4,9 @@
 !💣 Block
 *##iframe:remove()
 *##+js(nowebrtc)
-!||$csp=worker-src 'none'
+||$csp=worker-src 'none', domain=~youtube.com|~google.com
 *##+js(window.name-defuser)
- 
+
 !😶 Remove
 *##+js(set, navigator.appCodeName, undefined)
 *##+js(set, navigator.appName, undefined)
@@ -27,13 +27,6 @@
 *##+js(set, screen.innerWidth, undefined)
 *##+js(set, screen.colorDepth, undefined)
 *##+js(set, screen.pixelDepth, undefined)
-*##+js(set, Math.acos, undefined)
-*##+js(set, Math.acosh, undefined)
-*##+js(set, Math.asin, undefined)
-*##+js(set, Math.asinh, undefined)
-*##+js(set, Math.cosh, undefined)
-*##+js(set, Math.expm1, undefined)
-*##+js(set, Math.sinh, undefined)
 *##+js(set, Storage.prototype.key, undefined)
 *##+js(set, Storage.prototype.getItem, undefined)
 *##+js(set, Storage.prototype.setItem, undefined)
@@ -41,12 +34,12 @@
 
 !💩 False
 *##+js(set, navigator.mediaDevices.enumerateDevices, falseFunc)
-*##+js(set, HTMLMediaElement.prototype.canPlayType, falseFunc)
+!*##+js(set, HTMLMediaElement.prototype.canPlayType, falseFunc)
 *##+js(set, speechSynthesis.getVoices, falseFunc)
 *##+js(set, Date.prototype.getTimezoneOffset, falseFunc)
 *##+js(set, Intl.DateTimeFormat.prototype.resolvedOptions, falseFunc)
 *##+js(set, performance.now, falseFunc)
-
+ 
 !😡 Abort
 *##+js(aopr, HTMLCanvasElement.prototype.toDataURL)
 *##+js(aopr, CanvasRenderingContext2D.prototype.getImageData)
@@ -58,11 +51,3 @@
 *##+js(aopr, AudioBuffer.prototype.getChannelData)
 *##+js(aopr, AudioContext)
 *##+js(aopr, BaseAudioContext.prototype.createOscillator)
-!*##+js(aopr, Element.prototype.getBoundingClientRect)
-!*##+js(aopr, Element.prototype.getClientRects)
-!*##+js(aopr, Range.prototype.getBoundingClientRect)
-!*##+js(aopr, Range.prototype.getClientRects)
-!*##+js(aopr, HTMLDocument.prototype.createElement)
-!*##+js(aopr, DOMParser.prototype.parseFromString)
-!*##+js(aopw, HTMLElement.prototype.innerHTML)
-!*##+js(aopw, HTMLElement.prototype.outerHTML)
