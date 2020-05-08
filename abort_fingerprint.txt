@@ -1,18 +1,68 @@
-!*****Privacy Settings*****
-! chrome://flags/#freeze-user-agent
-! chrome://flags/#improved-cookie-controls
-! chrome://flags/#happiness-tracking-surveys-for-desktop-settings-privacy
-! chrome://flags/#dns-over-https
-
-! 🔒 HTTPS Everywhere
+!🔒 Encrypt
 |http:$document
 
 !💣 Block
+*##iframe:remove()
 *##+js(nowebrtc)
+!||$csp=worker-src 'none'
+*##+js(window.name-defuser)
  
+!😶 Remove
+*##+js(set, navigator.appCodeName, undefined)
+*##+js(set, navigator.appName, undefined)
+!*##+js(set, navigator.appVersion, undefined)
+*##+js(set, navigator.buildID, undefined)
+*##+js(set, navigator.deviceMemory, undefined)
+*##+js(set, navigator.getBattery, undefined)
+*##+js(set, navigator.hardwareConcurrency, undefined)
+*##+js(set, navigator.mimeTypes, undefined)
+*##+js(set, navigator.platform, undefined)
+*##+js(set, navigator.plugins, undefined)
+*##+js(set, navigator.vendor, undefined)
+*##+js(set, screen.height, undefined)
+*##+js(set, screen.width, undefined)
+*##+js(set, screen.availHeight, undefined)
+*##+js(set, screen.availWidth, undefined)
+*##+js(set, screen.innerHeight, undefined)
+*##+js(set, screen.innerWidth, undefined)
+*##+js(set, screen.colorDepth, undefined)
+*##+js(set, screen.pixelDepth, undefined)
+*##+js(set, Math.acos, undefined)
+*##+js(set, Math.acosh, undefined)
+*##+js(set, Math.asin, undefined)
+*##+js(set, Math.asinh, undefined)
+*##+js(set, Math.cosh, undefined)
+*##+js(set, Math.expm1, undefined)
+*##+js(set, Math.sinh, undefined)
+*##+js(set, Storage.prototype.key, undefined)
+*##+js(set, Storage.prototype.getItem, undefined)
+*##+js(set, Storage.prototype.setItem, undefined)
+*##+js(set, IDBFactory.prototype.open, undefined)
+
+!💩 False
+*##+js(set, navigator.mediaDevices.enumerateDevices, falseFunc)
+*##+js(set, HTMLMediaElement.prototype.canPlayType, falseFunc)
+*##+js(set, speechSynthesis.getVoices, falseFunc)
+*##+js(set, Date.prototype.getTimezoneOffset, falseFunc)
+*##+js(set, Intl.DateTimeFormat.prototype.resolvedOptions, falseFunc)
+*##+js(set, performance.now, falseFunc)
+
 !😡 Abort
 *##+js(aopr, HTMLCanvasElement.prototype.toDataURL)
 *##+js(aopr, CanvasRenderingContext2D.prototype.getImageData)
 *##+js(aopr, CanvasRenderingContext2D.prototype.isPointInPath)
 *##+js(aopr, CanvasRenderingContext2D.prototype.isPointInStroke)
 *##+js(aopr, WebGLRenderingContext.prototype.shaderSource)
+*##+js(aopr, WebGLRenderingContext.prototype.getExtension)
+*##+js(aopr, WebGLRenderingContext.prototype.getParameter)
+*##+js(aopr, AudioBuffer.prototype.getChannelData)
+*##+js(aopr, AudioContext)
+*##+js(aopr, BaseAudioContext.prototype.createOscillator)
+!*##+js(aopr, Element.prototype.getBoundingClientRect)
+!*##+js(aopr, Element.prototype.getClientRects)
+!*##+js(aopr, Range.prototype.getBoundingClientRect)
+!*##+js(aopr, Range.prototype.getClientRects)
+!*##+js(aopr, HTMLDocument.prototype.createElement)
+!*##+js(aopr, DOMParser.prototype.parseFromString)
+!*##+js(aopw, HTMLElement.prototype.innerHTML)
+!*##+js(aopw, HTMLElement.prototype.outerHTML)
