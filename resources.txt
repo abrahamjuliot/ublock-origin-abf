@@ -20,8 +20,10 @@ randomcanvas.js application/javascript
 	const clean = arr => arr.filter(e => e === 0 || e)
 	let insertedNodes = []
 	const observer = new MutationObserver(mutations => {
-		const addedNodes = mutations.map(mutation => mutation.addedNodes.length? mutation.addedNodes: [])
-		insertedNodes = addedNodes
+		mutations.forEach(function(mutation) {
+		   for (var i = 0; i < mutation.addedNodes.length; i++)
+		     insertedNodes.push(mutation.addedNodes[i])
+		 })
 	})
 	observer.observe(document, { childList: true })
 	console.log(insertedNodes)
