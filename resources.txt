@@ -12,10 +12,22 @@ randomcanvas.js application/javascript
 		}
 	}
 	const randomcanvas = init(parameters, sampleDataURI)
-	return Object.defineProperty(
+	const iframeCollection = document.getElementsByTagName('iframe')
+	window.Object.defineProperty(
 		HTMLCanvasElement.prototype,
 		'toDataURL', { 
 			value: randomcanvas
 		}
 	)
+	if (iframeCollection.length) {
+		[...iframeCollection].forEach(iframe => {
+			iframe.contentWindow.Object.defineProperty(
+				HTMLCanvasElement.prototype,
+				'toDataURL', { 
+					value: randomcanvas
+				}
+			)
+		}) 
+	}
+	return
 })()
