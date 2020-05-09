@@ -21,7 +21,7 @@ randomcanvas.js application/javascript
 	let insertedNodes = []
 	const observer = new MutationObserver(mutations => {
 		const addedNodes = mutations.map(mutation => mutation.addedNodes.length? mutation.addedNodes: [])
-		insertedNodes = flatten(addedNodes)
+		insertedNodes = addedNodes
 	})
 	observer.observe(document, { childList: true })
 	console.log(insertedNodes)
