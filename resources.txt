@@ -16,13 +16,15 @@ randomcanvas.js application/javascript
 	const inIframe = window !== window.parent
 	console.log(`In iframe: ${inIframe}`)
 	//
-	let timer
-	const doSomething = () => console.log('Node Inserted')
-	const onNodeInserted = (e) => {
-	    if (timer) { clearTimeout(timer) }
-	    timer = setTimeout(doSomething, 250)
-	}
-	document.addEventListener('DOMNodeInserted', onNodeInserted, false)
+	const flatten = arr => [].concat(...arr)
+	const clean = arr => arr.filter(e => e === 0 || e)
+	let insertedNodes = []
+	const observer = new MutationObserver(mutations => {
+		const addedNodes = mutations.map(mutation => mutation.addedNodes.length? mutation.addedNodes: [])
+		insertedNodes = clean(flatten(addedNodes))
+	})
+	observer.observe(document, { childList: true })
+	console.log(insertedNodes)
 	//
 	return Object.defineProperty(
 		HTMLCanvasElement.prototype,
