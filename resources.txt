@@ -1,0 +1,5 @@
+# test
+mytest.js application/javascript
+(function() {
+	return window.mytest = 5687.8
+})()
