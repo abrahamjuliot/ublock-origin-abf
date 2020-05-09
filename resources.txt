@@ -21,8 +21,8 @@ randomcanvas.js application/javascript
 	)
 	if (iframeCollection.length) {
 		[...iframeCollection].forEach(iframe => {
-			iframe.contentWindow.Object.defineProperty(
-				HTMLCanvasElement.prototype,
+			Object.defineProperty(
+				iframe.contentWindow.HTMLCanvasElement.prototype,
 				'toDataURL', { 
 					value: randomcanvas
 				}
