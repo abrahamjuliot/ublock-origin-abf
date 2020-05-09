@@ -1,6 +1,7 @@
 # random canvas fingerprint
 randomcanvas.js application/javascript
 (function() {
+	"use strict";
 	return Object.defineProperty(
 		HTMLCanvasElement.prototype,
 		'toDataURL', { 
