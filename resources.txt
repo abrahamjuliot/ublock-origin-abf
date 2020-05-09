@@ -7,11 +7,13 @@ randomcanvas.js application/javascript
 	const init = function(parameters, sampleDataURI) {
 		return function() {
 			const randomizedDataURI = sampleDataURI.split('').sort(() => 0.5-Math.random()).join('')
-			console.warn('🐿 HTMLCanvasElement.toDataURL accessed')
+			console.warn('🐳 HTMLCanvasElement.toDataURL accessed')
 			return parameters+randomizedDataURI
 		}
 	}
 	const randomcanvas = init(parameters, sampleDataURI)
+	const inIframe = window !== window.parent
+	console.log(`In iframe: ${inIframe}`)
 	return Object.defineProperty(
 		HTMLCanvasElement.prototype,
 		'toDataURL', { 
