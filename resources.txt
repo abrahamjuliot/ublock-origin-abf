@@ -9,7 +9,7 @@ randomCanvas.js application/javascript
 		
 	const dataURL = 'data:image/png;base64,'+randomized
 	
-	Object.defineProperty(
+	return Object.defineProperty(
 	  HTMLCanvasElement.prototype,
 	  'toDataURL', 
 	  { value: () => { alert('HTMLCanvasElement.toDataURL'); return dataURL }
