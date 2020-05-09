@@ -1,5 +1,5 @@
-# random canvas fingerprint
-randomcanvas.js application/javascript
+# spoof canvas fingerprint
+spoofcanvas.js application/javascript
 (function() {
 	function randomRGBA() {
 	    const clr = () => Math.round(Math.random()*255)
@@ -9,14 +9,14 @@ randomcanvas.js application/javascript
 	const txt = '💩 Private'
 	const context = canvas.getContext('2d')
 	context.textBaseline = 'top'
-    context.font = "14px 'Arial'"
-    context.textBaseline = 'alphabetic'
-    context.fillStyle = randomRGBA()
-    context.fillRect(125, 1, 62, 20)
-    context.fillStyle = randomRGBA()
-    context.fillText(txt, 2, 15)
-    context.fillStyle = randomRGBA()
-    context.fillText(txt, 4, 17)
+	context.font = "14px 'Arial'"
+	context.textBaseline = 'alphabetic'
+	context.fillStyle = randomRGBA()
+	context.fillRect(125, 1, 62, 20)
+	context.fillStyle = randomRGBA()
+	context.fillText(txt, 2, 15)
+	context.fillStyle = randomRGBA()
+	context.fillText(txt, 4, 17)
 	const newDataURI = canvas.toDataURL()
 	const cache = function(newDataURI) {
 		return (typeOfAttempt='') => () => {
@@ -30,6 +30,48 @@ randomcanvas.js application/javascript
 			root.HTMLCanvasElement.prototype,
 			{
 				'toDataURL':  { value: randomcanvas(type) }
+			}
+		)
+	}
+	// Handle window
+	redefine(window)
+	// Handle iframes
+	;[...document.getElementsByTagName('iframe')].forEach(iframe => {
+		redefine(iframe.contentWindow, '😡 Aggressive - ')
+	})
+})()
+
+# spoof timezone fingerprint
+spooftimezone.js application/javascript
+(function() {
+	const cache = () => {
+		const options = Intl.DateTimeFormat().resolvedOptions()
+		return () => options
+	}
+	const getOptions = cache()
+	function redefine(root, typeOfAttempt = '') {
+		Object.defineProperties(
+			root.Date.prototype,
+			{
+				'getTimezoneOffset':  {
+					value: () => {
+						console.warn(`🐠 ${typeOfAttempt}Date.getTimezoneOffset accessed`)
+						return 0	
+					}
+				}
+			}
+		)
+		Object.defineProperties(
+			root.Intl.DateTimeFormat.prototype,
+			{
+				'resolvedOptions':  {
+					value: () => {
+						const options = getOptions()
+						options.timeZone = 'UTC'
+						console.warn(`🐠 ${typeOfAttempt}Intl.DateTimeFormat.resolvedOptions accessed`)
+						return options
+					}
+				}
 			}
 		)
 	}
