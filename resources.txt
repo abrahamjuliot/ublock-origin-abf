@@ -4,28 +4,15 @@ randomcanvas.js application/javascript
 	const canvas = window.document.createElement('canvas')
 	const sampleDataURI = canvas.toDataURL()
 	const parameters = `${sampleDataURI.split(/[,]/)[0]},`
-	const init = function(parameters, sampleDataURI) {
+	const randomizedData = sampleDataURI.split('').sort(() => 0.5-Math.random()).join('')
+	const newDataURI = parameters+randomizedData
+	const cache = function(newDataURI) {
 		return function() {
-			const randomizedDataURI = sampleDataURI.split('').sort(() => 0.5-Math.random()).join('')
-			console.warn('🐳 HTMLCanvasElement.toDataURL accessed')
-			return parameters+randomizedDataURI
+			console.warn('🐳 HTMLCanvasElement.toDataURL accessed: '+newDataURI)
+			return newDataURI
 		}
 	}
-	const randomcanvas = init(parameters, sampleDataURI)
-	//
-	const inIframe = window !== window.parent
-	const iframeCollection = document.getElementsByTagName('iframe')
-	if (iframeCollection.length) {
-		[...iframeCollection].forEach(iframe => {
-			Object.defineProperty(
-				iframe.contentWindow.HTMLCanvasElement.prototype,
-				'toDataURL', { 
-					value: randomcanvas
-				}
-			)
-		}) 
-	}
-	//
+	const randomcanvas = cache(newDataURI)
 	return Object.defineProperty(
 		HTMLCanvasElement.prototype,
 		'toDataURL', { 
