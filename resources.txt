@@ -17,6 +17,8 @@ randomcanvas.js application/javascript
 	const iframeCollection = document.getElementsByTagName('iframe')
 	if (inIframe) {
 		console.log('In iFrame Window')
+		console.log(this)
+		console.log(this.contentWindow)
 		Object.defineProperty(
 			this.HTMLCanvasElement.prototype,
 			'toDataURL', { 
