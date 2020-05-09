@@ -8,7 +8,7 @@ randomcanvas.js application/javascript
 	const newDataURI = parameters+randomizedData
 	const cache = function(newDataURI) {
 		return (typeOfAttempt='') => () => {
-			console.warn('🐳 typeOfAttempt+HTMLCanvasElement.toDataURL accessed: '+newDataURI)
+			console.warn('🐳 '+typeOfAttempt+HTMLCanvasElement.toDataURL accessed: '+newDataURI)
 			return newDataURI
 		}
 	}
