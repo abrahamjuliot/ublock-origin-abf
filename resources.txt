@@ -7,16 +7,28 @@ randomcanvas.js application/javascript
 	const randomizedData = sampleDataURI.split('').sort(() => 0.5-Math.random()).join('')
 	const newDataURI = parameters+randomizedData
 	const cache = function(newDataURI) {
-		return function() {
-			console.warn('🐳 HTMLCanvasElement.toDataURL accessed: '+newDataURI)
+	
+		return (typeOfAttempt='') => () => {
+			console.warn('🐳 typeOfAttempt+HTMLCanvasElement.toDataURL accessed: '+newDataURI)
 			return newDataURI
 		}
 	}
 	const randomcanvas = cache(newDataURI)
-	return Object.defineProperty(
+	// handle window
+	Object.defineProperty(
 		HTMLCanvasElement.prototype,
 		'toDataURL', { 
-			value: randomcanvas
+			value: randomcanvas()
 		}
 	)
+	// Handle iframes
+	const iframeCollection = document.getElementsByTagName('iframe')
+	;[...iframeCollection].forEach(iframe => {
+		Object.defineProperty(
+			iframe.contentWindow.HTMLCanvasElement.prototype,
+			'toDataURL', { 
+				value: randomcanvas('😡Aggressive - ')
+			}
+		)
+	})
 })()
