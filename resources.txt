@@ -1,14 +1,3 @@
-# canvas
-randomcanvas.js application/javascript
-(function() {
-	console.log('start')
-	return window.Object.defineProperty(
-		HTMLCanvasElement.prototype,
-		'toDataURL', 
-		{ value: () => 'NO!' }
-	)
-})()
-
 # test
 mytest.js application/javascript
 (function() {
