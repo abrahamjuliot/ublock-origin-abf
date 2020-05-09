@@ -1,5 +1,5 @@
 # spoof canvas fingerprint
-spoofcanvas.js application/javascript
+randomcanvas.js application/javascript
 (function() {
 	function randomRGBA() {
 	    const clr = () => Math.round(Math.random()*255)
