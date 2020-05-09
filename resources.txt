@@ -1,16 +1,21 @@
 # random canvas fingerprint
 randomcanvas.js application/javascript
 (function() {
-	"use strict";
+	const canvas = window.document.createElement('canvas')
+	const sampleDataURI = canvas.toDataURL()
+	const parameters = `${sampleDataURI.split(/[,]/)[0]},`
+	const init = function(parameters, sampleDataURI) {
+		return function() {
+			const randomizedDataURI = sampleDataURI.split('').sort(() => 0.5-Math.random()).join('')
+			console.warn('🐿 HTMLCanvasElement.toDataURL accessed')
+			return parameters+randomizedDataURI
+		}
+	}
+	const randomcanvas = init(parameters, sampleDataURI)
 	return Object.defineProperty(
 		HTMLCanvasElement.prototype,
 		'toDataURL', { 
-			value: () => {
-				const sampleDataURI = document.createElement('canvas').toDataURL()
-				const randomizedDataURI = sampleDataURI.split('').sort(() => 0.5-Math.random()).join('')
-				console.warn('🐿 HTMLCanvasElement.toDataURL accessed')
-				return randomizedDataURI
-			}
+			value: randomcanvas
 		}
 	)
 })()
