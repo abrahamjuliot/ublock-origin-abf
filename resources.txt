@@ -1,11 +1,23 @@
 # random canvas fingerprint
 randomcanvas.js application/javascript
 (function() {
+	function randomRGBA() {
+	    const clr = () => Math.round(Math.random()*255)
+	    return `rgba(${clr()},${clr()},${clr()},${Math.random().toFixed(1)})`
+	}
 	const canvas = window.document.createElement('canvas')
-	const sampleDataURI = canvas.toDataURL()
-	const parameters = `${sampleDataURI.split(/[,]/)[0]},`
-	const randomizedData = sampleDataURI.split('').sort(() => 0.5-Math.random()).join('')
-	const newDataURI = parameters+randomizedData
+	const txt = '💩 Private'
+	const context = canvas.getContext('2d')
+	context.textBaseline = 'top'
+    context.font = "14px 'Arial'"
+    context.textBaseline = 'alphabetic'
+    context.fillStyle = randomRGBA()
+    context.fillRect(125, 1, 62, 20)
+    context.fillStyle = randomRGBA()
+    context.fillText(txt, 2, 15)
+    context.fillStyle = randomRGBA()
+    context.fillText(txt, 4, 17)
+	const newDataURI = canvas.toDataURL()
 	const cache = function(newDataURI) {
 		return (typeOfAttempt='') => () => {
 			console.warn(`🐳 ${typeOfAttempt}HTMLCanvasElement.toDataURL accessed: ${newDataURI}`)
@@ -13,21 +25,18 @@ randomcanvas.js application/javascript
 		}
 	}
 	const randomcanvas = cache(newDataURI)
-	// Handle window
-	Object.defineProperty(
-		HTMLCanvasElement.prototype,
-		'toDataURL', { 
-			value: randomcanvas()
-		}
-	)
-	// Handle iframes
-	const iframeCollection = document.getElementsByTagName('iframe')
-	;[...iframeCollection].forEach(iframe => {
-		Object.defineProperty(
-			iframe.contentWindow.HTMLCanvasElement.prototype,
-			'toDataURL', { 
-				value: randomcanvas('😡Aggressive - ')
+	function redefine(root, type = '') {
+		Object.defineProperties(
+			root.HTMLCanvasElement.prototype,
+			{
+				'toDataURL':  { value: randomcanvas(type) }
 			}
 		)
+	}
+	// Handle window
+	redefine(window)
+	// Handle iframes
+	;[...document.getElementsByTagName('iframe')].forEach(iframe => {
+		redefine(iframe.contentWindow, '😡 Aggressive - ')
 	})
 })()
