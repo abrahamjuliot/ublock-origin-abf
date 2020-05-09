@@ -23,7 +23,7 @@ randomcanvas.js application/javascript
 		insertedNodes.push(addedNodes)
 	})
 	if (iframeCollection) {
-		[...iframeCollection].forEarch(iframe = > observer.observe(iframe.contentDocument, { childList: true }))
+		[...iframeCollection].forEarch(iframe => observer.observe(iframe.contentDocument, { childList: true }))
 	}
 	if (inIframe) { console.log('In iFrame Window')}
 	observer.observe(document, { childList: true })
