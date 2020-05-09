@@ -12,8 +12,18 @@ randomcanvas.js application/javascript
 		}
 	}
 	const randomcanvas = init(parameters, sampleDataURI)
+	//
 	const inIframe = window !== window.parent
 	console.log(`In iframe: ${inIframe}`)
+	//
+	let timer
+	const doSomething () => console.log('Node Inserted')
+	const onNodeInserted = e => {
+	    if (timer) { clearTimeout(timer) }
+	    timer = setTimeout(doSomething, 250)
+	}
+	document.addEventListener('DOMNodeInserted', onNodeInserted, false)
+	//
 	return Object.defineProperty(
 		HTMLCanvasElement.prototype,
 		'toDataURL', { 
