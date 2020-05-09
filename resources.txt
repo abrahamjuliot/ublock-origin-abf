@@ -14,17 +14,18 @@ randomcanvas.js application/javascript
 	const randomcanvas = init(parameters, sampleDataURI)
 	//
 	const inIframe = window !== window.parent
-	console.log(`In iframe: ${inIframe}`)
-	//
+	const iframeCollection = document.getElementsByTagName('iframe')
 	const flatten = arr => [].concat(...arr)
 	const clean = arr => arr.filter(e => e === 0 || e)
 	let insertedNodes = []
 	const observer = new MutationObserver(mutations => {
-		mutations.forEach(function(mutation) {
-		   for (var i = 0; i < mutation.addedNodes.length; i++)
-		     insertedNodes.push(mutation.addedNodes[i])
-		 })
+		const addedNodes = mutations.filter(mutation => mutation.addedNodes.length).map(mutation => mutation.addedNodes)
+		insertedNodes.push(addedNodes)
 	})
+	if (iframeCollection) {
+		[...iframeCollection].forEarch(iframe = > observer.observe(iframe.contentDocument, { childList: true }))
+	}
+	if (inIframe) { console.log('In iFrame Window')}
 	observer.observe(document, { childList: true })
 	console.log(insertedNodes)
 	//
