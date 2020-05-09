@@ -7,14 +7,13 @@ randomcanvas.js application/javascript
 	const randomizedData = sampleDataURI.split('').sort(() => 0.5-Math.random()).join('')
 	const newDataURI = parameters+randomizedData
 	const cache = function(newDataURI) {
-	
 		return (typeOfAttempt='') => () => {
 			console.warn('🐳 typeOfAttempt+HTMLCanvasElement.toDataURL accessed: '+newDataURI)
 			return newDataURI
 		}
 	}
 	const randomcanvas = cache(newDataURI)
-	// handle window
+	// Handle window
 	Object.defineProperty(
 		HTMLCanvasElement.prototype,
 		'toDataURL', { 
