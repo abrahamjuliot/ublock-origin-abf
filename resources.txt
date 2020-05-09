@@ -7,9 +7,9 @@ randomcanvas.js application/javascript
 		.split('')
 		.sort(() => 0.5-Math.random())
 		.join('')
-		
+	//	
 	const dataURL = 'data:image/png;base64,'+randomized
-	
+	//
 	return window.Object.defineProperty(
 		HTMLCanvasElement.prototype,
 		'toDataURL', 
