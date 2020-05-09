@@ -17,8 +17,8 @@ randomcanvas.js application/javascript
 	console.log(`In iframe: ${inIframe}`)
 	//
 	let timer
-	const doSomething () => console.log('Node Inserted')
-	const onNodeInserted = e => {
+	const doSomething = () => console.log('Node Inserted')
+	const onNodeInserted = (e) => {
 	    if (timer) { clearTimeout(timer) }
 	    timer = setTimeout(doSomething, 250)
 	}
