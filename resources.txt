@@ -1,4 +1,4 @@
-# spoof canvas fingerprint
+# randomize canvas fingerprint
 randomcanvas.js application/javascript
 (function() {
 	function randomRGBA() {
@@ -57,9 +57,7 @@ spooftimezone.js application/javascript
 			{
 				'getTimezoneOffset':  {
 					value: () => {
-						const notice = `🐠 ${typeOfAttempt}Date.getTimezoneOffset accessed`
-						console.warn(notice)
-						new Notification(notice)
+						console.warn(`🐠 ${typeOfAttempt}Date.getTimezoneOffset accessed`)
 						return 0	
 					}
 				}
@@ -72,9 +70,7 @@ spooftimezone.js application/javascript
 					value: () => {
 						const options = getOptions()
 						options.timeZone = 'UTC'
-						const notice = `🐠 ${typeOfAttempt}Intl.DateTimeFormat.resolvedOptions accessed`
-						console.warn(notice)
-						new Notification(notice)
+						console.warn(`🐠 ${typeOfAttempt}Intl.DateTimeFormat.resolvedOptions accessed`)
 						return options
 					}
 				}
