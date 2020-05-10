@@ -17,7 +17,7 @@
 	context.fillText(txt, 4, 17)
 	const newDataURI = canvas.toDataURL()
 	const cachedData = function(newDataURI) {
-		return (typeOfAttempt='') => () => {
+		return (typeOfAttempt) => () => {
 			console.warn(`🐳 ${typeOfAttempt}HTMLCanvasElement.toDataURL accessed: ${newDataURI}`)
 			return newDataURI
 		}
@@ -28,7 +28,7 @@
 	}
 	redefine(window, randomcanvas)
 	;[...document.getElementsByTagName('iframe')].forEach(frame => redefine(frame.contentWindow, '😡 Aggressive - '))
-})()
+})();
 
 # spoof timezone fingerprint
 spooftimezone.js application/javascript
