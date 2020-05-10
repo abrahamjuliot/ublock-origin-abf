@@ -26,6 +26,48 @@
 	function redefine(root, type='') {
 		Object.defineProperties(root.HTMLCanvasElement.prototype, { 'toDataURL':  { value: randomcanvas(type) } })
 	}
-	redefine(window, randomcanvas)
+	redefine(window)
 	;[...document.getElementsByTagName('iframe')].forEach(frame => redefine(frame.contentWindow, '😡 Aggressive - '))
+})()
+
+# spoof timezone fingerprint
+spooftimezone.js application/javascript
+(function() {
+	function cachedOptions () {
+		const options = Intl.DateTimeFormat().resolvedOptions()
+		return function() { return options }
+	}
+	const getOptions = cachedOptions()
+	function redefine(root, typeOfAttempt = '') {
+		Object.defineProperties(
+			root.Date.prototype,
+			{
+				'getTimezoneOffset':  {
+					value: () => {
+						console.warn(`🐠 ${typeOfAttempt}Date.getTimezoneOffset accessed`)
+						return 0	
+					}
+				}
+			}
+		)
+		Object.defineProperties(
+			root.Intl.DateTimeFormat.prototype,
+			{
+				'resolvedOptions':  {
+					value: () => {
+						const options = getOptions()
+						options.timeZone = 'UTC'
+						console.warn(`🐠 ${typeOfAttempt}Intl.DateTimeFormat.resolvedOptions accessed`)
+						return options
+					}
+				}
+			}
+		)
+	}
+	// Handle window
+	redefine(window)
+	// Handle iframes
+	;[...document.getElementsByTagName('iframe')].forEach(iframe => {
+		redefine(iframe.contentWindow, '😡 Aggressive - ')
+	})
 })()
