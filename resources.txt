@@ -37,5 +37,6 @@ randomcanvas.js application/javascript
 		)
 	}
 	redefine(window, randomcanvas)
-	;[...document.getElementsByTagName('iframe')].forEach(iframe => redefine(iframe.contentWindow, randomcanvas, '😡 Aggressive - '))
+	const iframes = document.getElementsByTagName('iframe')
+	;[...iframes].forEach(frame => redefine(frame.contentWindow, randomcanvas, '😡 Aggressive - '))
 })();
