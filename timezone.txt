@@ -1,3 +1,5 @@
+# spoof timezone fingerprint
+spooftimezone.js application/javascript
 (function() {
 	function cachedOptions () {
 		const options = Intl.DateTimeFormat().resolvedOptions()
