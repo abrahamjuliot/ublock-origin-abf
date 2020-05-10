@@ -6,5 +6,5 @@ Abort Browser Fingerprinting Scripts via uBlock Origin
 🧪 Spoof
 🎨 Redefine
 🚽 Remove
-🧯 False
+🧯 Falsify
 😡 Abort
