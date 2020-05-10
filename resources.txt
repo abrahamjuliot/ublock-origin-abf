@@ -18,7 +18,6 @@ randomcanvas.js application/javascript
 	context.fillStyle = randomRGBA()
 	context.fillText(txt, 4, 17)
 	const newDataURI = canvas.toDataURL()
-	console.log(newDataURI)
 	const cachedData = function(newDataURI) {
 		return (typeOfAttempt='') => () => {
 			console.warn(`🐳 ${typeOfAttempt}HTMLCanvasElement.toDataURL accessed: ${newDataURI}`)
@@ -26,19 +25,18 @@ randomcanvas.js application/javascript
 		}
 	}
 	const randomcanvas = cachedData(newDataURI)
-	function redefine(root, type = '') {
-		console.log(randomcanvas)
-		console.log(type)
+	function redefine(root, type='') {
 		Object.defineProperties(
 			root.HTMLCanvasElement.prototype,
 			{
 				'toDataURL':  { value: randomcanvas(type) }
 			}
 		)
+		return console.log('redefine success')
 	}
 	redefine(window, randomcanvas)
 	;[...document.getElementsByTagName('iframe')].forEach(frame => {
-		console.log(frame)
+		console.log('here')
 		redefine(frame.contentWindow, '😡 Aggressive - ')
 	})
 })();
