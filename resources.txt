@@ -40,7 +40,7 @@ randomcanvas.js application/javascript
 		redefine(iframe.contentWindow, '😡 Aggressive - ')
 	})
 })()
-
+//
 # spoof timezone fingerprint
 spooftimezone.js application/javascript
 (function() {
