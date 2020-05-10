@@ -20,9 +20,7 @@ randomcanvas.js application/javascript
 	const newDataURI = canvas.toDataURL()
 	const cache = function(newDataURI) {
 		return (typeOfAttempt='') => () => {
-			const notice = `🐳 ${typeOfAttempt}HTMLCanvasElement.toDataURL accessed: ${newDataURI}`
-			console.warn(notice)
-			new Notification(notice)
+			console.warn(`🐳 ${typeOfAttempt}HTMLCanvasElement.toDataURL accessed: ${newDataURI}`)
 			return newDataURI
 		}
 	}
