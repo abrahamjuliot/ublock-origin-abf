@@ -1,4 +1,8 @@
+# random canvas fingerprint
+randomcanvas.js application/javascript
 (function() {
+	const domLoaded = (fn) => document.readyState != 'loading'?
+    	fn(): document.addEventListener('DOMContentLoaded', fn)
 	function randomRGBA() {
 	    const clr = () => Math.round(Math.random()*255)
 	    return `rgba(${clr()},${clr()},${clr()},${Math.random().toFixed(1)})`
@@ -17,7 +21,7 @@
 	context.fillText(txt, 4, 17)
 	const newDataURI = canvas.toDataURL()
 	const cachedData = function(newDataURI) {
-		return (typeOfAttempt = '') => () => {
+		return (typeOfAttempt='') => () => {
 			console.warn(`🐳 ${typeOfAttempt}HTMLCanvasElement.toDataURL accessed: ${newDataURI}`)
 			return newDataURI
 		}
@@ -27,5 +31,7 @@
 		Object.defineProperties(root.HTMLCanvasElement.prototype, { 'toDataURL':  { value: randomcanvas(type) } })
 	}
 	redefine(window)
-	;[...document.getElementsByTagName('iframe')].forEach(frame => redefine(frame.contentWindow, '😡 Aggressive - '))
+	domLoaded(() => {
+		;[...document.getElementsByTagName('iframe')].forEach(frame => redefine(frame.contentWindow, '😡 Aggressive - '))	
+	})
 })()
