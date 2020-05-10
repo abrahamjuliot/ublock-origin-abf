@@ -38,7 +38,7 @@ spooftimezone.js application/javascript
 		return function() { return options }
 	}
 	const getOptions = cachedOptions()
-	function redefine(root, typeOfAttempt = '') {
+	function spoof(root, typeOfAttempt = '') {
 		Object.defineProperties(
 			root.Date.prototype,
 			{
@@ -65,9 +65,9 @@ spooftimezone.js application/javascript
 		)
 	}
 	// Handle window
-	redefine(window)
+	spoof(window)
 	// Handle iframes
 	;[...document.getElementsByTagName('iframe')].forEach(iframe => {
-		redefine(iframe.contentWindow, '😡 Aggressive - ')
+		spoof(iframe.contentWindow, '😡 Aggressive - ')
 	})
 })()
