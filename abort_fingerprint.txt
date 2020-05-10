@@ -34,7 +34,7 @@
 !*##+js(set, screen.colorDepth, undefined)
 !*##+js(set, screen.pixelDepth, undefined)
 
-!🧯 False
+!🧯 Falsify
 !*##+js(set, navigator.mediaDevices.enumerateDevices, falseFunc)
 !*##+js(set, HTMLMediaElement.prototype.canPlayType, falseFunc)
 *##+js(set, speechSynthesis.getVoices, falseFunc)
