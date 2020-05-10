@@ -28,7 +28,7 @@
 	}
 	redefine(window)
 	;[...document.getElementsByTagName('iframe')].forEach(frame => redefine(frame.contentWindow, '😡 Aggressive - '))
-})()
+})();
 
 # spoof timezone fingerprint
 spooftimezone.js application/javascript
