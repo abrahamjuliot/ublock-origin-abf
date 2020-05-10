@@ -19,7 +19,7 @@ randomcanvas.js application/javascript
 	context.fillText(txt, 4, 17)
 	const newDataURI = canvas.toDataURL()
 	const cachedData = function(newDataURI) {
-		return (typeOfAttempt='') => () => {
+		return (typeOfAttempt) => () => {
 			console.warn(`🐳 ${typeOfAttempt}HTMLCanvasElement.toDataURL accessed: ${newDataURI}`)
 			return newDataURI
 		}
@@ -36,7 +36,11 @@ randomcanvas.js application/javascript
 	}
 	redefine(window, randomcanvas)
 	;[...document.getElementsByTagName('iframe')].forEach(frame => {
-		console.log('here')
+		console.log('in frame')
 		redefine(frame.contentWindow, '😡 Aggressive - ')
+		;[...frame.contentDocument.getElementsByTagName('iframe')].forEach(frame => {
+			console.log('frame in frame')
+			redefine(frame.contentWindow, '😡 Aggressive - ')
+		})
 	})
 })();
