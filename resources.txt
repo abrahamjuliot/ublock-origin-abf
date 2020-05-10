@@ -43,7 +43,7 @@ randomcanvas.js application/javascript
 
 # spoof timezone fingerprint
 spooftimezone.js application/javascript
-(function() {
+;(function() {
 	const cachedOptions = () => {
 		const options = Intl.DateTimeFormat().resolvedOptions()
 		return () => options
