@@ -1,5 +1,3 @@
-# randomize canvas fingerprint
-randomcanvas.js application/javascript
 (function() {
 	function randomRGBA() {
 	    const clr = () => Math.round(Math.random()*255)
@@ -19,28 +17,57 @@ randomcanvas.js application/javascript
 	context.fillText(txt, 4, 17)
 	const newDataURI = canvas.toDataURL()
 	const cachedData = function(newDataURI) {
-		return (typeOfAttempt) => () => {
+		return (typeOfAttempt='') => () => {
 			console.warn(`🐳 ${typeOfAttempt}HTMLCanvasElement.toDataURL accessed: ${newDataURI}`)
 			return newDataURI
 		}
 	}
 	const randomcanvas = cachedData(newDataURI)
 	function redefine(root, type='') {
-		Object.defineProperties(
-			root.HTMLCanvasElement.prototype,
-			{
-				'toDataURL':  { value: randomcanvas(type) }
-			}
-		)
-		return console.log('redefine success')
+		Object.defineProperties(root.HTMLCanvasElement.prototype, { 'toDataURL':  { value: randomcanvas(type) } })
 	}
 	redefine(window, randomcanvas)
-	;[...document.getElementsByTagName('iframe')].forEach(frame => {
-		console.log('in frame')
-		redefine(frame.contentWindow, '😡 Aggressive - ')
-		;[...frame.contentDocument.getElementsByTagName('iframe')].forEach(frame => {
-			console.log('frame in frame')
-			redefine(frame.contentWindow, '😡 Aggressive - ')
-		})
+	;[...document.getElementsByTagName('iframe')].forEach(frame => redefine(frame.contentWindow, '😡 Aggressive - '))
+})()
+
+# spoof timezone fingerprint
+spooftimezone.js application/javascript
+(function() {
+	function cachedOptions () {
+		const options = Intl.DateTimeFormat().resolvedOptions()
+		return function() { return options }
+	}
+	const getOptions = cachedOptions()
+	function redefine(root, typeOfAttempt = '') {
+		Object.defineProperties(
+			root.Date.prototype,
+			{
+				'getTimezoneOffset':  {
+					value: () => {
+						console.warn(`🐠 ${typeOfAttempt}Date.getTimezoneOffset accessed`)
+						return 0	
+					}
+				}
+			}
+		)
+		Object.defineProperties(
+			root.Intl.DateTimeFormat.prototype,
+			{
+				'resolvedOptions':  {
+					value: () => {
+						const options = getOptions()
+						options.timeZone = 'UTC'
+						console.warn(`🐠 ${typeOfAttempt}Intl.DateTimeFormat.resolvedOptions accessed`)
+						return options
+					}
+				}
+			}
+		)
+	}
+	// Handle window
+	redefine(window)
+	// Handle iframes
+	;[...document.getElementsByTagName('iframe')].forEach(iframe => {
+		redefine(iframe.contentWindow, '😡 Aggressive - ')
 	})
-})();
+})()
