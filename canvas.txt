@@ -7,18 +7,30 @@ randomcanvas.js application/javascript
 	    const clr = () => Math.round(Math.random()*255)
 	    return `rgba(${clr()},${clr()},${clr()},${Math.random().toFixed(1)})`
 	}
+	function randomFont() {
+		const fontFamily = [
+		  'Arial','Arial Black','Arial Narrow','Courier','Courier New','Georgia','Helvetica',
+		  'Impact','Lucida Console','monospace','Tahoma','Times','Times New Roman','Verdana'
+		]
+		const fontSize = Math.floor((Math.random() * 100) + 12)
+		const rand = Math.floor(Math.random()*fontFamily.length)
+		return `${fontSize}px '${fontFamily[rand]}'`
+	}
 	const canvas = window.document.createElement('canvas')
-	const txt = '💩 Private'
+	const txt = '🚀 Private'
 	const context = canvas.getContext('2d')
 	context.textBaseline = 'top'
-	context.font = "14px 'Arial'"
 	context.textBaseline = 'alphabetic'
+	context.font = randomFont()
 	context.fillStyle = randomRGBA()
 	context.fillRect(125, 1, 62, 20)
+	context.font = randomFont()
 	context.fillStyle = randomRGBA()
 	context.fillText(txt, 2, 15)
+	context.font = randomFont()
 	context.fillStyle = randomRGBA()
 	context.fillText(txt, 4, 17)
+	context.font = randomFont()
 	const newDataURI = canvas.toDataURL()
 	const cachedData = function(newDataURI) {
 		return (typeOfAttempt='') => () => {
