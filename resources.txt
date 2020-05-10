@@ -26,7 +26,7 @@ randomcanvas.js application/javascript
 		}
 	}
 	const randomcanvas = cachedData(newDataURI)
-	function redefine(root, randomcanvas, type = '') {
+	function redefine(root, type = '') {
 		console.log(randomcanvas)
 		console.log(type)
 		Object.defineProperties(
@@ -37,6 +37,8 @@ randomcanvas.js application/javascript
 		)
 	}
 	redefine(window, randomcanvas)
-	const iframes = document.getElementsByTagName('iframe')
-	;[...iframes].forEach(frame => redefine(frame.contentWindow, randomcanvas, '😡 Aggressive - '))
+	;[...document.getElementsByTagName('iframe')].forEach(frame => {
+		console.log(frame)
+		redefine(frame.contentWindow, '😡 Aggressive - ')
+	})
 })();
