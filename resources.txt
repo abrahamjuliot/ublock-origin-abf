@@ -20,7 +20,9 @@ randomcanvas.js application/javascript
 	const newDataURI = canvas.toDataURL()
 	const cache = function(newDataURI) {
 		return (typeOfAttempt='') => () => {
-			console.warn(`🐳 ${typeOfAttempt}HTMLCanvasElement.toDataURL accessed: ${newDataURI}`)
+			const notice = `🐳 ${typeOfAttempt}HTMLCanvasElement.toDataURL accessed: ${newDataURI}`
+			console.warn(notice)
+			new Notification(notice)
 			return newDataURI
 		}
 	}
@@ -55,7 +57,9 @@ spooftimezone.js application/javascript
 			{
 				'getTimezoneOffset':  {
 					value: () => {
-						console.warn(`🐠 ${typeOfAttempt}Date.getTimezoneOffset accessed`)
+						const notice = `🐠 ${typeOfAttempt}Date.getTimezoneOffset accessed`
+						console.warn(notice)
+						new Notification(notice)
 						return 0	
 					}
 				}
@@ -68,7 +72,9 @@ spooftimezone.js application/javascript
 					value: () => {
 						const options = getOptions()
 						options.timeZone = 'UTC'
-						console.warn(`🐠 ${typeOfAttempt}Intl.DateTimeFormat.resolvedOptions accessed`)
+						const notice = `🐠 ${typeOfAttempt}Intl.DateTimeFormat.resolvedOptions accessed`
+						console.warn(notice)
+						new Notification(notice)
 						return options
 					}
 				}
