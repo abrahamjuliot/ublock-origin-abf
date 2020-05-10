@@ -2,14 +2,14 @@
 |http:$document
 
 !💣 Block
-*##iframe:remove()
+!*##iframe:remove()
 *##+js(nowebrtc)
-||$csp=worker-src 'none', domain=~youtube.com|~google.com
+!||$csp=worker-src 'none', domain=~youtube.com|~google.com
 *##+js(window.name-defuser)
 
 !🧪 Spoof
 *##+js(randomcanvas)
-*##+js(spooftimezone)
+!*##+js(spooftimezone)
 
 !🎨 Redefine
 *##+js(set, navigator.deviceMemory, 4)
