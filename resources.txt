@@ -18,13 +18,13 @@ randomcanvas.js application/javascript
 	context.fillStyle = randomRGBA()
 	context.fillText(txt, 4, 17)
 	const newDataURI = canvas.toDataURL()
-	const cached = function(newDataURI) {
+	const cachedData = function(newDataURI) {
 		return (typeOfAttempt='') => () => {
 			console.warn(`🐳 ${typeOfAttempt}HTMLCanvasElement.toDataURL accessed: ${newDataURI}`)
 			return newDataURI
 		}
 	}
-	const randomcanvas = cached(newDataURI)
+	const randomcanvas = cachedData(newDataURI)
 	function redefine(root, type = '') {
 		Object.defineProperties(
 			root.HTMLCanvasElement.prototype,
@@ -44,11 +44,11 @@ randomcanvas.js application/javascript
 # spoof timezone fingerprint
 spooftimezone.js application/javascript
 (function() {
-	const cached = () => {
+	const cachedOptions = () => {
 		const options = Intl.DateTimeFormat().resolvedOptions()
 		return () => options
 	}
-	const getOptions = cached()
+	const getOptions = cachedOptions()
 	function redefine(root, typeOfAttempt = '') {
 		Object.defineProperties(
 			root.Date.prototype,
