@@ -18,18 +18,60 @@ randomcanvas.js application/javascript
 	context.fillStyle = randomRGBA()
 	context.fillText(txt, 4, 17)
 	const newDataURI = canvas.toDataURL()
-	const cache = function(newDataURI) {
+	const cached = function(newDataURI) {
 		return (typeOfAttempt='') => () => {
 			console.warn(`🐳 ${typeOfAttempt}HTMLCanvasElement.toDataURL accessed: ${newDataURI}`)
 			return newDataURI
 		}
 	}
-	const randomcanvas = cache(newDataURI)
+	const randomcanvas = cached(newDataURI)
 	function redefine(root, type = '') {
 		Object.defineProperties(
 			root.HTMLCanvasElement.prototype,
 			{
 				'toDataURL':  { value: randomcanvas(type) }
+			}
+		)
+	}
+	// Handle window
+	redefine(window)
+	// Handle iframes
+	;[...document.getElementsByTagName('iframe')].forEach(iframe => {
+		redefine(iframe.contentWindow, '😡 Aggressive - ')
+	})
+})()
+
+# spoof timezone fingerprint
+spooftimezone.js application/javascript
+(function() {
+	const cached = () => {
+		const options = Intl.DateTimeFormat().resolvedOptions()
+		return () => options
+	}
+	const getOptions = cached()
+	function redefine(root, typeOfAttempt = '') {
+		Object.defineProperties(
+			root.Date.prototype,
+			{
+				'getTimezoneOffset':  {
+					value: () => {
+						console.warn(`🐠 ${typeOfAttempt}Date.getTimezoneOffset accessed`)
+						return 0	
+					}
+				}
+			}
+		)
+		Object.defineProperties(
+			root.Intl.DateTimeFormat.prototype,
+			{
+				'resolvedOptions':  {
+					value: () => {
+						const options = getOptions()
+						options.timeZone = 'UTC'
+						console.warn(`🐠 ${typeOfAttempt}Intl.DateTimeFormat.resolvedOptions accessed`)
+						return options
+					}
+				}
 			}
 		)
 	}
