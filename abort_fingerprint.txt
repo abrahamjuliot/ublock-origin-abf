@@ -1,4 +1,4 @@
-!🔒 Encrypt
+!🔒 HTTP Nowhere
 |http:$document
 
 !💣 Block
@@ -7,44 +7,40 @@
 ||$csp=worker-src 'none', domain=~youtube.com|~google.com
 *##+js(window.name-defuser)
 
-!😶 Remove
-*##+js(set, navigator.appCodeName, undefined)
-*##+js(set, navigator.appName, undefined)
+!🧪 Spoof
+*##+js(randomcanvas)
+*##+js(spooftimezone)
+
+!🎨 Redefine
+*##+js(set, navigator.deviceMemory, 4)
+
+!🚽 Remove
+!*##+js(set, navigator.appCodeName, undefined)
+!*##+js(set, navigator.appName, undefined)
 !*##+js(set, navigator.appVersion, undefined)
-*##+js(set, navigator.buildID, undefined)
-*##+js(set, navigator.deviceMemory, undefined)
+!*##+js(set, navigator.buildID, undefined)
 *##+js(set, navigator.getBattery, undefined)
 *##+js(set, navigator.hardwareConcurrency, undefined)
 *##+js(set, navigator.mimeTypes, undefined)
-*##+js(set, navigator.platform, undefined)
+!*##+js(set, navigator.platform, undefined)
 *##+js(set, navigator.plugins, undefined)
-*##+js(set, navigator.vendor, undefined)
-*##+js(set, screen.height, undefined)
-*##+js(set, screen.width, undefined)
-*##+js(set, screen.availHeight, undefined)
-*##+js(set, screen.availWidth, undefined)
-*##+js(set, screen.innerHeight, undefined)
-*##+js(set, screen.innerWidth, undefined)
-*##+js(set, screen.colorDepth, undefined)
-*##+js(set, screen.pixelDepth, undefined)
-*##+js(set, Storage.prototype.key, undefined)
-*##+js(set, Storage.prototype.getItem, undefined)
-*##+js(set, Storage.prototype.setItem, undefined)
-*##+js(set, IDBFactory.prototype.open, undefined)
+!*##+js(set, navigator.vendor, undefined)
+!*##+js(set, screen.height, undefined)
+!*##+js(set, screen.width, undefined)
+!*##+js(set, screen.availHeight, undefined)
+!*##+js(set, screen.availWidth, undefined)
+!*##+js(set, screen.innerHeight, undefined)
+!*##+js(set, screen.innerWidth, undefined)
+!*##+js(set, screen.colorDepth, undefined)
+!*##+js(set, screen.pixelDepth, undefined)
 
-!💩 False
-*##+js(set, navigator.mediaDevices.enumerateDevices, falseFunc)
+!🧯 False
+!*##+js(set, navigator.mediaDevices.enumerateDevices, falseFunc)
 !*##+js(set, HTMLMediaElement.prototype.canPlayType, falseFunc)
 *##+js(set, speechSynthesis.getVoices, falseFunc)
-*##+js(set, Date.prototype.getTimezoneOffset, falseFunc)
-*##+js(set, Intl.DateTimeFormat.prototype.resolvedOptions, falseFunc)
-*##+js(set, performance.now, falseFunc)
+!*##+js(set, performance.now, falseFunc)
  
 !😡 Abort
-*##+js(aopr, HTMLCanvasElement.prototype.toDataURL)
-*##+js(aopr, CanvasRenderingContext2D.prototype.getImageData)
-*##+js(aopr, CanvasRenderingContext2D.prototype.isPointInPath)
-*##+js(aopr, CanvasRenderingContext2D.prototype.isPointInStroke)
 *##+js(aopr, WebGLRenderingContext.prototype.shaderSource)
 *##+js(aopr, WebGLRenderingContext.prototype.getExtension)
 *##+js(aopr, WebGLRenderingContext.prototype.getParameter)
