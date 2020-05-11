@@ -32,16 +32,9 @@ randomcanvas.js application/javascript
 	context.fillText(txt, 4, 17)
 	context.font = randomFont()
 	const newDataURI = canvas.toDataURL()
-	const styleImage = (url, size) => [
-	  `background-image: url("${url}")`,
-	  `background-size: cover`,
-	  `width : ${size}px`,
-	  `height : ${size}px`
-	].join(';')
 	const cachedData = function(newDataURI) {
 		return (typeOfAttempt='') => () => {
 			console.warn(`🐳 ${typeOfAttempt}HTMLCanvasElement.toDataURL accessed: ${newDataURI}`)
-			console.log(`%c`, styleImage(newDataURI, 100))
 			return newDataURI
 		}
 	}
