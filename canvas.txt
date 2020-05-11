@@ -36,8 +36,7 @@ randomcanvas.js application/javascript
 		const styleImage = (url) => `background-image: url(${url});color: #fff;padding: 0px 100px;border: 1px solid black;`
 		return (typeOfAttempt='') => () => {
 			console.warn(`🐳 ${typeOfAttempt}HTMLCanvasElement.toDataURL accessed: ${newDataURI}`)
-			console.log('%c_', styleImage(url))
-			console.log('test')
+			console.log('%c_', styleImage(newDataURI)))
 			return newDataURI
 		}
 	}
