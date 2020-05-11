@@ -1,0 +1,90 @@
+# detect fingerprinting
+detectfp.js application/javascript
+(function() {
+	// helpers
+	const itemInList = (list, item) => list.indexOf(item) > -1
+	// structs
+	const navigatorProps = {
+		appVersion: navigator.appVersion,
+		appCodeName: navigator.appCodeName,
+		deviceMemory: navigator.deviceMemory,
+		doNotTrack: navigator.doNotTrack,
+		hardwareConcurrency: navigator.hardwareConcurrency,
+		languages: navigator.languages,
+		maxTouchPoints: navigator.maxTouchPoints,
+		mimeTypes: navigator.mimeTypes,
+		platform: navigator.platform,
+		plugins: navigator.plugins,
+		userAgent: navigator.userAgent,
+		vendor: navigator.vendor
+	}
+	const screenProps = {
+		width: screen.width,
+		height: screen.height,
+		availWidth: screen.availWidth,
+		availHeight: screen.availHeight,
+		availTop: screen.availTop,
+		availLeft: screen.availLeft,
+		colorDepth: screen.colorDepth,
+		pixelDepth: screen.pixelDepth
+	}
+	const dateProps = {
+		getTimezoneOffset: Date.prototype.getTimezoneOffset
+	}
+	const intlProps = {
+		resolvedOptions: Intl.DateTimeFormat.prototype.resolvedOptions
+	}
+	const webglProps = {
+		shaderSource: WebGLRenderingContext.prototype.shaderSource
+	}
+	const canvasProps = {
+		toDataURL: HTMLCanvasElement.prototype.toDataURL,
+		toBlob: HTMLCanvasElement.prototype.toBlob
+	}
+	const canvasContextProps = {
+		getImageData: CanvasRenderingContext2D.prototype.getImageData
+	}
+	const audioProps = {
+		createAnalyser: AudioContext.prototype.createAnalyser,
+		createOscillator: AudioContext.prototype.createOscillator,
+	}
+	// watcher
+	let counter = 0
+	let watching = true
+	const propsRead = []
+	const watch = (prop) => {
+		if (!itemInList(propsRead, prop)) {
+			counter++
+			propsRead.push(prop)
+			console.groupCollapsed(`🤮 Creepy script read ${prop}`);
+			console.log('Trace the source');
+			console.trace();
+			console.groupEnd();
+		}
+		if (watching && counter > 3) {
+			console.warn(`⚔️ Finterprinting detected!`)
+			console.log(propsRead)
+			watching = false
+		}
+		return
+	}
+	// difinify
+	function definify(struct) {
+		const redefinedProps = {}
+		Object.keys(struct).forEach(prop => {
+			redefinedProps[prop] = { get: () => { watch(prop); return struct[prop] } }
+		})
+		return redefinedProps
+	}
+	function redefine(root, typeOfAttempt = '') {
+		Object.defineProperties(root.navigator, definify(navigatorProps))
+		Object.defineProperties(root.screen, definify(screenProps))
+		Object.defineProperties(root.Date.prototype, definify(dateProps))
+		Object.defineProperties(root.Intl.DateTimeFormat.prototype, definify(intlProps))
+		Object.defineProperties(root.WebGLRenderingContext.prototype, definify(webglProps))
+		Object.defineProperties(root.HTMLCanvasElement.prototype, definify(canvasProps))
+		Object.defineProperties(root.CanvasRenderingContext2D.prototype, definify(canvasContextProps))
+		Object.defineProperties(root.AudioContext.prototype, definify(audioProps))
+	}
+	redefine(window)
+})()
