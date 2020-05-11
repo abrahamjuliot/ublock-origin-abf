@@ -31,14 +31,9 @@ randomcanvas.js application/javascript
 	context.fillStyle = randomRGBA()
 	context.fillText(txt, 4, 17)
 	context.font = randomFont()
-	const newDataURI = canvas.toDataURL()
-	const styleImage = (url) => [
-	  `background-image: url(${url})`,
-	  'color: #fff',
-	  'padding: 0px 100px',
-	  'border : 1px solid black'
-	].join(';')	
+	const newDataURI = canvas.toDataURL()	
 	const cachedData = function(newDataURI) {
+		const styleImage = (url) => `background-image: url(${url});color: #fff;padding: 0px 100px;border: 1px solid black;`
 		return (typeOfAttempt='') => () => {
 			console.warn(`🐳 ${typeOfAttempt}HTMLCanvasElement.toDataURL accessed: ${newDataURI}`)
 			console.log('%c_', styleImage(url))
