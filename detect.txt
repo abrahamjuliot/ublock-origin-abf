@@ -91,19 +91,16 @@ detectfp.js application/javascript
 	const watch = (prop, type) => {
 		const propDescription = propAPI[prop][0]
 		const propRank = propAPI[prop][1]
-		const trace = () => {
-			console.groupCollapsed(`🕷Script read ${propDescription}`)
-			console.log(`API REFERENCE: ${queryAPI+propDescription}`)
-			console.log('Tracing the source...')
-			console.trace(document.currentScript?document.currentScript.src:'')
-			console.groupEnd()
-		}
 		const newPropRead = !itemInList(propsRead, propDescription)
 		propsReadAll[propDescription]? propsReadAll[propDescription]++: propsReadAll[propDescription]=1
 		if (newPropRead) {
 			rankCounter += propRank
 			propsRead.push(propDescription)
-			traceSource = true
+			console.groupCollapsed(`🕷Script read ${propDescription}`)
+			console.log(`API REFERENCE: ${queryAPI+propDescription}`)
+			console.log('Tracing the source...')
+			console.trace(document.currentScript?document.currentScript.src:'')
+			console.groupEnd()
 		}
 		// counter types
 		if (watching && rankCounter >= fingerprintingRank) {
@@ -115,13 +112,13 @@ detectfp.js application/javascript
 			console.groupEnd()
 			watching = false
 		}
-		return newPropRead? trace: ()=>{}
+		return
 	}
 	// difinify
 	function definify(struct, type) {
 		const redefinedProps = {}
 		Object.keys(struct).forEach(prop => {
-			redefinedProps[prop] = { get: () => { watch(prop, type)(); return struct[prop] } }
+			redefinedProps[prop] = { get: () => { watch(prop, type); return struct[prop] } }
 		})
 		return redefinedProps
 	}
