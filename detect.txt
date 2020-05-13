@@ -137,6 +137,6 @@ detectfp.js application/javascript
 	}
 	redefine(window)
 	//domLoaded(() => {
-		;[...document.getElementsByTagName('iframe')].forEach(frame => redefine(frame.contentWindow, '😡 Aggressive - '))	
-	})
+	//	;[...document.getElementsByTagName('iframe')].forEach(frame => redefine(frame.contentWindow, '😡 Aggressive - '))	
+	//})
 })()
