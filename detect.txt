@@ -103,7 +103,6 @@ detectfp.js application/javascript
 		if (newPropRead) {
 			rankCounter += propRank
 			propsRead.push(propDescription)
-			traceSource = true
 		}
 		// counter types
 		if (watching && rankCounter >= fingerprintingRank) {
@@ -136,4 +135,7 @@ detectfp.js application/javascript
 		Object.defineProperties(root.AudioContext.prototype, definify(audioProps, typeOfAttempt))
 	}
 	redefine(window)
+	domLoaded(() => {
+		;[...document.getElementsByTagName('iframe')].forEach(frame => redefine(frame.contentWindow, '😡 Aggressive - '))
+	})
 })()
