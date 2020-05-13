@@ -91,16 +91,19 @@ detectfp.js application/javascript
 	const watch = (prop, type) => {
 		const propDescription = propAPI[prop][0]
 		const propRank = propAPI[prop][1]
-		const newPropRead = !itemInList(propsRead, propDescription)
-		propsReadAll[propDescription]? propsReadAll[propDescription]++: propsReadAll[propDescription]=1
-		if (newPropRead) {
-			rankCounter += propRank
-			propsRead.push(propDescription)
+		const trace = () => {
 			console.groupCollapsed(`🕷Script read ${propDescription}`)
 			console.log(`API REFERENCE: ${queryAPI+propDescription}`)
 			console.log('Tracing the source...')
 			console.trace(document.currentScript?document.currentScript.src:'')
 			console.groupEnd()
+		}
+		const newPropRead = !itemInList(propsRead, propDescription)
+		propsReadAll[propDescription]? propsReadAll[propDescription]++: propsReadAll[propDescription]=1
+		if (newPropRead) {
+			rankCounter += propRank
+			propsRead.push(propDescription)
+			traceSource = true
 		}
 		// counter types
 		if (watching && rankCounter >= fingerprintingRank) {
@@ -112,13 +115,13 @@ detectfp.js application/javascript
 			console.groupEnd()
 			watching = false
 		}
-		return
+		return newPropRead? trace: ()=>{}
 	}
 	// difinify
 	function definify(struct, type) {
 		const redefinedProps = {}
 		Object.keys(struct).forEach(prop => {
-			redefinedProps[prop] = { get: () => { watch(prop, type); return struct[prop] } }
+			redefinedProps[prop] = { get: () => { watch(prop, type)(); return struct[prop] } }
 		})
 		return redefinedProps
 	}
@@ -133,7 +136,7 @@ detectfp.js application/javascript
 		Object.defineProperties(root.AudioContext.prototype, definify(audioProps, typeOfAttempt))
 	}
 	redefine(window)
-	domLoaded(() => {
+	//domLoaded(() => {
 		;[...document.getElementsByTagName('iframe')].forEach(frame => redefine(frame.contentWindow, '😡 Aggressive - '))	
 	})
 })()
