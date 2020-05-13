@@ -3,8 +3,6 @@ detectfp.js application/javascript
 (function() {
 	// helpers
 	const itemInList = (list, item) => list.indexOf(item) > -1
-	const domLoaded = (fn) => document.readyState != 'loading'?
-		fn(): document.addEventListener('DOMContentLoaded', fn)
 	// structs
 	const navigatorProps = {
 		appVersion: navigator.appVersion,
@@ -135,7 +133,4 @@ detectfp.js application/javascript
 		Object.defineProperties(root.AudioContext.prototype, definify(audioProps, typeOfAttempt))
 	}
 	redefine(window)
-	domLoaded(() => {
-		;[...document.getElementsByTagName('iframe')].forEach(frame => redefine(frame.contentWindow, '😡 Aggressive - '))
-	})
 })()
