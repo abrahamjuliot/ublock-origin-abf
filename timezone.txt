@@ -6,13 +6,13 @@ spooftimezone.js application/javascript
 		return function() { return options }
 	}
 	const getOptions = cachedOptions()
-	function redefine(root, typeOfAttempt = '') {
+	function redefine(root) {
 		Object.defineProperties(
 			root.Date.prototype,
 			{
 				'getTimezoneOffset':  {
 					value: () => {
-						console.warn(`🐠 ${typeOfAttempt}Date.getTimezoneOffset accessed`)
+						console.warn(`🐠 Date.getTimezoneOffset accessed`)
 						return 0	
 					}
 				}
@@ -25,7 +25,7 @@ spooftimezone.js application/javascript
 					value: () => {
 						const options = getOptions()
 						options.timeZone = 'UTC'
-						console.warn(`🐠 ${typeOfAttempt}Intl.DateTimeFormat.resolvedOptions accessed`)
+						console.warn(`🐠 Intl.DateTimeFormat.resolvedOptions accessed`)
 						return options
 					}
 				}
@@ -34,8 +34,4 @@ spooftimezone.js application/javascript
 	}
 	// Handle window
 	redefine(window)
-	// Handle iframes
-	;[...document.getElementsByTagName('iframe')].forEach(iframe => {
-		redefine(iframe.contentWindow, '😡 Aggressive - ')
-	})
 })()
