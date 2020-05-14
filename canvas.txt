@@ -39,7 +39,7 @@ randomcanvas.js application/javascript
 		return (typeOfAttempt) => () => {
 			if (ignoreInitialAggressiveCount && typeOfAttempt == aggressive) {
 				ignoreInitialAggressiveCount = false
-				console.log('ignoring initial aggression count (triggered by injection)')
+				console.log('Ignoring initial aggression count triggered by script injection...')
 				return newDataURI
 			}
 			console.warn(`🐳 ${typeOfAttempt}HTMLCanvasElement.toDataURL accessed: ${newDataURI}`)
