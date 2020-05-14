@@ -179,9 +179,11 @@ detectfp.js application/javascript
 		if (watching && rankCounter >= fingerprintingRank) {
 			const warnStyle = `color:green;border:2px solid green;font-weight:bold;padding:5px;`
 			console.warn(`%c⚔️ Finterprinting detected!`, warnStyle)
-			console.groupCollapsed(`📔 Finterprinting stats`)
-			console.log(`Total properties read: `, propsRead)
-			console.log(`Total reads per property: `, propsReadAll)
+			console.groupCollapsed(`📔 Finterprinting Stats`)
+			console.log(`Total properties read (your data collected): `, propsRead)
+			console.log(`Total reads per property (how many times your data was collected): `, propsReadAll)
+			console.log(`Search this hosts Privacy Policy: https://duckduckgo.com/?q=%22{window.location.hostname
+}%22+%22privacy%22+%22policy%22$`)
 			console.groupEnd()
 			watching = false
 		}
