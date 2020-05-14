@@ -156,6 +156,7 @@ detectfp.js application/javascript
 	// watcher
 	let rankCounter = 0
 	let watching = true
+	const domain = window.location.hostname
 	const fingerprintingRank = 6
 	const propsRead = []
 	const propsReadAll = {}
@@ -182,7 +183,7 @@ detectfp.js application/javascript
 			console.groupCollapsed(`📔 Finterprinting Stats`)
 			console.log(`Total properties read (your data collected): `, propsRead)
 			console.log(`Total reads per property (how many times your data was collected): `, propsReadAll)
-			console.log(`Search this hosts Privacy Policy: https://duckduckgo.com/?q=%22${window.location.hostname}%22+%22privacy%22+%22policy%22`)
+			console.log(`Search this hosts Privacy Policy: https://duckduckgo.com/?q=%22${domain}%22+%22privacy%22+%22policy%22`)
 			console.groupEnd()
 			watching = false
 		}
