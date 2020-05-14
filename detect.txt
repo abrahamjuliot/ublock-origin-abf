@@ -3,10 +3,6 @@ detectfp.js application/javascript
 (function() {
 	// helpers
 	const itemInList = (list, item) => list.indexOf(item) > -1
-	const domLoaded = (fn) => document.readyState != 'loading'?
-    	fn(): document.addEventListener('DOMContentLoaded', fn)
-	// settings
-	const aggressive = '😡 Aggressive - '
 	// structs
 	const navigatorProps = {
 		appVersion: navigator.appVersion,
@@ -160,16 +156,10 @@ detectfp.js application/javascript
 	// watcher
 	let rankCounter = 0
 	let watching = true
-	let ignoreInitialAggressiveCount = true
 	const fingerprintingRank = 6
 	const propsRead = []
 	const propsReadAll = {}
-	const watch = (prop, type) => {
-		if (ignoreInitialAggressiveCount && type == aggressive) {
-			ignoreInitialAggressiveCount = false
-			console.log('Ignoring initial aggression count triggered by script injection...')
-			return ()=>{}
-		}
+	const watch = (prop) => {
 		const propDescription = propAPI[prop][0]
 		const propRank = propAPI[prop][1]
 		const trace = () => {
@@ -188,7 +178,7 @@ detectfp.js application/javascript
 		// counter types
 		if (watching && rankCounter >= fingerprintingRank) {
 			const warnStyle = `color:green;border:2px solid green;font-weight:bold;padding:5px;`
-			console.warn(`%c⚔️${type}Finterprinting detected!`, warnStyle)
+			console.warn(`%c⚔️ Finterprinting detected!`, warnStyle)
 			console.groupCollapsed(`📔 Finterprinting stats`)
 			console.log(`Total properties read: `, propsRead)
 			console.log(`Total reads per property: `, propsReadAll)
@@ -198,36 +188,33 @@ detectfp.js application/javascript
 		return newPropRead? trace: ()=>{}
 	}
 	// difinify
-	function definify(struct, type) {
+	function definify(struct) {
 		const redefinedProps = {}
 		Object.keys(struct).forEach(prop => {
-			redefinedProps[prop] = { get: () => { watch(prop, type)(); return struct[prop] } }
+			redefinedProps[prop] = { get: () => { watch(prop)(); return struct[prop] } }
 		})
 		return redefinedProps
 	}
 	function redefine(root, typeOfAttempt = '') {
-		Object.defineProperties(root.navigator, definify(navigatorProps, typeOfAttempt))
-		Object.defineProperties(root.screen, definify(screenProps, typeOfAttempt))
-		Object.defineProperties(root.Date.prototype, definify(dateProps, typeOfAttempt))
-		Object.defineProperties(root.Intl.DateTimeFormat.prototype, definify(intlProps, typeOfAttempt))
-		Object.defineProperties(root.Math, definify(mathProps, typeOfAttempt))
-		Object.defineProperties(root.navigator.mediaDevices, definify(mediaDeviceProps, typeOfAttempt))
-		Object.defineProperties(root.HTMLVideoElement.prototype, definify(videoElementProps, typeOfAttempt))
-		Object.defineProperties(root.HTMLMediaElement.prototype, definify(mediaElementProps, typeOfAttempt))
-		Object.defineProperties(root.MediaSource, definify(mediaSourceProps, typeOfAttempt))
-		Object.defineProperties(root.MediaRecorder, definify(mediaRecorderProps, typeOfAttempt))
-		Object.defineProperties(root.speechSynthesis, definify(speechProps, typeOfAttempt))
-		Object.defineProperties(root.performance, definify(performanceProps, typeOfAttempt))
-		Object.defineProperties(root.Element.prototype, definify(elemRectProps, typeOfAttempt))
-		Object.defineProperties(root.Range.prototype, definify(rangeRectProps, typeOfAttempt))
-		Object.defineProperties(root.WebGLRenderingContext.prototype, definify(webglProps, typeOfAttempt))
-		Object.defineProperties(root.HTMLCanvasElement.prototype, definify(canvasProps, typeOfAttempt))
-		Object.defineProperties(root.CanvasRenderingContext2D.prototype, definify(canvasContextProps, typeOfAttempt))
-		Object.defineProperties(root.AudioContext.prototype, definify(audioProps, typeOfAttempt))
-		Object.defineProperties(root.AudioBuffer.prototype, definify(audioBufferProps, typeOfAttempt))
+		Object.defineProperties(root.navigator, definify(navigatorProps))
+		Object.defineProperties(root.screen, definify(screenProps))
+		Object.defineProperties(root.Date.prototype, definify(dateProps))
+		Object.defineProperties(root.Intl.DateTimeFormat.prototype, definify(intlProps))
+		Object.defineProperties(root.Math, definify(mathProps))
+		Object.defineProperties(root.navigator.mediaDevices, definify(mediaDeviceProps))
+		Object.defineProperties(root.HTMLVideoElement.prototype, definify(videoElementProps))
+		Object.defineProperties(root.HTMLMediaElement.prototype, definify(mediaElementProps))
+		Object.defineProperties(root.MediaSource, definify(mediaSourceProps))
+		Object.defineProperties(root.MediaRecorder, definify(mediaRecorderProps))
+		Object.defineProperties(root.speechSynthesis, definify(speechProps))
+		Object.defineProperties(root.performance, definify(performanceProps))
+		Object.defineProperties(root.Element.prototype, definify(elemRectProps))
+		Object.defineProperties(root.Range.prototype, definify(rangeRectProps))
+		Object.defineProperties(root.WebGLRenderingContext.prototype, definify(webglProps))
+		Object.defineProperties(root.HTMLCanvasElement.prototype, definify(canvasProps))
+		Object.defineProperties(root.CanvasRenderingContext2D.prototype, definify(canvasContextProps))
+		Object.defineProperties(root.AudioContext.prototype, definify(audioProps))
+		Object.defineProperties(root.AudioBuffer.prototype, definify(audioBufferProps))
 	}
 	redefine(window)
-	domLoaded(() => {
-		;[...document.getElementsByTagName('iframe')].forEach(frame => redefine(frame.contentWindow, aggressive))	
-	})
 })()
