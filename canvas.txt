@@ -17,6 +17,7 @@ randomcanvas.js application/javascript
 		return `${fontSize}px '${fontFamily[rand]}'`
 	}
 	const canvas = window.document.createElement('canvas')
+	const aggressive = '😡 Aggressive - '
 	const txt = '🚀 Private'
 	const context = canvas.getContext('2d')
 	context.textBaseline = 'top'
@@ -34,7 +35,13 @@ randomcanvas.js application/javascript
 	const newDataURI = canvas.toDataURL()	
 	const cachedData = function(newDataURI) {
 		const styleImage = (url) => `background-image: url(${url});color: #fff;padding: 0px 100px;border: 1px solid black;`
-		return (typeOfAttempt='') => () => {
+		let ignoreInitialAggressiveCount = true
+		return (typeOfAttempt) => () => {
+			if (ignoreInitialAggressiveCount && typeOfAttempt == aggressive) {
+				ignoreInitialAggressiveCount = false
+				console.log('ignoring initial aggression count (triggered by injection)')
+				return newDataURI
+			}
 			console.warn(`🐳 ${typeOfAttempt}HTMLCanvasElement.toDataURL accessed: ${newDataURI}`)
 			console.log('%c_', styleImage(newDataURI))
 			return newDataURI
@@ -46,6 +53,6 @@ randomcanvas.js application/javascript
 	}
 	redefine(window)
 	domLoaded(() => {
-		;[...document.getElementsByTagName('iframe')].forEach(frame => redefine(frame.contentWindow, '😡 Aggressive - '))	
+		;[...document.getElementsByTagName('iframe')].forEach(frame => redefine(frame.contentWindow, aggressive))	
 	})
 })()
