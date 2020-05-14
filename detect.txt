@@ -92,10 +92,6 @@ detectfp.js application/javascript
 		createAnalyser: AudioContext.prototype.createAnalyser,
 		createOscillator: AudioContext.prototype.createOscillator,
 	}
-	const audioBufferProps = {
-		getChannelData: AudioBuffer.prototype.getChannelData,
-		copyFromChannel: AudioBuffer.prototype.copyFromChannel,
-	}
 	const queryAPI = 'https://developer.mozilla.org/en-US/search?q='
 	// API with Ranking per Unique Impact and Longterm State
 	const propAPI = {
@@ -149,9 +145,7 @@ detectfp.js application/javascript
 		measureText: ['CanvasRenderingContext2D.prototype.measureText', 1],
 		font: ['CanvasRenderingContext2D.prototype.font', 1],
 		createAnalyser: ['AudioContext.prototype.createAnalyser', 6],
-		createOscillator: ['AudioContext.prototype.createOscillator', 6],
-		getChannelData: ['AudioBuffer.prototype.getChannelData', 6],
-		copyFromChannel: ['AudioBuffer.prototype.copyFromChannel', 6]
+		createOscillator: ['AudioContext.prototype.createOscillator', 6]
 	}
 	// watcher
 	let rankCounter = 0
@@ -216,7 +210,6 @@ detectfp.js application/javascript
 		Object.defineProperties(root.HTMLCanvasElement.prototype, definify(canvasProps))
 		Object.defineProperties(root.CanvasRenderingContext2D.prototype, definify(canvasContextProps))
 		Object.defineProperties(root.AudioContext.prototype, definify(audioProps))
-		Object.defineProperties(root.AudioBuffer.prototype, definify(audioBufferProps))
 	}
 	redefine(window)
 })()
