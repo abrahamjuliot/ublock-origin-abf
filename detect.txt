@@ -3,6 +3,10 @@ detectfp.js application/javascript
 (function() {
 	// helpers
 	const itemInList = (list, item) => list.indexOf(item) > -1
+	const domLoaded = (fn) => document.readyState != 'loading'?
+    	fn(): document.addEventListener('DOMContentLoaded', fn)
+	// settings
+	const aggressive = '😡 Aggressive - '
 	// structs
 	const navigatorProps = {
 		appVersion: navigator.appVersion,
@@ -34,24 +38,72 @@ detectfp.js application/javascript
 	const intlProps = {
 		resolvedOptions: Intl.DateTimeFormat.prototype.resolvedOptions
 	}
+	const mathProps = {
+		acos: Math.acos,
+		acosh: Math.acosh,
+		asin: Math.asin,
+		asinh: Math.asinh,
+		cosh: Math.cosh,
+		expm1: Math.expm1,
+		sinh: Math.sinh
+	}
+	const mediaDeviceProps = {
+		enumerateDevices: navigator.mediaDevices.enumerateDevices
+	}
+	const videoElementProps = {
+		canPlayType: HTMLVideoElement.prototype.canPlayType
+	}
+	const mediaElementProps = {
+		canPlayType: HTMLMediaElement.prototype.canPlayType
+	}
+	const mediaSourceProps = {
+		isTypeSupported: MediaSource.isTypeSupported
+	}
+	const mediaRecorderProps = {
+		isTypeSupported: MediaRecorder.isTypeSupported
+	}
+	const speechProps = {
+		getVoices: speechSynthesis.getVoices
+	}
+	const performanceProps = {
+		now: performance.now
+	}
+	const elemRectProps = {
+		getBoundingClientRect: Element.prototype.getBoundingClientRect,
+		getClientRects: Element.prototype.getClientRects
+	}
+	const rangeRectProps = {
+		getBoundingClientRect: Range.prototype.getBoundingClientRect,
+		getClientRects: Range.prototype.getClientRects
+	}
 	const webglProps = {
-		shaderSource: WebGLRenderingContext.prototype.shaderSource
+		shaderSource: WebGLRenderingContext.prototype.shaderSource,
+		getExtension: WebGLRenderingContext.prototype.getExtension,
+		getParameter: WebGLRenderingContext.prototype.getParameter,
+		getSupportedExtensions: WebGLRenderingContext.prototype.getSupportedExtensions
 	}
 	const canvasProps = {
 		toDataURL: HTMLCanvasElement.prototype.toDataURL,
 		toBlob: HTMLCanvasElement.prototype.toBlob
 	}
 	const canvasContextProps = {
-		getImageData: CanvasRenderingContext2D.prototype.getImageData
+		getImageData: CanvasRenderingContext2D.prototype.getImageData,
+		isPointInPath: CanvasRenderingContext2D.prototype.isPointInPath,
+		isPointInStroke: CanvasRenderingContext2D.prototype.isPointInStroke,
+		measureText: CanvasRenderingContext2D.prototype.measureText,
 	}
 	const audioProps = {
 		createAnalyser: AudioContext.prototype.createAnalyser,
 		createOscillator: AudioContext.prototype.createOscillator,
 	}
+	const audioBufferProps = {
+		getChannelData: AudioBuffer.prototype.getChannelData,
+		copyFromChannel: AudioBuffer.prototype.copyFromChannel,
+	}
 	const queryAPI = 'https://developer.mozilla.org/en-US/search?q='
 	// API with Ranking per Unique Impact and Longterm State
 	const propAPI = {
-		appVersion: ['navigator.appVersion', 3],
+		appVersion: ['navigator.appVersion', 2],
 		appCodeName: ['navigator.appCodeName', 1],
 		deviceMemory: ['navigator.deviceMemory', 1],
 		doNotTrack: ['navigator.doNotTrack', 1],
@@ -73,20 +125,51 @@ detectfp.js application/javascript
 		pixelDepth: ['screen.pixelDepth', 1],
 		getTimezoneOffset: ['Date.prototype.getTimezoneOffset', 2],
 		resolvedOptions: ['Intl.DateTimeFormat.prototype.resolvedOptions', 2],
+		acos: ['acos: Math.acos', 1],
+		acosh: ['Math.acosh', 1],
+		asin: ['Math.asin', 1],
+		asinh: ['Math.asinh', 1],
+		cosh: ['Math.cosh', 1],
+		expm1: ['Math.expm1', 1],
+		sinh: ['Math.sinh', 1],
+		enumerateDevices: ['navigator.mediaDevices.enumerateDevices', 1],
+		canPlayType: ['prototype.canPlayType', 1],
+		isTypeSupported: ['isTypeSupported', 1],
+		getVoices: ['speechSynthesis.getVoices', 1],
+		now: ['performance.now', 1],
+		getBoundingClientRect: ['prototype.getBoundingClientRect', 2],
+		getClientRects: ['prototype.getClientRects', 2],
+		offsetWidth: ['HTMLElement.prototype.offsetWidth', 1],
+		offsetHeight: ['HTMLElement.prototype.offsetHeight', 1],
 		shaderSource: ['WebGLRenderingContext.prototype.shaderSource', 6],
+		getExtension: ['WebGLRenderingContext.prototype.getExtension', 2],
+		getParameter: ['WebGLRenderingContext.prototype.getParameter', 2],
+		getSupportedExtensions: ['WebGLRenderingContext.prototype.getSupportedExtensions', 4],
 		toDataURL: ['HTMLCanvasElement.prototype.toDataURL', 6],
 		toBlob: ['HTMLCanvasElement.prototype.toBlob', 6],
 		getImageData: ['CanvasRenderingContext2D.prototype.getImageData', 6],
+		isPointInPath: ['CanvasRenderingContext2D.prototype.isPointInPath', 1],
+		isPointInStroke: ['CanvasRenderingContext2D.prototype.isPointInStroke', 1],
+		measureText: ['CanvasRenderingContext2D.prototype.measureText', 1],
+		font: ['CanvasRenderingContext2D.prototype.font', 1],
 		createAnalyser: ['AudioContext.prototype.createAnalyser', 6],
-		createOscillator: ['AudioContext.prototype.createOscillator', 6]
+		createOscillator: ['AudioContext.prototype.createOscillator', 6],
+		getChannelData: ['AudioBuffer.prototype.getChannelData', 6],
+		copyFromChannel: ['AudioBuffer.prototype.copyFromChannel', 6]
 	}
 	// watcher
 	let rankCounter = 0
 	let watching = true
+	let ignoreInitialAggressiveCount = true
 	const fingerprintingRank = 6
 	const propsRead = []
 	const propsReadAll = {}
 	const watch = (prop, type) => {
+		if (ignoreInitialAggressiveCount && type == aggressive) {
+			ignoreInitialAggressiveCount = false
+			console.log('Ignoring initial aggression count triggered by script injection...')
+			return ()=>{}
+		}
 		const propDescription = propAPI[prop][0]
 		const propRank = propAPI[prop][1]
 		const trace = () => {
@@ -127,10 +210,24 @@ detectfp.js application/javascript
 		Object.defineProperties(root.screen, definify(screenProps, typeOfAttempt))
 		Object.defineProperties(root.Date.prototype, definify(dateProps, typeOfAttempt))
 		Object.defineProperties(root.Intl.DateTimeFormat.prototype, definify(intlProps, typeOfAttempt))
+		Object.defineProperties(root.Math, definify(mathProps, typeOfAttempt))
+		Object.defineProperties(root.navigator.mediaDevices, definify(mediaDeviceProps, typeOfAttempt))
+		Object.defineProperties(root.HTMLVideoElement.prototype, definify(videoElementProps, typeOfAttempt))
+		Object.defineProperties(root.HTMLMediaElement.prototype, definify(mediaElementProps, typeOfAttempt))
+		Object.defineProperties(root.MediaSource, definify(mediaSourceProps, typeOfAttempt))
+		Object.defineProperties(root.MediaRecorder, definify(mediaRecorderProps, typeOfAttempt))
+		Object.defineProperties(root.speechSynthesis, definify(speechProps, typeOfAttempt))
+		Object.defineProperties(root.performance, definify(performanceProps, typeOfAttempt))
+		Object.defineProperties(root.Element.prototype, definify(elemRectProps, typeOfAttempt))
+		Object.defineProperties(root.Range.prototype, definify(rangeRectProps, typeOfAttempt))
 		Object.defineProperties(root.WebGLRenderingContext.prototype, definify(webglProps, typeOfAttempt))
 		Object.defineProperties(root.HTMLCanvasElement.prototype, definify(canvasProps, typeOfAttempt))
 		Object.defineProperties(root.CanvasRenderingContext2D.prototype, definify(canvasContextProps, typeOfAttempt))
 		Object.defineProperties(root.AudioContext.prototype, definify(audioProps, typeOfAttempt))
+		Object.defineProperties(root.AudioBuffer.prototype, definify(audioBufferProps, typeOfAttempt))
 	}
 	redefine(window)
+	domLoaded(() => {
+		;[...document.getElementsByTagName('iframe')].forEach(frame => redefine(frame.contentWindow, aggressive))	
+	})
 })()
