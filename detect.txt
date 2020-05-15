@@ -9,30 +9,30 @@ detectfp.js application/javascript
 	const rand = (min, max) =>
 		(Math.floor(Math.random() * (max - min + 1)) + min)
 	// randomize
-	const style = `padding:4px 0px;color:green;background:#c9f3c92e;`
+	const randomized = {}
 	const doNotTrack = () => {
 		const val = listRand(['0','1'])
-		console.log(`%cnavigator.doNotTrack randomized: ${val}`, style)
+		randomized.doNotTrack = ['doNotTrack', val]
 		return val
 	}
 	const maxTouchPoints = () => {
 		const val = rand(0, 10)
-		console.log(`%cnavigator.maxTouchPoints randomized: ${val}`, style)
+		randomized.maxTouchPoints = ['maxTouchPoints', val]
 		return val
 	}
 	const hardwareConcurrency = () => {
 		const val = rand(1, 16)
-		console.log(`%cnavigator.hardwareConcurrency randomized: ${val}`, style)
+		randomized.hardwareConcurrency = ['hardwareConcurrency', val]
 		return val
 	}
 	const deviceMemory = () => {
 		const val = evenRand(2, 32)
-		console.log(`%cnavigator.deviceMemory randomized: ${val}`, style)
+		randomized.deviceMemory = ['deviceMemory', val]
 		return val
 	}
 	const screenRatio = listRand([{w:1920,h:1080},{w:1440,h:900},{w:1280,h:800},{w:1600,h:900}])
 	const screenRandomized = (prop, val) => {
-		console.log(`%c${prop} randomized: ${val}`, style)
+		randomized[prop] = ['prop', val]
 		return val
 	}
 	// structs
@@ -124,8 +124,24 @@ detectfp.js application/javascript
 		createAnalyser: AudioContext.prototype.createAnalyser,
 		createOscillator: AudioContext.prototype.createOscillator,
 	}
-	const queryAPI = 'https://developer.mozilla.org/en-US/search?q='
+	// Log Randomized
+	const colors = [
+		'rgba(251,207,207,.5)',
+		'rgba(255,239,208,.5)',
+		'rgba(210,255,254,.5)',
+		'rgba(206,251,211,.5)',
+		'rgba(240,198,255.5)'
+	]
+	const style = () => `padding:4px 0px;background:${listRand(colors)};`
+	console.groupCollapsed(`🧪 Randomized ${randomized.length} properties`)
+	Object.keys(randomized).forEach(key => {
+		const prop = randomized[key][0]
+		const val = randomized[key][0]
+		console.log(console.log(`%c${prop}: ${val}`, style))
+	})
+	console.groupEnd()
 	// API with Ranking per Unique Impact and Longterm State
+	const queryAPI = 'https://developer.mozilla.org/en-US/search?q='
 	const propAPI = {
 		appVersion: ['navigator.appVersion', 2],
 		appCodeName: ['navigator.appCodeName', 1],
