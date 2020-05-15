@@ -211,9 +211,9 @@ detectfp.js application/javascript
 	const watch = (prop) => {
 		const propDescription = propAPI[prop][0]
 		const propRank = propAPI[prop][1]
-		//const emojis = propRank>=6?'🥵':propRank>=4?'😱':propRank>=3?'😨':propRank>=2?'☹️':'🙄'
 		const trace = () => {
-			console.groupCollapsed(`🥵 Script read ${propDescription}`)
+			const emojis = propRank >= 6? '🥵': propRank >= 4? '😱': propRank >= 3? '😨': propRank >=2 ? '☹️': '🙄'
+			console.groupCollapsed(`${emojis} Script read ${propDescription}`)
 			console.log(`API REFERENCE: ${queryAPI+propDescription}`)
 			console.log('Attempting to trace the source (refresh to retry)...')
 			console.trace(document.currentScript?document.currentScript.src:'')
