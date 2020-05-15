@@ -126,11 +126,11 @@ detectfp.js application/javascript
 	}
 	// Log Randomized
 	const colors = () => [
-		`rgba(251,207,207,.${rand(1,9)})`,
-		`rgba(255,239,208,.${rand(1,9)}))`,
-		`rgba(210,255,254,.${rand(1,9)}))`,
-		`rgba(206,251,211,.${rand(1,9)}))`,
-		`rgba(240,198,255,.${rand(1,9)}))`
+		`rgba(251,207,207,.${rand(5,9)})`,
+		`rgba(255,239,208,.${rand(5,9)}))`,
+		`rgba(210,255,254,.${rand(5,9)}))`,
+		`rgba(206,251,211,.${rand(5,9)}))`,
+		`rgba(240,198,255,.${rand(5,9)}))`
 	]
 	const style = () => `padding:4px 0px;background:${listRand(colors())};`
 	const randomizedKeys = Object.keys(randomized)
