@@ -18,20 +18,16 @@ spoofnavigator.js application/javascript
 		props.hardwareConcurrency,
 		props.deviceMemory
 	].join('.')
-	const reads = []
 	const watcher = function(prop) {
 		const style = `padding:4px 0px;color:green;background:#c9f3c92e;`
-		const propWasNotRead = !reads.filter(item => item == prop)[0]
-		propWasNotRead?
-		console.log(`%cSpoofing ${prop} in new hash (${hash}): ${props[prop]}`, style):
-		reads.push(prop)
+		console.log(`%cSpoofing ${prop} in new hash (${hash}): ${props[prop]}`, style)
 		return
 	}
 	// difinify
 	function definify(props) {
 		const redefinedProps = {}
 		Object.keys(props).forEach(prop => {
-			redefinedProps[prop] = { value: (()=> { watcher(prop);return props[prop] })() }
+			redefinedProps[prop] = { value: (() => {watcher(prop); return props[prop]})() }
 		})
 		return redefinedProps
 	}
