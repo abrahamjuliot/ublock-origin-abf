@@ -2,36 +2,34 @@
 |http:$document
 
 !💣 Block
-!*##iframe:remove()
+!*##iframe:remove() use uMatrx
 *##+js(nowebrtc)
-!||$csp=worker-src 'none', domain=~youtube.com|~google.com
+!||$csp=worker-src 'none', domain=~youtube.com|~google.com use uMatrx
 *##+js(window.name-defuser)
 
 !🧪 Spoof
 *##+js(randomcanvas)
-!*##+js(spooftimezone)
-
-!⚠️ Warn
 *##+js(detectfp)
+*##+js(spoofnavigator)
+*##+js(spooftimezone)
 
 !🎨 Redefine
 !*##+js(set, navigator.deviceMemory, 4)
+!*##+js(set, navigator.maxTouchPoints, 0)
 
 !🚽 Remove
 !*##+js(set, navigator.appCodeName, undefined)
 !*##+js(set, navigator.appName, undefined)
 !*##+js(set, navigator.appVersion, undefined)
 !*##+js(set, navigator.buildID, undefined)
-
 !*##+js(set, navigator.getBattery, undefined)
 !*##+js(set, navigator.hardwareConcurrency, undefined)
 !*##+js(set, navigator.mimeTypes, undefined)
-
 !*##+js(set, navigator.platform, undefined)
-
 !*##+js(set, navigator.plugins, undefined)
-
 !*##+js(set, navigator.vendor, undefined)
+!*##+js(set, navigator.deviceMemory, undefined)
+!*##+js(set, navigator.maxTouchPoints, undefined)
 !*##+js(set, screen.height, undefined)
 !*##+js(set, screen.width, undefined)
 !*##+js(set, screen.availHeight, undefined)
@@ -40,17 +38,17 @@
 !*##+js(set, screen.innerWidth, undefined)
 !*##+js(set, screen.colorDepth, undefined)
 !*##+js(set, screen.pixelDepth, undefined)
+!*##+js(set, AudioBuffer.prototype.getChannelData, undefined)
+!*##+js(set, WebGLRenderingContext.prototype.getExtension, undefined)
+!*##+js(set, WebGLRenderingContext.prototype.getParameter, undefined)
 
 !🧯 Falsify
 !*##+js(set, navigator.mediaDevices.enumerateDevices, falseFunc)
-!*##+js(set, HTMLMediaElement.prototype.canPlayType, falseFunc)
 !*##+js(set, speechSynthesis.getVoices, falseFunc)
 !*##+js(set, performance.now, falseFunc)
- 
+
 !😡 Abort
 !*##+js(aopr, WebGLRenderingContext.prototype.shaderSource)
-!*##+js(aopr, WebGLRenderingContext.prototype.getExtension)
-!*##+js(aopr, WebGLRenderingContext.prototype.getParameter)
 !*##+js(aopr, AudioBuffer.prototype.getChannelData)
 !*##+js(aopr, AudioContext)
 !*##+js(aopr, BaseAudioContext.prototype.createOscillator)
