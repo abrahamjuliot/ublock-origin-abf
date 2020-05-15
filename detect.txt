@@ -3,26 +3,58 @@ detectfp.js application/javascript
 (function() {
 	// helpers
 	const itemInList = (list, item) => list.indexOf(item) > -1
+	const listRand = (list) => list[Math.floor(Math.random() * list.length)]
+	const evenRand = (min, max) =>
+		(Math.floor(Math.random() * ((max/2) - min + 1)) + min)*2
+	const rand = (min, max) =>
+		(Math.floor(Math.random() * (max - min + 1)) + min)
+	// randomize
+	const style = `padding:4px 0px;color:green;background:#c9f3c92e;`
+	const doNotTrack = () => {
+		const val = listRand(['0','1'])
+		console.log(`%cnavigator.doNotTrack randomized: ${val}`, style)
+		return val
+	}
+	const maxTouchPoints = () => {
+		const val = rand(0, 10)
+		console.log(`%cnavigator.maxTouchPoints randomized: ${val}`, style)
+		return val
+	}
+	const hardwareConcurrency = () => {
+		const val = rand(1, 16)
+		console.log(`%cnavigator.hardwareConcurrency randomized: ${val}`, style)
+		return val
+	}
+	const deviceMemory = () => {
+		const val = evenRand(2, 32)
+		console.log(`%cnavigator.deviceMemory randomized: ${val}`, style)
+		return val
+	}
+	const screenRatio = listRand([{w:1920,h:1080},{w:1440,h:900},{w:1280,h:800},{w:1600,h:900}])
+	const screenRandomized = (prop, val) => {
+		console.log(`%c${prop} randomized: ${val}`, style)
+		return val
+	}
 	// structs
 	const navigatorProps = {
 		appVersion: navigator.appVersion,
 		appCodeName: navigator.appCodeName,
-		deviceMemory: navigator.deviceMemory,
-		doNotTrack: navigator.doNotTrack,
-		hardwareConcurrency: navigator.hardwareConcurrency,
+		deviceMemory: deviceMemory(), // randomized
+		doNotTrack: doNotTrack(), // randomized
+		hardwareConcurrency: hardwareConcurrency(), // randomized
 		languages: navigator.languages,
-		maxTouchPoints: navigator.maxTouchPoints,
-		mimeTypes: navigator.mimeTypes,
+		maxTouchPoints: maxTouchPoints(), // randomized
+		mimeTypes: undefined,
 		platform: navigator.platform,
-		plugins: navigator.plugins,
+		plugins: undefined,
 		userAgent: navigator.userAgent,
-		vendor: navigator.vendor
+		vendor: ''
 	}
 	const screenProps = {
-		width: screen.width,
-		height: screen.height,
-		availWidth: screen.availWidth,
-		availHeight: screen.availHeight,
+		width: screenRandomized('screen.width', screenRatio.w),
+		height: screenRandomized('screen.height', screenRatio.h),
+		availWidth: screenRandomized('screen.availWidth', screenRatio.w-rand(1, 20)),
+		availHeight: screenRandomized('screen.availHeight', screenRatio.h-rand(1, 20)),
 		availTop: screen.availTop,
 		availLeft: screen.availLeft,
 		colorDepth: screen.colorDepth,
@@ -59,7 +91,7 @@ detectfp.js application/javascript
 		isTypeSupported: MediaRecorder.isTypeSupported
 	}
 	const speechProps = {
-		getVoices: speechSynthesis.getVoices
+		getVoices: [] // speechSynthesis.getVoices
 	}
 	const performanceProps = {
 		now: performance.now
