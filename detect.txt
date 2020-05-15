@@ -126,17 +126,18 @@ detectfp.js application/javascript
 	}
 	// Log Randomized
 	const colors = [
-		'rgba(251,207,207,.5)',
-		'rgba(255,239,208,.5)',
-		'rgba(210,255,254,.5)',
-		'rgba(206,251,211,.5)',
-		'rgba(240,198,255.5)'
+		'rgba(251,207,207,1)',
+		'rgba(255,239,208,1)',
+		'rgba(210,255,254,1)',
+		'rgba(206,251,211,1)',
+		'rgba(240,198,255,1)'
 	]
 	const style = () => `padding:4px 0px;background:${listRand(colors)};`
-	console.groupCollapsed(`🧪 Randomized ${randomized.length} properties`)
-	Object.keys(randomized).forEach(key => {
+	const randomizedKeys = Object.keys(randomized)
+	console.groupCollapsed(`🧪 Randomized ${randomizedKeys.length} properties`)
+	randomizedKeys.forEach(key => {
 		const prop = randomized[key][0]
-		const val = randomized[key][0]
+		const val = randomized[key][1]
 		console.log(console.log(`%c${prop}: ${val}`, style))
 	})
 	console.groupEnd()
