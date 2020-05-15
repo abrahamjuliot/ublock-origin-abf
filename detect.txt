@@ -44,9 +44,9 @@ detectfp.js application/javascript
 		hardwareConcurrency: hardwareConcurrency(), // randomized
 		languages: navigator.languages,
 		maxTouchPoints: maxTouchPoints(), // randomized
-		mimeTypes: undefined,
+		mimeTypes: [],
 		platform: navigator.platform,
-		plugins: undefined,
+		plugins: [],
 		userAgent: navigator.userAgent,
 		vendor: ''
 	}
@@ -183,7 +183,7 @@ detectfp.js application/javascript
 	let rankCounter = 0
 	let watching = true
 	const domain = window.location.hostname
-	const fingerprintingRank = 6
+	const fingerprintingRank = 12
 	const propsRead = []
 	const propsReadAll = {}
 	const watch = (prop) => {
