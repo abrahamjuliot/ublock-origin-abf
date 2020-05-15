@@ -214,7 +214,7 @@ detectfp.js application/javascript
 		const trace = () => {
 			const emojis = propRank >= 6? '🥵': propRank >= 4? '🥶': propRank >= 3? '😱': propRank >=2 ? '😨': '😟'
 			console.groupCollapsed(`${emojis} Script read ${propDescription}`)
-			console.log(`API REFERENCE: ${queryAPI+propDescription}`)
+			console.log(`%cAPI REFERENCE: ${queryAPI+propDescription}`, `color:blue;background:#8eca8e4d`)
 			console.log('Attempting to trace the source (refresh to retry)...')
 			console.trace(document.currentScript?document.currentScript.src:'')
 			console.groupEnd()
