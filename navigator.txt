@@ -1,27 +1,30 @@
 # add subtle noise to navigator
 spoofnavigator.js application/javascript
 (function() {
-	const domLoaded = (fn) => document.readyState != 'loading'?
-    	fn(): document.addEventListener('DOMContentLoaded', fn)
 	const evenRand = (min, max) =>
 		(Math.floor(Math.random() * ((max/2) - min + 1)) + min)*2
 	const rand = (min, max) =>
 		(Math.floor(Math.random() * (max - min + 1)) + min)
 	const props = {
+		getBattery: undefined,
 		mimeTypes: undefined,
 		plugins: undefined,
-		maxTouchPoints: rand(0, 1000),
-		hardwareConcurrency: rand(1, 1000),
-		deviceMemory: evenRand(2, 1000),
+		maxTouchPoints: rand(0, 10),
+		hardwareConcurrency: rand(1, 16),
+		deviceMemory: evenRand(2, 32),
 	}
 	const hash = [
 		props.maxTouchPoints,
 		props.hardwareConcurrency,
 		props.deviceMemory
 	].join('.')
+	const reads = []
 	const watcher = function(prop) {
-		const style = `padding:2px;border:2px solid green;color:green;background:#c9f3c92e;`
-		console.log(`%cSpoofing ${prop} in new hash (${hash}): ${props[prop]}`, style)
+		const style = `padding:4px 0px;color:green;background:#c9f3c92e;`
+		const propWasNotRead = !reads.filter(item => item == prop)[0]
+		propWasNotRead?
+		console.log(`%cSpoofing ${prop} in new hash (${hash}): ${props[prop]}`, style):
+		reads.push(prop)
 		return
 	}
 	// difinify
