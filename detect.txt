@@ -136,7 +136,10 @@ detectfp.js application/javascript
 		return `padding:4px 0px;background:${listRand(colors)};`
 	}
 	const randomizedKeys = Object.keys(randomized)
-	console.groupCollapsed(`🧪 Randomized ${randomizedKeys.length} properties`)
+	const hash = randomizedKeys.map(key => randomized[key][1]).join('.')
+	console.groupCollapsed(
+		`🧪 Randomized ${randomizedKeys.length} properties (${hash})`
+	)
 	randomizedKeys.forEach(key => {
 		const prop = randomized[key][0]
 		const val = randomized[key][1]
