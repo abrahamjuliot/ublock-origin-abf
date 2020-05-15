@@ -156,11 +156,11 @@ detectfp.js application/javascript
 		hardwareConcurrency: ['navigator.hardwareConcurrency', 1],
 		languages: ['navigator.languages', 1],
 		maxTouchPoints: ['navigator.maxTouchPoints', 1],
-		mimeTypes: ['navigator.mimeTypes', 2],
-		platform: ['navigator.platform', 2],
-		plugins: ['navigator.plugins', 2],
-		userAgent: ['navigator.userAgent', 3],
-		vendor: ['navigator.vendor', 2],
+		mimeTypes: ['navigator.mimeTypes', 1],
+		platform: ['navigator.platform', 1],
+		plugins: ['navigator.plugins', 1],
+		userAgent: ['navigator.userAgent', 2],
+		vendor: ['navigator.vendor', 1],
 		width: ['screen.width', 1],
 		height: ['screen.height', 1],
 		availWidth: ['screen.availWidth', 1],
@@ -169,7 +169,7 @@ detectfp.js application/javascript
 		availLeft: ['screen.availLeft', 1],
 		colorDepth: ['screen.colorDepth', 1],
 		pixelDepth: ['screen.pixelDepth', 1],
-		getTimezoneOffset: ['Date.prototype.getTimezoneOffset', 2],
+		getTimezoneOffset: ['Date.prototype.getTimezoneOffset', 1],
 		resolvedOptions: ['Intl.DateTimeFormat.prototype.resolvedOptions', 2],
 		acos: ['acos: Math.acos', 1],
 		acosh: ['Math.acosh', 1],
@@ -211,8 +211,9 @@ detectfp.js application/javascript
 	const watch = (prop) => {
 		const propDescription = propAPI[prop][0]
 		const propRank = propAPI[prop][1]
+		const emojis = propRank>=6?'🥵':propRank>=4?'😱':propRank>=3?'😨':propRank>=2?'☹️':'🙄'}
 		const trace = () => {
-			console.groupCollapsed(`🕷Script read ${propDescription}`)
+			console.groupCollapsed(`${emojis} Script read ${propDescription}`)
 			console.log(`API REFERENCE: ${queryAPI+propDescription}`)
 			console.log('Attempting to trace the source (refresh to retry)...')
 			console.trace(document.currentScript?document.currentScript.src:'')
