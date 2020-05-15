@@ -125,20 +125,20 @@ detectfp.js application/javascript
 		createOscillator: AudioContext.prototype.createOscillator,
 	}
 	// Log Randomized
-	const colors = [
-		'rgba(251,207,207,1)',
-		'rgba(255,239,208,1)',
-		'rgba(210,255,254,1)',
-		'rgba(206,251,211,1)',
-		'rgba(240,198,255,1)'
+	const colors = () => [
+		`rgba(251,207,207,.${rand(1,9)})`,
+		`rgba(255,239,208,.${rand(1,9)}))`,
+		`rgba(210,255,254,.${rand(1,9)}))`,
+		`rgba(206,251,211,.${rand(1,9)}))`,
+		`rgba(240,198,255,.${rand(1,9)}))`
 	]
-	const style = () => `padding:4px 0px;background:${listRand(colors)};`
+	const style = () => `padding:4px 0px;background:${listRand(colors())};`
 	const randomizedKeys = Object.keys(randomized)
 	console.groupCollapsed(`🧪 Randomized ${randomizedKeys.length} properties`)
 	randomizedKeys.forEach(key => {
 		const prop = randomized[key][0]
 		const val = randomized[key][1]
-		console.log(console.log(`%c${prop}: ${val}`, style()))
+		console.log(`%c${prop}: ${val}`, style())
 	})
 	console.groupEnd()
 	// API with Ranking per Unique Impact and Longterm State
