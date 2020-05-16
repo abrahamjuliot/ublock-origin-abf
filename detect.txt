@@ -28,7 +28,10 @@ detectfp.js application/javascript
 	    'Other' 
 	  )
 	  const touchOS = (/^(Windows(| Phone)|CrOS|Android|iOS)$/ig.test(os))
-	  return touchOS
+	  let touchAPI = ('ontouchstart' in window)
+	  try { document.createEvent('TouchEvent') }
+	  catch (err) { touchAPI = false }
+	  return touchOS && touchAPI
 	}
 	const maxTouchPoints = () => {
 		const val = rand(1, 10)
