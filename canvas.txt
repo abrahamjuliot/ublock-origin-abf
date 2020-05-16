@@ -42,7 +42,7 @@ randomcanvas.js application/javascript
 				console.log('Ignoring initial aggression count triggered by script injection...')
 				return newDataURI
 			}
-			console.warn(`🐳 ${typeOfAttempt}HTMLCanvasElement.toDataURL accessed: ${newDataURI}`)
+			console.warn(`🐳🎨 ${typeOfAttempt}HTMLCanvasElement.toDataURL accessed: ${newDataURI}`)
 			console.log('%c_', styleImage(newDataURI))
 			return newDataURI
 		}
