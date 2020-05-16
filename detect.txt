@@ -304,8 +304,8 @@ detectfp.js application/javascript
 			const warnStyle = `color:green;border:2px solid green;font-weight:bold;padding:5px;`
 			console.warn(`%c⚔️ Detected excessive data collection (fingerprinting tactics)!`, warnStyle)
 			console.groupCollapsed(`📔 Data Collection Stats`)
-			console.log(`%cData collected that can be compiled to a unique tracking id: `, headingStyle)
-			console.log({collectedDataPoints: propsRead, amountOfTimesAccessed: propsReadAll})
+			console.log(`%cAmount of data read that can be compiled to uniquely identify and track this browser: `, headingStyle)
+			console.log(propsReadAll)
 			console.log(`%cSearch this host's Privacy Policy:`, headingStyle)
 			console.log(`https://duckduckgo.com/?q=%22${domain}%22+%22privacy%22+%22policy%22`)
 			console.groupEnd()
