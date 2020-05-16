@@ -183,7 +183,7 @@ detectfp.js application/javascript
 		getSupportedExtensions: WebGLRenderingContext.prototype.getSupportedExtensions
 	}
 	const canvasProps = {
-		toDataURL: cachedRandomized.cachedRandomCanvas(),
+		toDataURL: () => cachedRandomized.cachedRandomCanvas(),
 		toBlob: HTMLCanvasElement.prototype.toBlob
 	}
 	const canvasContextProps = {
