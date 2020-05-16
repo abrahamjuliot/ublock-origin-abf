@@ -126,7 +126,7 @@ detectfp.js application/javascript
 		shaderSource: WebGLRenderingContext.prototype.shaderSource,
 		getExtension: WebGLRenderingContext.prototype.getExtension,
 		getParameter: WebGLRenderingContext.prototype.getParameter,
-		getSupportedExtensions: []
+		getSupportedExtensions: WebGLRenderingContext.prototype.getSupportedExtensions
 	}
 	const canvasProps = {
 		toDataURL: HTMLCanvasElement.prototype.toDataURL,
