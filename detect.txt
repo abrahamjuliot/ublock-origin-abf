@@ -116,7 +116,7 @@ detectfp.js application/javascript
 		isTypeSupported: MediaRecorder.isTypeSupported
 	}
 	const speechProps = {
-		getVoices: [] // speechSynthesis.getVoices
+		getVoices: () => [] // speechSynthesis.getVoices
 	}
 	const performanceProps = {
 		now: performance.now
