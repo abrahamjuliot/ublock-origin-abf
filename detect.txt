@@ -23,11 +23,11 @@ detectfp.js application/javascript
 	    /android/ig.test(userAgent)? 'Android': 
 	    /linux/ig.test(userAgent)? 'Linux': 
 	    /ios/ig.test(userAgent)? 'iOS': 
-	    /mac/ig.test(userAgent)? 'Mac': 
+	    /mac/ig.test(userAgent)? 'Mac':
+	    /cros/ig.test(userAgent)? 'CrOS':
 	    'Other' 
 	  )
-	  const chromeOS = /cros/ig.test(userAgent)
-	  const touchOS = (/^(Windows(| Phone)|Android|iOS)$/ig.test(os) || chromeOS)
+	  const touchOS = (/^(Windows(| Phone)|CrOS|Android|iOS)$/ig.test(os))
 	  return touchOS
 	}
 	const maxTouchPoints = () => {
