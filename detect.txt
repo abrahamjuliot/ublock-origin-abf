@@ -97,7 +97,7 @@ detectfp.js application/javascript
 		return () => dataURL
 	}
 	// cached
-	const cached = {
+	const cachedRandomized = {
 		doNotTrack: doNotTrack(),
 		canLieTouch: canLieTouch(),
 		maxTouchPoints: maxTouchPoints(),
