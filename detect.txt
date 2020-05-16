@@ -8,6 +8,19 @@ detectfp.js application/javascript
 		(Math.floor(Math.random() * ((max/2) - min + 1)) + min)*2
 	const rand = (min, max) =>
 		(Math.floor(Math.random() * (max - min + 1)) + min)
+	const randomRGBA = () => {
+	    const clr = () => Math.round(Math.random()*255)
+	    return `rgba(${clr()},${clr()},${clr()},${Math.random().toFixed(1)})`
+	}
+	const randomFont = () => {
+		const fontFamily = [
+			'Arial','Arial Black','Arial Narrow','Courier','Courier New','Georgia','Helvetica',
+			'Impact','Lucida Console','monospace','Tahoma','Times','Times New Roman','Verdana'
+		]
+		const fontSize = Math.floor((Math.random() * 100) + 12)
+		const rand = Math.floor(Math.random()*fontFamily.length)
+		return `${fontSize}px '${fontFamily[rand]}'`
+	}
 	const hashify = str => {
 		let i, len, hash = 0x811c9dc5
 		for(i = 0, len = str.length; i < len; i++) {
@@ -20,7 +33,7 @@ detectfp.js application/javascript
 	const doNotTrack = () => {
 		const val = listRand(['0','1', 'unspecified'])
 		randomized.doNotTrack = ['doNotTrack', val]
-		return val
+		return () => val
 	}
 	function canLieTouch() {
 	  const userAgent = navigator.userAgent
@@ -38,48 +51,76 @@ detectfp.js application/javascript
 	  let touchAPI = ('ontouchstart' in window)
 	  try { document.createEvent('TouchEvent') }
 	  catch (err) { touchAPI = false }
-	  return touchOS && touchAPI
+	  return () => touchOS && touchAPI
 	}
 	const maxTouchPoints = () => {
 		const val = rand(1, 10)
 		randomized.maxTouchPoints = ['maxTouchPoints', val]
-		return val
+		return () => val
 	}
 	const hardwareConcurrency = () => {
 		const val = rand(1, 16)
 		randomized.hardwareConcurrency = ['hardwareConcurrency', val]
-		return val
+		return () => val
 	}
 	const deviceMemory = () => {
 		const val = evenRand(2, 32)
 		randomized.deviceMemory = ['deviceMemory', val]
-		return val
+		return () => val
 	}
-	const screenRatio = listRand([{w:1920,h:1080},{w:1440,h:900},{w:1280,h:800},{w:1600,h:900}])
+	const screenRatio = () => {
+		const val = listRand([{w:1920,h:1080},{w:1440,h:900},{w:1280,h:800},{w:1600,h:900}])
+		return () => val
+	}
 	const screenRandomized = (prop, val) => {
 		randomized[prop] = [prop, val]
 		return val
+	}
+	const canvasRandomized = () => {
+		const canvas = window.document.createElement('canvas')
+		const txt = '🚀 Private'
+		const context = canvas.getContext('2d')
+		context.textBaseline = 'top'
+		context.textBaseline = 'alphabetic'
+		context.font = randomFont()
+		context.fillStyle = randomRGBA()
+		context.fillRect(125, 1, 62, 20)
+		context.fillText(txt, 2, 15)
+		const dataURL = canvas.toDataURL()
+		randomized.toDataURL = ['HTMLCanvasElement.toDataURL', hashif(dataURL)]
+		return () => dataURL
+	}
+	const cachedRandomCanvas = canvasRandomized()
+	// cached
+	const cache = {
+		doNotTrack: doNotTrack(),
+		canLieTouch: canLieTouch(),
+		maxTouchPoints: maxTouchPoints(),
+		hardwareConcurrency: hardwareConcurrency(),
+		deviceMemory: deviceMemory(),
+		screenRatio: screenRatio(),
+		cachedRandomCanvas: cachedRandomCanvas()
 	}
 	// structs
 	const navigatorProps = {
 		appVersion: navigator.appVersion,
 		appCodeName: navigator.appCodeName,
-		deviceMemory: deviceMemory(), // randomize
-		doNotTrack: doNotTrack(), // randomize
-		hardwareConcurrency: hardwareConcurrency(), // randomize
+		deviceMemory: deviceMemory(), // Randomize
+		doNotTrack: doNotTrack(), // Randomize
+		hardwareConcurrency: hardwareConcurrency(), // Randomize
 		languages: navigator.languages,
-		maxTouchPoints: canLieTouch()? maxTouchPoints(): navigator.maxTouchPoints, // randomize if can lie
-		mimeTypes: [],
+		maxTouchPoints: canLieTouch()? maxTouchPoints(): navigator.maxTouchPoints, // Randomize if OS Supports Touch
+		mimeTypes: [], // Block
 		platform: navigator.platform,
-		plugins: [],
+		plugins: [], // Block
 		userAgent: navigator.userAgent,
-		vendor: ''
+		vendor: '' // Block
 	}
 	const screenProps = {
-		width: screenRandomized('screen.width', screenRatio.w),
-		height: screenRandomized('screen.height', screenRatio.h),
-		availWidth: screenRandomized('screen.availWidth', screenRatio.w-rand(1, 20)),
-		availHeight: screenRandomized('screen.availHeight', screenRatio.h-rand(1, 20)),
+		width: screenRandomized('screen.width', screenRatio.w), // Randomize
+		height: screenRandomized('screen.height', screenRatio.h), // Randomize
+		availWidth: screenRandomized('screen.availWidth', screenRatio.w-rand(1, 20)), // Randomize
+		availHeight: screenRandomized('screen.availHeight', screenRatio.h-rand(1, 20)), // Randomize
 		availTop: screen.availTop,
 		availLeft: screen.availLeft,
 		colorDepth: screen.colorDepth,
@@ -116,7 +157,7 @@ detectfp.js application/javascript
 		isTypeSupported: MediaRecorder.isTypeSupported
 	}
 	const speechProps = {
-		getVoices: () => [] // speechSynthesis.getVoices
+		getVoices: () => [] // Block speechSynthesis.getVoices
 	}
 	const performanceProps = {
 		now: performance.now
@@ -136,7 +177,7 @@ detectfp.js application/javascript
 		getSupportedExtensions: WebGLRenderingContext.prototype.getSupportedExtensions
 	}
 	const canvasProps = {
-		toDataURL: HTMLCanvasElement.prototype.toDataURL,
+		toDataURL: cachedRandomCanvas(), // randomized on page load
 		toBlob: HTMLCanvasElement.prototype.toBlob
 	}
 	const canvasContextProps = {
