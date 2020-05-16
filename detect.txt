@@ -93,11 +93,11 @@ detectfp.js application/javascript
 		context.fillRect(125, 1, 62, 20)
 		context.fillText(txt, 2, 15)
 		const dataURL = canvas.toDataURL()
-		randomized.toDataURL = ['HTMLCanvasElement.toDataURL', hashif(dataURL)]
+		randomized.toDataURL = ['HTMLCanvasElement.toDataURL', hashify(dataURL)]
 		return () => dataURL
 	}
 	// cached
-	const cachedRandomized = {
+	const canvasDataURL = {
 		doNotTrack: doNotTrack(),
 		canLieTouch: canLieTouch(),
 		maxTouchPoints: maxTouchPoints(),
@@ -105,7 +105,7 @@ detectfp.js application/javascript
 		deviceMemory: deviceMemory(),
 		screenRatio: screenRatio(),
 		availScreenRatio: availScreenRatio(),
-		cachedRandomCanvas: cachedRandomCanvas()
+		canvasDataURL: canvasDataURL()
 	}
 	// structs
 	const navigatorProps = {
@@ -183,7 +183,7 @@ detectfp.js application/javascript
 		getSupportedExtensions: WebGLRenderingContext.prototype.getSupportedExtensions
 	}
 	const canvasProps = {
-		toDataURL: () => cachedRandomized.cachedRandomCanvas(),
+		toDataURL: () => cachedRandomized.canvasDataURL(),
 		toBlob: HTMLCanvasElement.prototype.toBlob
 	}
 	const canvasContextProps = {
