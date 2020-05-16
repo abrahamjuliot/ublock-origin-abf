@@ -11,7 +11,7 @@ detectfp.js application/javascript
 	// randomize
 	const randomized = {}
 	const doNotTrack = () => {
-		const val = listRand(['0','1'])
+		const val = listRand(['0','1', 'unspecified'])
 		randomized.doNotTrack = ['doNotTrack', val]
 		return val
 	}
