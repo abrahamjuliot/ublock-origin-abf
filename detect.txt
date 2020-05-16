@@ -253,7 +253,7 @@ detectfp.js application/javascript
 		// counter types
 		if (watching && rankCounter >= fingerprintingRank) {
 			const warnStyle = `color:green;border:2px solid green;font-weight:bold;padding:5px;`
-			console.warn(`%c⚔️ Detected excessive data collection (finterprinting tactics)!`, warnStyle)
+			console.warn(`%c⚔️ Detected excessive data collection (fingerprinting tactics)!`, warnStyle)
 			console.groupCollapsed(`📔 Data Collection Stats`)
 			console.log(`%cHow many data points were read?`, `background:#bcf4de`)
 			console.log(propsRead)
