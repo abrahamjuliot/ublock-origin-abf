@@ -15,6 +15,27 @@ detectfp.js application/javascript
 		randomized.doNotTrack = ['doNotTrack', val]
 		return val
 	}
+	function lieTouch() {
+	    const userAgent = navigator.userAgent
+		const os = (
+		/windows phone/ig.test(userAgent)? 'Windows Phone':
+		/win(dows|16|32|64|95|98|nt)|wow64/ig.test(userAgent)? 'Windows':
+		/android/ig.test(userAgent)? 'Android': 
+		/linux/ig.test(userAgent)? 'Linux': 
+		/ios/ig.test(userAgent)? 'iOS': 
+		/mac/ig.test(userAgent)? 'Mac': 
+		'Other' 
+		)
+	    const chromeOS = /cros/ig.test(userAgent)
+	    const touchOS = /^(Windows(| Phone)|Android|iOS)$/ig.test(os) || chromeOS
+	    const touchSupport = (
+		('ontouchstart' in window) ||
+		(navigator.maxTouchPoints > 0) ||
+		(navigator.msMaxTouchPoints > 0)
+	    )
+	    return touchSupport && touchOS? true: false
+	}
+	const canLieTouch = lieTouch()
 	const maxTouchPoints = () => {
 		const val = rand(0, 10)
 		randomized.maxTouchPoints = ['maxTouchPoints', val]
@@ -43,7 +64,7 @@ detectfp.js application/javascript
 		doNotTrack: doNotTrack(), // randomized
 		hardwareConcurrency: hardwareConcurrency(), // randomized
 		languages: navigator.languages,
-		maxTouchPoints: maxTouchPoints(), // randomized
+		maxTouchPoints: canLieTouch? maxTouchPoints(): navigator.maxTouchPoints, // conditionally randomized
 		mimeTypes: [],
 		platform: navigator.platform,
 		plugins: [],
