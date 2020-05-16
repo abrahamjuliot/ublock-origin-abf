@@ -123,10 +123,10 @@ detectfp.js application/javascript
 		vendor: '' // Block
 	}
 	const screenProps = {
-		width: screenRandomized('screen.width', cachedRandomized.screenRatio.w),
-		height: screenRandomized('screen.height', cachedRandomized.screenRatio.h),
-		availWidth: screenRandomized('screen.availWidth', cachedRandomized.availScreenRatio),
-		availHeight: screenRandomized('screen.availHeight', cachedRandomized.availScreenRatio),
+		width: screenRandomized('screen.width', cachedRandomized.screenRatio().w),
+		height: screenRandomized('screen.height', cachedRandomized.screenRatio().h),
+		availWidth: screenRandomized('screen.availWidth', cachedRandomized.availScreenRatio().w),
+		availHeight: screenRandomized('screen.availHeight', cachedRandomized.availScreenRatio().h),
 		availTop: screen.availTop,
 		availLeft: screen.availLeft,
 		colorDepth: screen.colorDepth,
