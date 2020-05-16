@@ -96,7 +96,6 @@ detectfp.js application/javascript
 		randomized.toDataURL = ['HTMLCanvasElement.toDataURL', hashif(dataURL)]
 		return () => dataURL
 	}
-	const cachedRandomCanvas = canvasRandomized()
 	// cached
 	const cachedRandomized = {
 		doNotTrack: doNotTrack(),
