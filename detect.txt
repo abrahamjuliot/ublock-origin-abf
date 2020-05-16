@@ -236,10 +236,12 @@ detectfp.js application/javascript
 	const watch = (prop) => {
 		const propDescription = propAPI[prop][0]
 		const propRank = propAPI[prop][1]
+		const headingStyle = `background:#bcf4de`
 		const trace = () => {
 			const emojis = propRank >= 6? '🥵': propRank >= 4? '🥶': propRank >= 3? '😱': propRank >=2 ? '😨': ''
 			console.groupCollapsed(`${emojis} Script read ${propDescription}`)
-			console.log(`%cAPI REFERENCE: ${queryAPI+propDescription}`, `color:blue;background:#8eca8e4d;padding:2px;`)
+			console.log(`%cAPI Reference:`, headingStyle)
+			console.log(queryAPI+propDescription)
 			console.log('Attempting to trace the source (refresh to retry)...')
 			console.trace(document.currentScript?document.currentScript.src:'')
 			console.groupEnd()
@@ -255,11 +257,11 @@ detectfp.js application/javascript
 			const warnStyle = `color:green;border:2px solid green;font-weight:bold;padding:5px;`
 			console.warn(`%c⚔️ Detected excessive data collection (fingerprinting tactics)!`, warnStyle)
 			console.groupCollapsed(`📔 Data Collection Stats`)
-			console.log(`%cHow many data points were read?`, `background:#bcf4de`)
+			console.log(`%cHow many data points were read?`, headingStyle)
 			console.log(propsRead)
-			console.log(`%cHow many times was your data read?`, `background:#bcf4de`)
+			console.log(`%cHow many times was your data read?`, headingStyle)
 			console.log(propsReadAll)
-			console.log(`%cSearch this host's Privacy Policy:`, `background:#bcf4de`)
+			console.log(`%cSearch this host's Privacy Policy:`, headingStyle)
 			console.log(`https://duckduckgo.com/?q=%22${domain}%22+%22privacy%22+%22policy%22`)
 			console.groupEnd()
 			watching = false
