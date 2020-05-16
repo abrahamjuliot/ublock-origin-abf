@@ -1,0 +1,30 @@
+# random audio fingerprint
+randomaudio.js application/javascript
+(function() {
+	function cachedData() {
+		const context = new AudioContext()
+		const channels = 2
+		const frameCount = (context.sampleRate*2)/2000
+		const myArrayBuffer = context.createBuffer(2, frameCount, context.sampleRate)
+		let nowBuffering = myArrayBuffer.getChannelData(0)
+		for (let i = 0; i < frameCount; i++) { nowBuffering[i] = Math.random() * 2 - 1 }
+		const doubleSize = (arr) => arr.concat(arr)
+		let arr = Array.from(nowBuffering)
+		for (let i = 0; i < 10; i++) { arr = doubleSize(arr) }
+		const fingerprint = new Float32Array(arr)
+		const reducedString = fingerprint.slice(4500, 5000)
+			.reduce(function (acc, val) { return acc + Math.abs(val) }, 0)
+			.toString()
+		context.oncomplete = () => {}
+		return () => {
+			console.warn(`🐲 🎧 AudioBuffer.getChannelData accessed: ${reducedString}`)
+			return fingerprint
+		}
+	}
+	const randomaudio = cachedData()
+	// difinify
+	function redefine(root, type='') {
+		Object.defineProperties(root.AudioBuffer.prototype, { 'getChannelData':  { value: randomaudio } })
+	}
+	redefine(window)
+})()
