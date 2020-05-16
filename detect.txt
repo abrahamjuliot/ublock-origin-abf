@@ -15,7 +15,7 @@ detectfp.js application/javascript
 		randomized.doNotTrack = ['doNotTrack', val]
 		return val
 	}
-	function lieTouch() {
+	function canLieTouch() {
 	  const userAgent = navigator.userAgent
 	  const os = (
 	    /windows phone/ig.test(userAgent)? 'Windows Phone':
@@ -30,7 +30,6 @@ detectfp.js application/javascript
 	  const touchOS = (/^(Windows(| Phone)|Android|iOS)$/ig.test(os) || chromeOS)
 	  return touchOS
 	}
-	const canLieTouch = lieTouch()
 	const maxTouchPoints = () => {
 		const val = rand(1, 10)
 		randomized.maxTouchPoints = ['maxTouchPoints', val]
@@ -55,11 +54,11 @@ detectfp.js application/javascript
 	const navigatorProps = {
 		appVersion: navigator.appVersion,
 		appCodeName: navigator.appCodeName,
-		deviceMemory: deviceMemory(), // randomized
-		doNotTrack: doNotTrack(), // randomized
-		hardwareConcurrency: hardwareConcurrency(), // randomized
+		deviceMemory: deviceMemory(), // randomize
+		doNotTrack: doNotTrack(), // randomize
+		hardwareConcurrency: hardwareConcurrency(), // randomize
 		languages: navigator.languages,
-		maxTouchPoints: canLieTouch? maxTouchPoints(): navigator.maxTouchPoints, // conditionally randomized
+		maxTouchPoints: canLieTouch()? maxTouchPoints(): navigator.maxTouchPoints, // randomize if can lie
 		mimeTypes: [],
 		platform: navigator.platform,
 		plugins: [],
