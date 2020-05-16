@@ -16,28 +16,23 @@ detectfp.js application/javascript
 		return val
 	}
 	function lieTouch() {
-	    const userAgent = navigator.userAgent
-		const os = (
-		/windows phone/ig.test(userAgent)? 'Windows Phone':
-		/win(dows|16|32|64|95|98|nt)|wow64/ig.test(userAgent)? 'Windows':
-		/android/ig.test(userAgent)? 'Android': 
-		/linux/ig.test(userAgent)? 'Linux': 
-		/ios/ig.test(userAgent)? 'iOS': 
-		/mac/ig.test(userAgent)? 'Mac': 
-		'Other' 
-		)
-	    const chromeOS = /cros/ig.test(userAgent)
-	    const touchOS = /^(Windows(| Phone)|Android|iOS)$/ig.test(os) || chromeOS
-	    const touchSupport = (
-		('ontouchstart' in window) ||
-		(navigator.maxTouchPoints > 0) ||
-		(navigator.msMaxTouchPoints > 0)
-	    )
-	    return touchSupport && touchOS? true: false
+	  const userAgent = navigator.userAgent
+	  const os = (
+	    /windows phone/ig.test(userAgent)? 'Windows Phone':
+	    /win(dows|16|32|64|95|98|nt)|wow64/ig.test(userAgent)? 'Windows':
+	    /android/ig.test(userAgent)? 'Android': 
+	    /linux/ig.test(userAgent)? 'Linux': 
+	    /ios/ig.test(userAgent)? 'iOS': 
+	    /mac/ig.test(userAgent)? 'Mac': 
+	    'Other' 
+	  )
+	  const chromeOS = /cros/ig.test(userAgent)
+	  const touchOS = (/^(Windows(| Phone)|Android|iOS)$/ig.test(os) || chromeOS)
+	  return touchOS
 	}
 	const canLieTouch = lieTouch()
 	const maxTouchPoints = () => {
-		const val = rand(0, 10)
+		const val = rand(1, 10)
 		randomized.maxTouchPoints = ['maxTouchPoints', val]
 		return val
 	}
