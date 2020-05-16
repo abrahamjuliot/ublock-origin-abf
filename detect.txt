@@ -259,7 +259,8 @@ detectfp.js application/javascript
 			console.log(propsRead)
 			console.log(`%cHow many times was your data read?`, `background:#bcf4de`)
 			console.log(propsReadAll)
-			console.log(`%cSearch this host's Privacy Policy: https://duckduckgo.com/?q=%22${domain}%22+%22privacy%22+%22policy%22`, `background:#bcf4de`)
+			console.log(`%cSearch this host's Privacy Policy:`, `background:#bcf4de`)
+			console.log(`https://duckduckgo.com/?q=%22${domain}%22+%22privacy%22+%22policy%22`)
 			console.groupEnd()
 			watching = false
 		}
