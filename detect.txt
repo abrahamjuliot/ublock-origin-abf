@@ -2,6 +2,14 @@
 detectfp.js application/javascript
 (function() {
 	// helpers
+	const timer = (logStart) => {
+		console.log(logStart)
+		const start = Date.now()
+		return (logEnd) => {
+			const end = Date.now() - start
+			console.log(`${logEnd}: ${end/1000} seconds`)
+		}
+	}
 	const itemInList = (list, item) => list.indexOf(item) > -1
 	const listRand = (list) => list[Math.floor(Math.random() * list.length)]
 	const evenRand = (min, max) =>
@@ -29,8 +37,7 @@ detectfp.js application/javascript
 		return ("0000000" + (hash >>> 0).toString(16)).substr(-8)
 	}
 	// randomize
-	console.log('🔥 Computing randomization...')
-	const before = Date.now()
+	const randomizationTime = timer('🔥Computing randomization...')
 	const randomized = {}
 	const doNotTrack = () => {
 		const val = listRand(['0','1', 'unspecified'])
@@ -125,8 +132,7 @@ detectfp.js application/javascript
 		canvasDataURL: canvasDataURL(),
 		audioBufferChannelData: audioBufferChannelData()
 	}
-	const after = Date.now()
-	console.log(`⏱ Finished randomization in ${(after - before)/1000} seconds`)
+	randomizationTime(`⏱Randomization complete`)
 	// blocked
 	const blocked = {}
 	const mimeTypes = () => { const val = []; blocked.mimeTypes = ['navigator.mimeTypes', '[]']; return () => val }
@@ -247,7 +253,7 @@ detectfp.js application/javascript
 	const blockedKeys = Object.keys(blocked)
 	const hash = hashify(JSON.stringify(randomized))
 	console.groupCollapsed(
-		`🧪 Randomized ${randomizedKeys.length} properties (id: ${hash})`
+		`🧪Randomized ${randomizedKeys.length} properties (id: ${hash})`
 	)
 	randomizedKeys.forEach(key => {
 		const prop = randomized[key][0]
@@ -256,7 +262,7 @@ detectfp.js application/javascript
 	})
 	console.groupEnd()
 	console.groupCollapsed(
-		`🔌 Blocked ${blockedKeys.length} properties`
+		`🔌Blocked ${blockedKeys.length} properties`
 	)
 	blockedKeys.forEach(key => {
 		const prop = blocked[key][0]
@@ -335,7 +341,7 @@ detectfp.js application/javascript
 		const propRank = propAPI[prop][1]
 		const headingStyle = `background:#bcf4de73`
 		const trace = () => {
-			const emojis = propRank >= 6? '🥵 ': propRank >= 4? '🥶 ': propRank >= 3? '😱 ': propRank >=2 ? '😨 ': ''
+			const emojis = propRank >= 6? '🥵': propRank >= 4? '🥶': propRank >= 3? '😱': propRank >=2 ? '😨': ''
 			console.groupCollapsed(`${emojis} Script read ${propDescription}`)
 			console.log(`%cAPI Reference:`, headingStyle)
 			console.log(queryAPI+propDescription)
@@ -352,14 +358,14 @@ detectfp.js application/javascript
 		// counter types
 		if (watching && rankCounter >= fingerprintingRank) {
 			const warnStyle = `color:green;border:2px solid green;font-weight:bold;padding:5px;`
-			const warning = `⚔️ Detected excessive data collection (fingerprinting tactics)!`
+			const warning = `⚔️Detected excessive data collection (fingerprinting tactics)!`
 			console.warn('%c'+warning, warnStyle)
-			console.groupCollapsed(`📔 Data Collection Stats and Study Resources`)
+			console.groupCollapsed(`📔Data Collection Stats and Study Resources`)
 			console.log(`%cAmount of data read that can be compiled to uniquely identify and track this browser: `, headingStyle)
 			console.log(propsReadAll)
 			console.log(`%cSearch this host's Privacy Policy:`, headingStyle)
 			console.log(`https://duckduckgo.com/?q=%22${domain}%22+%22privacy%22+%22policy%22`)
-				console.groupCollapsed(`📋 Testing Resources`)
+				console.groupCollapsed(`📋Testing Resources`)
 				console.log('https://privacycheck.sec.lrz.de/')
 				console.log('https://ghacksuserjs.github.io/TorZillaPrint/TorZillaPrint.html')
 				console.log('https://browserleaks.com/')
@@ -368,12 +374,12 @@ detectfp.js application/javascript
 				console.log('https://fingerprintjs.com/demo')
 				console.log('https://bestiejs.github.io/platform.js/')
 				console.groupEnd()
-				console.groupCollapsed(`📝 Source Code Resources`)
+				console.groupCollapsed(`📝Source Code Resources`)
 				console.log('https://old.darkwavetech.com/fingerprint/fingerprint_code.html')
 				console.log('https://github.com/Valve/fingerprintjs2')
 				console.log('https://github.com/JackSpirou/ClientJS')
 				console.groupEnd()
-				console.groupCollapsed(`📚 Research Resources`)
+				console.groupCollapsed(`📚Research Resources`)
 				console.log('https://plaperdr.github.io/')
 				console.log('https://docs.google.com/spreadsheets/d/1ZB1zINfGFcrcFzNg4eytRnBQN3nBoKHua2jhV_X6W80')
 				console.groupEnd()
@@ -411,5 +417,7 @@ detectfp.js application/javascript
 		Object.defineProperties(root.AudioContext.prototype, definify(audioProps))
 		Object.defineProperties(root.AudioBuffer.prototype, definify(audioBufferProps))
 	}
+	const redefineTime = timer(`🔨Redefining properties...`)
 	redefine(window)
+	redefineTime(`⏱Redefining complete`)
 })()
