@@ -29,10 +29,12 @@ detectfp.js application/javascript
 		return ("0000000" + (hash >>> 0).toString(16)).substr(-8)
 	}
 	// randomize
+	console.log('🔥 Computing randomization...')
+	const before = Date.now()
 	const randomized = {}
 	const doNotTrack = () => {
 		const val = listRand(['0','1', 'unspecified'])
-		randomized.doNotTrack = ['doNotTrack', val]
+		randomized.doNotTrack = ['navigator.doNotTrack', val]
 		return () => val
 	}
 	function canLieTouch() {
@@ -53,19 +55,20 @@ detectfp.js application/javascript
 	  catch (err) { touchAPI = false }
 	  return () => touchOS && touchAPI
 	}
+	const canLieTouchComputed = canLieTouch()
 	const maxTouchPoints = () => {
 		const val = rand(1, 10)
-		randomized.maxTouchPoints = ['maxTouchPoints', val]
+		if (canLieTouchComputed()) { randomized.maxTouchPoints = ['navigator.maxTouchPoints', val] }
 		return () => val
 	}
 	const hardwareConcurrency = () => {
 		const val = rand(1, 16)
-		randomized.hardwareConcurrency = ['hardwareConcurrency', val]
+		randomized.hardwareConcurrency = ['navigator.hardwareConcurrency', val]
 		return () => val
 	}
 	const deviceMemory = () => {
 		const val = evenRand(2, 32)
-		randomized.deviceMemory = ['deviceMemory', val]
+		randomized.deviceMemory = ['navigator.deviceMemory', val]
 		return () => val
 	}
 	const screenRatio = () => {
@@ -83,7 +86,7 @@ detectfp.js application/javascript
 		return val
 	}
 	const canvasDataURL = () => {
-		const canvas = window.document.createElement('canvas')
+		const canvas = document.createElement('canvas')
 		const txt = '🚀 Private'
 		const context = canvas.getContext('2d')
 		context.textBaseline = 'top'
@@ -96,16 +99,52 @@ detectfp.js application/javascript
 		randomized.toDataURL = ['HTMLCanvasElement.toDataURL', hashify(dataURL)]
 		return () => dataURL
 	}
-	// cached
+	const audioBufferChannelData = () => {
+		const doubleSize = (arr) => arr.concat(arr) // helper
+		const context = new AudioContext()
+		const channels = 2
+		const frameCount = (context.sampleRate*2)/2000 // reduce initial size for randomization
+		const audioBuffer = context.createBuffer(2, frameCount, context.sampleRate)
+		let pcmData = audioBuffer.getChannelData(0)
+		for (let i = 0; i < frameCount; i++) { pcmData[i] = Math.random() * 2 - 1 } // randomize
+		let arr = Array.from(pcmData) // convert to Array
+		const randomChannelData = arr // store random data
+		for (let i = 0; i < 10; i++) { arr = doubleSize(arr) } // increase size
+		pcmData = new Float32Array(arr) // convert back to Float32Array
+		randomized.getChannelData = ['AudioBuffer.getChannelData', hashify(JSON.stringify(randomChannelData))]
+		return () => pcmData
+	}
+	// cached and randomized
 	const cachedRandomized = {
 		doNotTrack: doNotTrack(),
-		canLieTouch: canLieTouch(),
 		maxTouchPoints: maxTouchPoints(),
 		hardwareConcurrency: hardwareConcurrency(),
 		deviceMemory: deviceMemory(),
 		screenRatio: screenRatio(),
 		availScreenRatio: availScreenRatio(),
-		canvasDataURL: canvasDataURL()
+		canvasDataURL: canvasDataURL(),
+		audioBufferChannelData: audioBufferChannelData()
+	}
+	const after = Date.now()
+	console.log(`⏱ Finished randomization in ${(after - before)/1000} seconds`)
+	// blocked
+	const blocked = {}
+	const mimeTypes = () => { const val = []; blocked.mimeTypes = ['navigator.mimeTypes', '[]']; return () => val }
+	const plugins = () => { const val = []; blocked.plugins = ['navigator.plugins', '[]']; return () => val }
+	const vendor = () => { const val = ''; blocked.vendor = ['navigator.vendor', '""']; return () => val }
+	const getVoices = () => { const val = []; blocked.getVoices = ['speechSynthesis.getVoices', '[]']; return () => val }
+	const connection = () => { const val = undefined; blocked.connection = ['navigator.connection', 'undefined']; return () => val }
+	const getGamepads = () => { const val = []; blocked.getGamepads = ['navigator.getGamepads', '[]']; return () => val }
+	const getBattery = () => { const val = undefined; blocked.getBattery = ['navigator.getBattery', 'undefined']; return () => val }
+	// cached
+	const cachedBlocked = {
+		mimeTypes: mimeTypes(),
+		plugins: plugins(),
+		vendor: vendor(),
+		getVoices: getVoices(),
+		connection: connection(),
+		getBattery: getBattery(),
+		getGamepads: getGamepads()
 	}
 	// structs
 	const navigatorProps = {
@@ -115,13 +154,16 @@ detectfp.js application/javascript
 		doNotTrack: cachedRandomized.doNotTrack(),
 		hardwareConcurrency: cachedRandomized.hardwareConcurrency(),
 		languages: navigator.languages,
-		maxTouchPoints: cachedRandomized.canLieTouch()? cachedRandomized.maxTouchPoints(): navigator.maxTouchPoints,
-		mimeTypes: [], // Block
+		maxTouchPoints: canLieTouchComputed()? cachedRandomized.maxTouchPoints(): navigator.maxTouchPoints,
+		mimeTypes: cachedBlocked.mimeTypes(),
 		platform: navigator.platform,
-		plugins: [], // Block
+		plugins: cachedBlocked.plugins(),
 		userAgent: navigator.userAgent,
-		vendor: '' // Block
+		vendor: cachedBlocked.vendor(),
+		connection: cachedBlocked.connection()
 	}
+	if ('getBattery' in navigator) { navigatorProps.getBattery = () => cachedBlocked.getBattery() }
+	if ('getGamepads' in navigator) { navigatorProps.getGamepads = () => cachedBlocked.getGamepads() }
 	const screenProps = {
 		width: screenRandomized('screen.width', cachedRandomized.screenRatio().w),
 		height: screenRandomized('screen.height', cachedRandomized.screenRatio().h),
@@ -163,7 +205,7 @@ detectfp.js application/javascript
 		isTypeSupported: MediaRecorder.isTypeSupported
 	}
 	const speechProps = {
-		getVoices: () => [] // Block speechSynthesis.getVoices
+		getVoices: () => cachedBlocked.getVoices()
 	}
 	const performanceProps = {
 		now: performance.now
@@ -196,18 +238,13 @@ detectfp.js application/javascript
 		createAnalyser: AudioContext.prototype.createAnalyser,
 		createOscillator: AudioContext.prototype.createOscillator,
 	}
-	// Log Randomized
-	const style = () => {
-		const colors = [
-			`rgba(54,59,116,.${rand(1,6)})`,
-			`rgba(103,56,136,.${rand(1,6)})`,
-			`rgba(239,79,145,.${rand(1,9)})`,
-			`rgba(199,157,215,.${rand(1,9)})`,
-			`rgba(77,27,123,.${rand(1,6)})`
-		]
-		return `padding:4px 0px;background:${listRand(colors)};`
+	const audioBufferProps = {
+		getChannelData: () => cachedRandomized.audioBufferChannelData()
 	}
+	// Log Randomized & Blocked
+	const style = `color:aaa;background:#f9f9f9`
 	const randomizedKeys = Object.keys(randomized)
+	const blockedKeys = Object.keys(blocked)
 	const hash = hashify(JSON.stringify(randomized))
 	console.groupCollapsed(
 		`🧪 Randomized ${randomizedKeys.length} properties (id: ${hash})`
@@ -215,7 +252,16 @@ detectfp.js application/javascript
 	randomizedKeys.forEach(key => {
 		const prop = randomized[key][0]
 		const val = randomized[key][1]
-		console.log(`%c${prop}: ${val}`, style())
+		console.log(`%c${prop}: ${val}`, style)
+	})
+	console.groupEnd()
+	console.groupCollapsed(
+		`🔌 Blocked ${blockedKeys.length} properties`
+	)
+	blockedKeys.forEach(key => {
+		const prop = blocked[key][0]
+		const val = blocked[key][1]
+		console.log(`%c${prop}: ${val}`, style)
 	})
 	console.groupEnd()
 	// API with Ranking per Unique Impact and Longterm State
@@ -233,6 +279,9 @@ detectfp.js application/javascript
 		plugins: ['navigator.plugins', 1],
 		userAgent: ['navigator.userAgent', 2],
 		vendor: ['navigator.vendor', 1],
+		connection: ['navigator.connection', 1],
+		getBattery: ['navigator.getBattery', 1],
+		getGamepads: ['navigator.getGamepads', 1],
 		width: ['screen.width', 1],
 		height: ['screen.height', 1],
 		availWidth: ['screen.availWidth', 1],
@@ -271,7 +320,8 @@ detectfp.js application/javascript
 		measureText: ['CanvasRenderingContext2D.prototype.measureText', 1],
 		font: ['CanvasRenderingContext2D.prototype.font', 1],
 		createAnalyser: ['AudioContext.prototype.createAnalyser', 6],
-		createOscillator: ['AudioContext.prototype.createOscillator', 6]
+		createOscillator: ['AudioContext.prototype.createOscillator', 6],
+		getChannelData: ['AudioBuffer.prototype.getChannelData', 6]
 	}
 	// watcher
 	let rankCounter = 0
@@ -283,9 +333,9 @@ detectfp.js application/javascript
 	const watch = (prop) => {
 		const propDescription = propAPI[prop][0]
 		const propRank = propAPI[prop][1]
-		const headingStyle = `background:#bcf4de`
+		const headingStyle = `background:#bcf4de73`
 		const trace = () => {
-			const emojis = propRank >= 6? '🥵': propRank >= 4? '🥶': propRank >= 3? '😱': propRank >=2 ? '😨': ''
+			const emojis = propRank >= 6? '🥵 ': propRank >= 4? '🥶 ': propRank >= 3? '😱 ': propRank >=2 ? '😨 ': ''
 			console.groupCollapsed(`${emojis} Script read ${propDescription}`)
 			console.log(`%cAPI Reference:`, headingStyle)
 			console.log(queryAPI+propDescription)
@@ -302,12 +352,31 @@ detectfp.js application/javascript
 		// counter types
 		if (watching && rankCounter >= fingerprintingRank) {
 			const warnStyle = `color:green;border:2px solid green;font-weight:bold;padding:5px;`
-			console.warn(`%c⚔️ Detected excessive data collection (fingerprinting tactics)!`, warnStyle)
-			console.groupCollapsed(`📔 Data Collection Stats`)
+			const warning = `⚔️ Detected excessive data collection (fingerprinting tactics)!`
+			console.warn('%c'+warning, warnStyle)
+			console.groupCollapsed(`📔 Data Collection Stats and Study Resources`)
 			console.log(`%cAmount of data read that can be compiled to uniquely identify and track this browser: `, headingStyle)
 			console.log(propsReadAll)
 			console.log(`%cSearch this host's Privacy Policy:`, headingStyle)
 			console.log(`https://duckduckgo.com/?q=%22${domain}%22+%22privacy%22+%22policy%22`)
+				console.groupCollapsed(`📋 Testing Resources`)
+				console.log('https://privacycheck.sec.lrz.de/')
+				console.log('https://ghacksuserjs.github.io/TorZillaPrint/TorZillaPrint.html')
+				console.log('https://browserleaks.com/')
+				console.log('https://webbrowsertools.com/')
+				console.log('https://www.nothingprivate.ml')
+				console.log('https://fingerprintjs.com/demo')
+				console.log('https://bestiejs.github.io/platform.js/')
+				console.groupEnd()
+				console.groupCollapsed(`📝 Source Code Resources`)
+				console.log('https://old.darkwavetech.com/fingerprint/fingerprint_code.html')
+				console.log('https://github.com/Valve/fingerprintjs2')
+				console.log('https://github.com/JackSpirou/ClientJS')
+				console.groupEnd()
+				console.groupCollapsed(`📚 Research Resources`)
+				console.log('https://plaperdr.github.io/')
+				console.log('https://docs.google.com/spreadsheets/d/1ZB1zINfGFcrcFzNg4eytRnBQN3nBoKHua2jhV_X6W80')
+				console.groupEnd()
 			console.groupEnd()
 			watching = false
 		}
@@ -340,6 +409,7 @@ detectfp.js application/javascript
 		Object.defineProperties(root.HTMLCanvasElement.prototype, definify(canvasProps))
 		Object.defineProperties(root.CanvasRenderingContext2D.prototype, definify(canvasContextProps))
 		Object.defineProperties(root.AudioContext.prototype, definify(audioProps))
+		Object.defineProperties(root.AudioBuffer.prototype, definify(audioBufferProps))
 	}
 	redefine(window)
 })()
