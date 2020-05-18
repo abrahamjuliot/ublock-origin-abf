@@ -121,6 +121,36 @@ detectfp.js application/javascript
 		randomized.getChannelData = ['AudioBuffer.getChannelData', hashify(JSON.stringify(randomChannelData))]
 		return () => pcmData
 	}
+	const webglRenderer = () => {
+		//https://www.primegrid.com/gpu_list.php
+		const renderers = [
+			{ gpu: 'NVIDIA GeForce RTX', model: [
+					'2080 SUPER', '2080 Ti', '2080', '2070 SUPER', '2070', '2060'
+				]
+			},
+			{ gpu: 'NVIDIA GeForce GTX', model: [
+					'1080 Ti', '1080', '1070 Ti', '1070', '1660 Ti', '1660', '1650', '1060', '1050 Ti', '1050'
+				]
+			},
+			{ gpu: 'AMD Radeon', model: [
+					'VII', 'HD 7950 Compute Engine', '(TM) R9 Fury Series', 'Pro 580 Compute Engine', 
+					'RX 570 Compute Engine', '(TM) RX Vega 11 Graphics', 'RX Vega 56 Compute Engine'
+				]
+			},
+			{ gpu: 'Radeon', model: [
+					'RX Vega', 'RX 580 Series', 'RX 570 Series', 'RX 560 Series', '(TM) RX 480 Graphics'
+				] 
+			}
+		]
+		const getParameter = WebGLRenderingContext.prototype.getParameter
+		const randomRenderer = listRand(renderers)
+		const randomGpu = randomRenderer.gpu
+		const randomModel = listRand(randomRenderer.model)
+		const randomizedRenderer = `${randomGpu} ${randomModel}`
+		const extension = { 37446: `ANGLE (${randomizedRenderer} vs_${rand(1,5)}_0 ps_${rand(1,5)}_0)` }
+		randomized.getParameter = ['WebGL Renderer', randomizedRenderer]
+		return function(x) { return extension[x]? extension[x]: getParameter.apply(this, arguments) }
+	}
 	// cached and randomized
 	const cachedRandomized = {
 		doNotTrack: doNotTrack(),
@@ -130,7 +160,8 @@ detectfp.js application/javascript
 		screenRatio: screenRatio(),
 		availScreenRatio: availScreenRatio(),
 		canvasDataURL: canvasDataURL(),
-		audioBufferChannelData: audioBufferChannelData()
+		audioBufferChannelData: audioBufferChannelData(),
+		webglRenderer: webglRenderer()
 	}
 	randomizationTime(`⏱Randomization complete`)
 	// blocked
@@ -227,7 +258,7 @@ detectfp.js application/javascript
 	const webglProps = {
 		shaderSource: WebGLRenderingContext.prototype.shaderSource,
 		getExtension: WebGLRenderingContext.prototype.getExtension,
-		getParameter: WebGLRenderingContext.prototype.getParameter,
+		getParameter: cachedRandomized.webglRenderer,
 		getSupportedExtensions: WebGLRenderingContext.prototype.getSupportedExtensions
 	}
 	const canvasProps = {
@@ -252,7 +283,7 @@ detectfp.js application/javascript
 	const randomizedKeys = Object.keys(randomized)
 	const blockedKeys = Object.keys(blocked)
 	const hash = hashify(JSON.stringify(randomized))
-	console.groupCollapsed(
+	console.group(
 		`🧪Randomized ${randomizedKeys.length} properties (id: ${hash})`
 	)
 	randomizedKeys.forEach(key => {
@@ -342,7 +373,7 @@ detectfp.js application/javascript
 		const headingStyle = `background:#bcf4de73`
 		const trace = () => {
 			const emojis = propRank >= 6? '🥵': propRank >= 4? '🥶': propRank >= 3? '😱': propRank >=2 ? '😨': ''
-			console.groupCollapsed(`${emojis} Script read ${propDescription}`)
+			console.groupCollapsed(`${emojis}Script read ${propDescription}`)
 			console.log(`%cAPI Reference:`, headingStyle)
 			console.log(queryAPI+propDescription)
 			console.log(`%cAttempting to trace the source (refresh to retry)...`, headingStyle)
@@ -373,6 +404,7 @@ detectfp.js application/javascript
 				console.log('https://www.nothingprivate.ml')
 				console.log('https://fingerprintjs.com/demo')
 				console.log('https://bestiejs.github.io/platform.js/')
+				console.log('https://webglreport.com')
 				console.groupEnd()
 				console.groupCollapsed(`📝Source Code Resources`)
 				console.log('https://old.darkwavetech.com/fingerprint/fingerprint_code.html')
