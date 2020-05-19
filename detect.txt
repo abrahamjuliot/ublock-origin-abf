@@ -65,31 +65,33 @@ detectfp.js application/javascript
 	const canLieTouchComputed = canLieTouch()
 	const maxTouchPoints = () => {
 		const val = rand(1, 10)
-		if (canLieTouchComputed()) { randomized.maxTouchPoints = ['navigator.maxTouchPoints', val] }
+		if (canLieTouchComputed()) { randomized.maxTouchPoints = ['[device]maxTouchPoints', val] }
 		return () => val
 	}
 	const hardwareConcurrency = () => {
 		const val = rand(1, 16)
-		randomized.hardwareConcurrency = ['navigator.hardwareConcurrency', val]
+		randomized.hardwareConcurrency = ['[device]hardwareConcurrency', val]
 		return () => val
 	}
 	const deviceMemory = () => {
 		const val = evenRand(2, 32)
-		randomized.deviceMemory = ['navigator.deviceMemory', val]
+		randomized.deviceMemory = ['[device]deviceMemory', val]
 		return () => val
 	}
+	// https://gs.statcounter.com/screen-resolution-stats
 	const screenRatio = () => {
 		const val = listRand([{w:1920,h:1080},{w:1440,h:900},{w:1280,h:800},{w:1600,h:900}])
 		return () => val
 	}
-	const availScreenRatio = () => {
-		const val = listRand([{w:1920,h:1080},{w:1440,h:900},{w:1280,h:800},{w:1600,h:900}])
-		val.w = val.w-rand(1, 20)
-		val.h = val.h-rand(1, 20)
-		return () => val
+	const computedScreenRatio = screenRatio()
+	const availScreenRatio = (computedScreenRatio) => {
+		const available = computedScreenRatio
+		available.w -= rand(1, 20)
+		available.h -= rand(1, 20)
+		return () => available
 	}
 	const screenRandomized = (prop, val) => {
-		randomized[prop] = [prop, val]
+		randomized[prop] = [`[device]${prop}`, val]
 		return val
 	}
 	const canvasDataURL = () => {
@@ -157,8 +159,8 @@ detectfp.js application/javascript
 		maxTouchPoints: maxTouchPoints(),
 		hardwareConcurrency: hardwareConcurrency(),
 		deviceMemory: deviceMemory(),
-		screenRatio: screenRatio(),
-		availScreenRatio: availScreenRatio(),
+		screenRatio: computedScreenRatio,
+		availScreenRatio: availScreenRatio(computedScreenRatio),
 		canvasDataURL: canvasDataURL(),
 		audioBufferChannelData: audioBufferChannelData(),
 		webglRenderer: webglRenderer()
