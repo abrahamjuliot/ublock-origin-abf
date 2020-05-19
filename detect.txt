@@ -39,9 +39,10 @@ detectfp.js application/javascript
 	// randomize
 	const randomizationTime = timer('🔥Computing randomization...')
 	const randomized = {}
+	// todo: https://www.whatismybrowser.com/guides/the-latest-version/
 	const doNotTrack = () => {
-		const val = listRand(['0','1', 'unspecified'])
-		randomized.doNotTrack = ['navigator.doNotTrack', val]
+		const val = listRand(['0','1'])
+		randomized.doNotTrack = ['doNotTrack', val]
 		return () => val
 	}
 	function canLieTouch() {
@@ -57,10 +58,10 @@ detectfp.js application/javascript
 	    'Other' 
 	  )
 	  const touchOS = (/^(Windows(| Phone)|CrOS|Android|iOS)$/ig.test(os))
-	  let touchAPI = ('ontouchstart' in window)
-	  try { document.createEvent('TouchEvent') }
-	  catch (err) { touchAPI = false }
-	  return () => touchOS && touchAPI
+	  //let touchAPI = ('ontouchstart' in window)
+	  //try { document.createEvent('TouchEvent') }
+	  //catch (err) { touchAPI = false }
+	  return () => touchOS //&& touchAPI
 	}
 	const canLieTouchComputed = canLieTouch()
 	const maxTouchPoints = () => {
@@ -79,16 +80,13 @@ detectfp.js application/javascript
 		return () => val
 	}
 	// https://gs.statcounter.com/screen-resolution-stats
-	const screenRatio = () => {
+	const screenFingerprint = () => {
 		const val = listRand([{w:1920,h:1080},{w:1440,h:900},{w:1280,h:800},{w:1600,h:900}])
+		val.asrw = val.w-rand(1, 20)
+		val.asrh = val.h-rand(1, 20)
+		val.cDepth = listRand([24, 32, 48])
+		val.pDepth = listRand([24, 32, 48])
 		return () => val
-	}
-	const computedScreenRatio = screenRatio()
-	const availScreenRatio = (computedScreenRatio) => {
-		const available = computedScreenRatio
-		available.w -= rand(1, 20)
-		available.h -= rand(1, 20)
-		return () => available
 	}
 	const screenRandomized = (prop, val) => {
 		randomized[prop] = [`[device]${prop}`, val]
@@ -126,20 +124,24 @@ detectfp.js application/javascript
 	const webglRenderer = () => {
 		//https://www.primegrid.com/gpu_list.php
 		const renderers = [
-			{ gpu: 'NVIDIA GeForce RTX', model: [
+			{
+				gpu: 'NVIDIA GeForce RTX', model: [
 					'2080 SUPER', '2080 Ti', '2080', '2070 SUPER', '2070', '2060'
 				]
 			},
-			{ gpu: 'NVIDIA GeForce GTX', model: [
+			{	
+				gpu: 'NVIDIA GeForce GTX', model: [
 					'1080 Ti', '1080', '1070 Ti', '1070', '1660 Ti', '1660', '1650', '1060', '1050 Ti', '1050'
 				]
 			},
-			{ gpu: 'AMD Radeon', model: [
+			{
+				gpu: 'AMD Radeon', model: [
 					'VII', 'HD 7950 Compute Engine', '(TM) R9 Fury Series', 'Pro 580 Compute Engine', 
 					'RX 570 Compute Engine', '(TM) RX Vega 11 Graphics', 'RX Vega 56 Compute Engine'
 				]
 			},
-			{ gpu: 'Radeon', model: [
+			{
+				gpu: 'Radeon', model: [
 					'RX Vega', 'RX 580 Series', 'RX 570 Series', 'RX 560 Series', '(TM) RX 480 Graphics'
 				] 
 			}
@@ -150,7 +152,7 @@ detectfp.js application/javascript
 		const randomModel = listRand(randomRenderer.model)
 		const randomizedRenderer = `${randomGpu} ${randomModel}`
 		const extension = { 37446: `ANGLE (${randomizedRenderer} vs_${rand(1,5)}_0 ps_${rand(1,5)}_0)` }
-		randomized.getParameter = ['WebGL Renderer', randomizedRenderer]
+		randomized.getParameter = ['[device]WebGL Renderer', randomizedRenderer]
 		return function(x) { return extension[x]? extension[x]: getParameter.apply(this, arguments) }
 	}
 	// cached and randomized
@@ -159,8 +161,7 @@ detectfp.js application/javascript
 		maxTouchPoints: maxTouchPoints(),
 		hardwareConcurrency: hardwareConcurrency(),
 		deviceMemory: deviceMemory(),
-		screenRatio: computedScreenRatio,
-		availScreenRatio: availScreenRatio(computedScreenRatio),
+		screen: screenFingerprint(),
 		canvasDataURL: canvasDataURL(),
 		audioBufferChannelData: audioBufferChannelData(),
 		webglRenderer: webglRenderer()
@@ -168,13 +169,52 @@ detectfp.js application/javascript
 	randomizationTime(`⏱Randomization complete`)
 	// blocked
 	const blocked = {}
-	const mimeTypes = () => { const val = []; blocked.mimeTypes = ['navigator.mimeTypes', '[]']; return () => val }
-	const plugins = () => { const val = []; blocked.plugins = ['navigator.plugins', '[]']; return () => val }
-	const vendor = () => { const val = ''; blocked.vendor = ['navigator.vendor', '""']; return () => val }
-	const getVoices = () => { const val = []; blocked.getVoices = ['speechSynthesis.getVoices', '[]']; return () => val }
-	const connection = () => { const val = undefined; blocked.connection = ['navigator.connection', 'undefined']; return () => val }
-	const getGamepads = () => { const val = []; blocked.getGamepads = ['navigator.getGamepads', '[]']; return () => val }
-	const getBattery = () => { const val = undefined; blocked.getBattery = ['navigator.getBattery', 'undefined']; return () => val }
+	const mimeTypes = () => {
+		const val = []
+		blocked.mimeTypes = ['mimeTypes', '[]']
+		return () => val
+	}
+	const plugins = () => {
+		const val = []
+		blocked.plugins = ['plugins', '[]']
+		return () => val
+	}
+	const vendor = () => {
+		const val = ''
+		blocked.vendor = ['vendor', '""']
+		return () => val
+	}
+	const getVoices = () => {
+		const val = []
+		blocked.getVoices = ['speechSynthesis.getVoices', '[]']
+		return () => val
+	}
+	const connection = () => {
+		const val = undefined
+		blocked.connection = ['[device]connection', 'undefined']
+		return () => val
+	}
+	const getGamepads = () => {
+		const val = []
+		blocked.getGamepads = ['[device]getGamepads', '[]']
+		return () => val
+	}
+	const getBattery = () => {
+		const val = undefined
+		blocked.getBattery = ['[device]getBattery', 'undefined']
+		return () => val
+	}
+	const resolvedOptionsTimeZone = () => {
+		const options = Intl.DateTimeFormat().resolvedOptions()
+		options.timeZone = 'UTC'
+		blocked.timeZone = ['[device]timeZone', 'UTC']
+		return () => options
+	}
+	const timezoneOffset = () => {
+		const val = 0
+		blocked.timezoneOffset = ['[device]timezoneOffset', val]
+		return () => val
+	}
 	// cached
 	const cachedBlocked = {
 		mimeTypes: mimeTypes(),
@@ -183,7 +223,9 @@ detectfp.js application/javascript
 		getVoices: getVoices(),
 		connection: connection(),
 		getBattery: getBattery(),
-		getGamepads: getGamepads()
+		getGamepads: getGamepads(),
+		resolvedOptionsTimeZone: resolvedOptionsTimeZone(),
+		timezoneOffset: timezoneOffset()
 	}
 	// structs
 	const navigatorProps = {
@@ -204,20 +246,20 @@ detectfp.js application/javascript
 	if ('getBattery' in navigator) { navigatorProps.getBattery = () => cachedBlocked.getBattery() }
 	if ('getGamepads' in navigator) { navigatorProps.getGamepads = () => cachedBlocked.getGamepads() }
 	const screenProps = {
-		width: screenRandomized('screen.width', cachedRandomized.screenRatio().w),
-		height: screenRandomized('screen.height', cachedRandomized.screenRatio().h),
-		availWidth: screenRandomized('screen.availWidth', cachedRandomized.availScreenRatio().w),
-		availHeight: screenRandomized('screen.availHeight', cachedRandomized.availScreenRatio().h),
+		width: screenRandomized('screen.width', cachedRandomized.screen().w),
+		height: screenRandomized('screen.height', cachedRandomized.screen().h),
+		availWidth: screenRandomized('screen.availWidth', cachedRandomized.screen().asrw),
+		availHeight: screenRandomized('screen.availHeight', cachedRandomized.screen().asrh),
 		availTop: screen.availTop,
 		availLeft: screen.availLeft,
-		colorDepth: screen.colorDepth,
-		pixelDepth: screen.pixelDepth
+		colorDepth: screenRandomized('screen.colorDepth', cachedRandomized.screen().cDepth),
+		pixelDepth: screenRandomized('screen.pixelDepth', cachedRandomized.screen().pDepth)
 	}
 	const dateProps = {
-		getTimezoneOffset: Date.prototype.getTimezoneOffset
+		getTimezoneOffset: () => cachedBlocked.timezoneOffset()
 	}
 	const intlProps = {
-		resolvedOptions: Intl.DateTimeFormat.prototype.resolvedOptions
+		resolvedOptions: () => cachedBlocked.resolvedOptionsTimeZone()
 	}
 	const mathProps = {
 		acos: Math.acos,
