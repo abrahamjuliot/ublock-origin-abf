@@ -514,7 +514,6 @@ detectfp.js application/javascript
 		Object.defineProperties(root.CanvasRenderingContext2D.prototype, definify(canvasContextProps))
 		Object.defineProperties(root.AudioContext.prototype, definify(audioProps))
 		Object.defineProperties(root.AudioBuffer.prototype, definify(audioBufferProps))
-		Object.defineProperties(root.AudioBuffer.prototype, definify(audioBufferProps))
 		Object.defineProperties(root.RTCPeerConnection.prototype, definify(webRTCProps))
 	}
 	const redefineTime = timer(`🔨Redefining properties...`)
