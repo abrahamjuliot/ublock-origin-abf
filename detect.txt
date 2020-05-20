@@ -1,7 +1,16 @@
 # detect fingerprinting
 detectfp.js application/javascript
 (function() {
+	// Privacy cat
+	// options: remove iframes, toggle each device/browser privacy, toggle script tracing
+	const removeFrames = () => {
+		const frames = document.querySelectorAll('iframe')
+		for (let i = 0; i < frames.length; i++) {
+			frames[i].parentNode.removeChild(iframes[i])
+		}
+	}
 	// helpers
+	const isFn = (x) => typeof x === 'function' ? x() : x
 	const timer = (logStart) => {
 		console.log(logStart)
 		const start = Date.now()
@@ -31,18 +40,21 @@ detectfp.js application/javascript
 	}
 	const hashify = str => {
 		let i, len, hash = 0x811c9dc5
-		for(i = 0, len = str.length; i < len; i++) {
+		for (i = 0, len = str.length; i < len; i++) {
 			hash = Math.imul(31, hash) + str.charCodeAt(i)|0
-	    	}
+		}
 		return ("0000000" + (hash >>> 0).toString(16)).substr(-8)
 	}
 	// randomize
 	const randomizationTime = timer('🔥Computing randomization...')
-	const randomized = {}
+	const randomized = { browser: {}, device: {} }
 	// todo: https://www.whatismybrowser.com/guides/the-latest-version/
+	const randomizify = (env, prop, val, canLie = true) => {
+		if (canLie) { randomized[env][prop] = [prop, isFn(val)] }
+		return val
+	}
 	const doNotTrack = () => {
 		const val = listRand(['0','1'])
-		randomized.doNotTrack = ['doNotTrack', val]
 		return () => val
 	}
 	function canLieTouch() {
@@ -64,21 +76,9 @@ detectfp.js application/javascript
 	  return () => touchOS //&& touchAPI
 	}
 	const canLieTouchComputed = canLieTouch()
-	const maxTouchPoints = () => {
-		const val = rand(1, 10)
-		if (canLieTouchComputed()) { randomized.maxTouchPoints = ['[device]maxTouchPoints', val] }
-		return () => val
-	}
-	const hardwareConcurrency = () => {
-		const val = rand(1, 16)
-		randomized.hardwareConcurrency = ['[device]hardwareConcurrency', val]
-		return () => val
-	}
-	const deviceMemory = () => {
-		const val = evenRand(2, 32)
-		randomized.deviceMemory = ['[device]deviceMemory', val]
-		return () => val
-	}
+	const maxTouchPoints = () => { const val = rand(1, 10); return () => val }
+	const hardwareConcurrency = () => { const val = rand(1, 16); return () => val }
+	const deviceMemory = () => { const val = evenRand(2, 32); return () => val }
 	// https://gs.statcounter.com/screen-resolution-stats
 	const screenFingerprint = () => {
 		const val = listRand([{w:1920,h:1080},{w:1440,h:900},{w:1280,h:800},{w:1600,h:900}])
@@ -88,10 +88,7 @@ detectfp.js application/javascript
 		val.pDepth = listRand([24, 32, 48])
 		return () => val
 	}
-	const screenRandomized = (prop, val) => {
-		randomized[prop] = [`[device]${prop}`, val]
-		return val
-	}
+	const screenFingerprintComputed = screenFingerprint()
 	const canvasDataURL = () => {
 		const canvas = document.createElement('canvas')
 		const txt = '🚀 Private'
@@ -103,7 +100,7 @@ detectfp.js application/javascript
 		context.fillRect(125, 1, 62, 20)
 		context.fillText(txt, 2, 15)
 		const dataURL = canvas.toDataURL()
-		randomized.toDataURL = ['HTMLCanvasElement.toDataURL', hashify(dataURL)]
+		randomized.browser.toDataURL = ['HTMLCanvasElement.toDataURL', hashify(dataURL)]
 		return () => dataURL
 	}
 	const audioBufferChannelData = () => {
@@ -116,33 +113,60 @@ detectfp.js application/javascript
 		for (let i = 0; i < frameCount; i++) { pcmData[i] = Math.random() * 2 - 1 } // randomize
 		let arr = Array.from(pcmData) // convert to Array
 		const randomChannelData = arr // store random data
-		for (let i = 0; i < 10; i++) { arr = doubleSize(arr) } // increase size
+		for (let y = 0; y < 10; y++) { arr = doubleSize(arr) } // increase size
 		pcmData = new Float32Array(arr) // convert back to Float32Array
-		randomized.getChannelData = ['AudioBuffer.getChannelData', hashify(JSON.stringify(randomChannelData))]
+		randomized.browser.getChannelData = ['AudioBuffer.getChannelData', hashify(JSON.stringify(randomChannelData))]
 		return () => pcmData
 	}
 	const webglRenderer = () => {
 		//https://www.primegrid.com/gpu_list.php
 		const renderers = [
 			{
-				gpu: 'NVIDIA GeForce RTX', model: [
-					'2080 SUPER', '2080 Ti', '2080', '2070 SUPER', '2070', '2060'
+				gpu: 'NVIDIA GeForce RTX',
+				model: [
+					'2080 SUPER',
+					'2080 Ti',
+					'2080',
+					'2070 SUPER',
+					'2070',
+					'2060'
 				]
 			},
 			{	
-				gpu: 'NVIDIA GeForce GTX', model: [
-					'1080 Ti', '1080', '1070 Ti', '1070', '1660 Ti', '1660', '1650', '1060', '1050 Ti', '1050'
+				gpu: 'NVIDIA GeForce GTX',
+				model: [
+					'1080 Ti',
+					'1080',
+					'1070 Ti',
+					'1070',
+					'1660 Ti',
+					'1660',
+					'1650',
+					'1060',
+					'1050 Ti',
+					'1050'
 				]
 			},
 			{
-				gpu: 'AMD Radeon', model: [
-					'VII', 'HD 7950 Compute Engine', '(TM) R9 Fury Series', 'Pro 580 Compute Engine', 
-					'RX 570 Compute Engine', '(TM) RX Vega 11 Graphics', 'RX Vega 56 Compute Engine'
+				gpu: 'AMD Radeon',
+				model: [
+					'VII',
+					'HD 7950 Compute Engine',
+					'(TM) R9 Fury Series', 
+					'Pro 580 Compute Engine',
+					'RX 570 Compute Engine', 
+					'(TM) RX Vega 11 Graphics',
+					'RX Vega 56 Compute Engine'
 				]
 			},
 			{
-				gpu: 'Radeon', model: [
-					'RX Vega', 'RX 580 Series', 'RX 570 Series', 'RX 560 Series', '(TM) RX 480 Graphics'
+				gpu: 'Radeon',
+				model: [
+					'RX Vega',
+					'RX 580 Series',
+					'RX 570 Series',
+					'RX 560 Series',
+					'(TM) RX 480 Graphics'
 				] 
 			}
 		]
@@ -152,80 +176,52 @@ detectfp.js application/javascript
 		const randomModel = listRand(randomRenderer.model)
 		const randomizedRenderer = `${randomGpu} ${randomModel}`
 		const extension = { 37446: `ANGLE (${randomizedRenderer} vs_${rand(1,5)}_0 ps_${rand(1,5)}_0)` }
-		randomized.getParameter = ['[device]WebGL Renderer', randomizedRenderer]
+		randomized.device.getParameter = ['WebGL Renderer', randomizedRenderer]
 		return function(x) { return extension[x]? extension[x]: getParameter.apply(this, arguments) }
 	}
-	// cached and randomized
+	// randomized & cached: prevent recompute on property reads
 	const cachedRandomized = {
-		doNotTrack: doNotTrack(),
-		maxTouchPoints: maxTouchPoints(),
-		hardwareConcurrency: hardwareConcurrency(),
-		deviceMemory: deviceMemory(),
-		screen: screenFingerprint(),
+		doNotTrack: randomizify('browser', 'doNotTrack', doNotTrack()),
+		maxTouchPoints: randomizify('device', 'maxTouchPoints', maxTouchPoints(), canLieTouchComputed()),
+		hardwareConcurrency: randomizify('device', 'hardwareConcurrency', hardwareConcurrency()),
+		deviceMemory: randomizify('device', 'deviceMemory', deviceMemory()),
+		screenWidth: randomizify('device', 'screen.width', screenFingerprintComputed().w),
+		screenHeight: randomizify('device', 'screen.height', screenFingerprintComputed().h),
+		screenAvailWidth: randomizify('device', 'screen.availWidth', screenFingerprintComputed().asrw),
+		screenAvailHeight: randomizify('device', 'screen.availHeight', screenFingerprintComputed().asrh),
+		screenColorDepth: randomizify('device', 'screen.colorDepth', screenFingerprintComputed().cDepth),
+		screenPixelDepth: randomizify('device', 'screen.pixelDepth', screenFingerprintComputed().pDepth),
 		canvasDataURL: canvasDataURL(),
 		audioBufferChannelData: audioBufferChannelData(),
 		webglRenderer: webglRenderer()
 	}
 	randomizationTime(`⏱Randomization complete`)
 	// blocked
-	const blocked = {}
-	const mimeTypes = () => {
-		const val = []
-		blocked.mimeTypes = ['mimeTypes', '[]']
-		return () => val
-	}
-	const plugins = () => {
-		const val = []
-		blocked.plugins = ['plugins', '[]']
-		return () => val
-	}
-	const vendor = () => {
-		const val = ''
-		blocked.vendor = ['vendor', '""']
-		return () => val
-	}
-	const getVoices = () => {
-		const val = []
-		blocked.getVoices = ['speechSynthesis.getVoices', '[]']
-		return () => val
-	}
-	const connection = () => {
-		const val = undefined
-		blocked.connection = ['[device]connection', 'undefined']
-		return () => val
-	}
-	const getGamepads = () => {
-		const val = []
-		blocked.getGamepads = ['[device]getGamepads', '[]']
-		return () => val
-	}
-	const getBattery = () => {
-		const val = undefined
-		blocked.getBattery = ['[device]getBattery', 'undefined']
+	const blocked = { browser: {}, device: {} }
+	const blockify = (env, prop, val, canLie = true) => {
+		if (canLie) { blocked[env][prop] = [prop, (val !== ''? JSON.stringify(val): "''")] }
 		return () => val
 	}
 	const resolvedOptionsTimeZone = () => {
 		const options = Intl.DateTimeFormat().resolvedOptions()
 		options.timeZone = 'UTC'
-		blocked.timeZone = ['[device]timeZone', 'UTC']
+		blocked.device.timeZone = ['timeZone', 'UTC']
 		return () => options
 	}
-	const timezoneOffset = () => {
-		const val = 0
-		blocked.timezoneOffset = ['[device]timezoneOffset', val]
-		return () => val
-	}
-	// cached
+	// blocked & cached: prevent recompute on property reads
 	const cachedBlocked = {
-		mimeTypes: mimeTypes(),
-		plugins: plugins(),
-		vendor: vendor(),
-		getVoices: getVoices(),
-		connection: connection(),
-		getBattery: getBattery(),
-		getGamepads: getGamepads(),
+		mimeTypes: blockify('browser', 'mimeTypes', []),
+		plugins: blockify('browser', 'plugins', []),
+		vendor: blockify('browser', 'vendor', ''),
+		getVoices: blockify('browser', 'getVoices', []),
+		connection: blockify('device', 'connection', undefined),
+		getBattery: blockify('device', 'getBattery', undefined),
+		getGamepads: blockify('device', 'getGamepads', []),
 		resolvedOptionsTimeZone: resolvedOptionsTimeZone(),
-		timezoneOffset: timezoneOffset()
+		timezoneOffset: blockify('device', 'timezoneOffset', 0),
+		createDataChannel: blockify('device', 'RTCPeerConnection.createDataChannel', undefined),
+		createOffer: blockify('device', 'RTCPeerConnection.createOffer', undefined),
+		setRemoteDescription: blockify('device', 'RTCPeerConnection.setRemoteDescription', undefined)
 	}
 	// structs
 	const navigatorProps = {
@@ -246,14 +242,14 @@ detectfp.js application/javascript
 	if ('getBattery' in navigator) { navigatorProps.getBattery = () => cachedBlocked.getBattery() }
 	if ('getGamepads' in navigator) { navigatorProps.getGamepads = () => cachedBlocked.getGamepads() }
 	const screenProps = {
-		width: screenRandomized('screen.width', cachedRandomized.screen().w),
-		height: screenRandomized('screen.height', cachedRandomized.screen().h),
-		availWidth: screenRandomized('screen.availWidth', cachedRandomized.screen().asrw),
-		availHeight: screenRandomized('screen.availHeight', cachedRandomized.screen().asrh),
+		width: cachedRandomized.screenWidth,
+		height: cachedRandomized.screenHeight,
+		availWidth: cachedRandomized.screenAvailWidth,
+		availHeight: cachedRandomized.screenAvailHeight,
 		availTop: screen.availTop,
 		availLeft: screen.availLeft,
-		colorDepth: screenRandomized('screen.colorDepth', cachedRandomized.screen().cDepth),
-		pixelDepth: screenRandomized('screen.pixelDepth', cachedRandomized.screen().pDepth)
+		colorDepth: cachedRandomized.screenColorDepth,
+		pixelDepth: cachedRandomized.screenPixelDepth
 	}
 	const dateProps = {
 		getTimezoneOffset: () => cachedBlocked.timezoneOffset()
@@ -322,28 +318,53 @@ detectfp.js application/javascript
 	const audioBufferProps = {
 		getChannelData: () => cachedRandomized.audioBufferChannelData()
 	}
+	const webRTCProps = {
+		createDataChannel: () => cachedBlocked.createDataChannel(),
+		createOffer: () => cachedBlocked.createOffer(),
+		setRemoteDescription: () => cachedBlocked.setRemoteDescription()
+	}
 	// Log Randomized & Blocked
-	const style = `color:aaa;background:#f9f9f9`
-	const randomizedKeys = Object.keys(randomized)
-	const blockedKeys = Object.keys(blocked)
+	const style = `color:aaa;background:#e2d7d752`
+	const randomizedBrowserKeys = Object.keys(randomized.browser)
+	const randomizedDeviceKeys = Object.keys(randomized.device)
+	const blockedBrowserKeys = Object.keys(blocked.browser)
+	const blockedDeviceKeys = Object.keys(blocked.device)
 	const hash = hashify(JSON.stringify(randomized))
 	console.group(
-		`🧪Randomized ${randomizedKeys.length} properties (id: ${hash})`
+		`🧪Randomized ${randomizedBrowserKeys.length+randomizedDeviceKeys.length} properties (id: ${hash})`
 	)
-	randomizedKeys.forEach(key => {
-		const prop = randomized[key][0]
-		const val = randomized[key][1]
-		console.log(`%c${prop}: ${val}`, style)
-	})
+		console.group('Browser')
+		randomizedBrowserKeys.forEach(key => {
+			const prop = randomized.browser[key][0]
+			const val = randomized.browser[key][1]
+			console.log(`%c${prop}: ${val}`, style)
+		})
+		console.groupEnd()
+		console.group('Device')
+		randomizedDeviceKeys.forEach(key => {
+			const prop = randomized.device[key][0]
+			const val = randomized.device[key][1]
+			console.log(`%c${prop}: ${val}`, style)
+		})
+		console.groupEnd()
 	console.groupEnd()
 	console.groupCollapsed(
-		`🔌Blocked ${blockedKeys.length} properties`
+		`🔌Blocked ${blockedBrowserKeys.length+blockedDeviceKeys.length} properties`
 	)
-	blockedKeys.forEach(key => {
-		const prop = blocked[key][0]
-		const val = blocked[key][1]
-		console.log(`%c${prop}: ${val}`, style)
-	})
+		console.group('Browser')
+		blockedBrowserKeys.forEach(key => {
+			const prop = blocked.browser[key][0]
+			const val = blocked.browser[key][1]
+			console.log(`%c${prop}: ${val}`, style)
+		})
+		console.groupEnd()
+		console.group('Device')
+		blockedDeviceKeys.forEach(key => {
+			const prop = blocked.device[key][0]
+			const val = blocked.device[key][1]
+			console.log(`%c${prop}: ${val}`, style)
+		})
+		console.groupEnd()
 	console.groupEnd()
 	// API with Ranking per Unique Impact and Longterm State
 	const queryAPI = 'https://developer.mozilla.org/en-US/search?q='
@@ -402,7 +423,9 @@ detectfp.js application/javascript
 		font: ['CanvasRenderingContext2D.prototype.font', 1],
 		createAnalyser: ['AudioContext.prototype.createAnalyser', 6],
 		createOscillator: ['AudioContext.prototype.createOscillator', 6],
-		getChannelData: ['AudioBuffer.prototype.getChannelData', 6]
+		getChannelData: ['AudioBuffer.prototype.getChannelData', 6],
+		createDataChannel: ['RTCPeerConnection.prototype.createDataChannel', 6],
+		createOffer: ['RTCPeerConnection.prototype.createOffer', 6]
 	}
 	// watcher
 	let rankCounter = 0
@@ -416,8 +439,7 @@ detectfp.js application/javascript
 		const propRank = propAPI[prop][1]
 		const headingStyle = `background:#bcf4de73`
 		const trace = () => {
-			const emojis = propRank >= 6? '🥵': propRank >= 4? '🥶': propRank >= 3? '😱': propRank >=2 ? '😨': ''
-			console.groupCollapsed(`${emojis}Script read ${propDescription}`)
+			console.groupCollapsed(`Script read ${propDescription}`)
 			console.log(`%cAPI Reference:`, headingStyle)
 			console.log(queryAPI+propDescription)
 			console.log(`%cAttempting to trace the source (refresh to retry)...`, headingStyle)
@@ -432,9 +454,9 @@ detectfp.js application/javascript
 		}
 		// counter types
 		if (watching && rankCounter >= fingerprintingRank) {
-			const warnStyle = `color:green;border:2px solid green;font-weight:bold;padding:5px;`
-			const warning = `⚔️Detected excessive data collection (fingerprinting tactics)!`
-			console.warn('%c'+warning, warnStyle)
+			const warnStyle = `color:red;border:1px solid red;font-weight:bold;padding:2px;`
+			const warning = `⚔️Meow! Detected Fingerprinting!`
+			console.log('%c'+warning, warnStyle)
 			console.groupCollapsed(`📔Data Collection Stats and Study Resources`)
 			console.log(`%cAmount of data read that can be compiled to uniquely identify and track this browser: `, headingStyle)
 			console.log(propsReadAll)
@@ -492,6 +514,8 @@ detectfp.js application/javascript
 		Object.defineProperties(root.CanvasRenderingContext2D.prototype, definify(canvasContextProps))
 		Object.defineProperties(root.AudioContext.prototype, definify(audioProps))
 		Object.defineProperties(root.AudioBuffer.prototype, definify(audioBufferProps))
+		Object.defineProperties(root.AudioBuffer.prototype, definify(audioBufferProps))
+		Object.defineProperties(root.RTCPeerConnection.prototype, definify(webRTCProps))
 	}
 	const redefineTime = timer(`🔨Redefining properties...`)
 	redefine(window)
