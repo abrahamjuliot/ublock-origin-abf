@@ -1,15 +1,47 @@
 # detect fingerprinting
 detectfp.js application/javascript
 (function() {
-	// Privacy cat
+	// Privacy cat, try randomize over block
+	// fix your getters
 	// options: remove iframes, toggle each device/browser privacy, toggle script tracing
-	const removeFrames = () => {
-		const frames = document.querySelectorAll('iframe')
-		for (let i = 0; i < frames.length; i++) {
-			frames[i].parentNode.removeChild(iframes[i])
-		}
+	/*
+	https://privacycheck.sec.lrz.de
+	https://ghacksuserjs.github.io/TorZillaPrint/TorZillaPrint.html
+	https://browserleaks.com
+	https://webbrowsertools.com
+	https://www.nothingprivate.ml
+	https://fingerprintjs.com/demo
+	https://bestiejs.github.io/platform.js
+	https://webglreport.com'
+	//Source Code Resources
+	https://old.darkwavetech.com/fingerprint/fingerprint_code.html
+	https://github.com/Valve/fingerprintjs2
+	https://github.com/JackSpirou/ClientJS
+	// resources
+	https://plaperdr.github.io
+	https://docs.google.com/spreadsheets/d/1ZB1zINfGFcrcFzNg4eytRnBQN3nBoKHua2jhV_X6W80
+	*/
+	// notify
+	const options = {
+		traceFirstRead: false
+		// alert type
+		// inject iframe
 	}
 	// helpers
+	const getCurrentScript = () => {
+		const jsURL = /(\/.+\.js)/gi
+		const error = new Error()
+		let path
+		try {
+			path = error.stack.match(jsURL)[0]
+			return path
+		}
+		catch (err) {
+			return '🤔'
+		}
+	}
+	const domLoaded = (fn) => document.readyState != 'loading'?
+    	fn(): document.addEventListener('DOMContentLoaded', fn)
 	const isFn = (x) => typeof x === 'function' ? x() : x
 	const timer = (logStart) => {
 		console.log(logStart)
@@ -428,63 +460,55 @@ detectfp.js application/javascript
 		createOffer: ['RTCPeerConnection.prototype.createOffer', 6]
 	}
 	// watcher
+	let watchAll = true
 	let rankCounter = 0
-	let watching = true
-	const domain = window.location.hostname
-	const fingerprintingRank = 12
+	const warningRank = 12
 	const propsRead = []
 	const propsReadAll = {}
+	const scripts = []
 	const watch = (prop) => {
+		const url = getCurrentScript()
 		const propDescription = propAPI[prop][0]
-		const propRank = propAPI[prop][1]
+		const fpRank = propAPI[prop][1]
 		const headingStyle = `background:#bcf4de73`
-		const trace = () => {
+		const warnStyle = `color:red;border:1px solid red;font-weight:bold;padding:2px;`
+		const tracedScript = scripts.filter(s => s.url == url)[0]
+		const traceFirstRead = () => {
 			console.groupCollapsed(`Script read ${propDescription}`)
-			console.log(`%cAPI Reference:`, headingStyle)
-			console.log(queryAPI+propDescription)
-			console.log(`%cAttempting to trace the source (refresh to retry)...`, headingStyle)
-			console.trace(document.currentScript?document.currentScript.src:'')
+			console.log(`Script:https:${url}`)
+			console.log('API:'+queryAPI+propDescription)
 			console.groupEnd()
 		}
 		const newPropRead = !itemInList(propsRead, propDescription)
 		propsReadAll[propDescription]? propsReadAll[propDescription]++: propsReadAll[propDescription]=1
-		if (newPropRead) {
-			rankCounter += propRank
-			propsRead.push(propDescription)
+		if (newPropRead) { rankCounter += fpRank; propsRead.push(propDescription) }
+		if (watchAll && rankCounter >= warningRank) {
+			const caution = `Excessive property reads detected!`
+			console.log('%c'+caution, warnStyle)
+			console.log('Total property reads:', propsReadAll)
+			console.log('Scripts: ', scripts)
+			document.title = '🤢'+document.title
+			watchAll = false
 		}
-		// counter types
-		if (watching && rankCounter >= fingerprintingRank) {
-			const warnStyle = `color:red;border:1px solid red;font-weight:bold;padding:2px;`
-			const warning = `⚔️Meow! Detected Fingerprinting!`
-			console.log('%c'+warning, warnStyle)
-			console.groupCollapsed(`📔Data Collection Stats and Study Resources`)
-			console.log(`%cAmount of data read that can be compiled to uniquely identify and track this browser: `, headingStyle)
-			console.log(propsReadAll)
-			console.log(`%cSearch this host's Privacy Policy:`, headingStyle)
-			console.log(`https://duckduckgo.com/?q=%22${domain}%22+%22privacy%22+%22policy%22`)
-				console.groupCollapsed(`📋Testing Resources`)
-				console.log('https://privacycheck.sec.lrz.de/')
-				console.log('https://ghacksuserjs.github.io/TorZillaPrint/TorZillaPrint.html')
-				console.log('https://browserleaks.com/')
-				console.log('https://webbrowsertools.com/')
-				console.log('https://www.nothingprivate.ml')
-				console.log('https://fingerprintjs.com/demo')
-				console.log('https://bestiejs.github.io/platform.js/')
-				console.log('https://webglreport.com')
-				console.groupEnd()
-				console.groupCollapsed(`📝Source Code Resources`)
-				console.log('https://old.darkwavetech.com/fingerprint/fingerprint_code.html')
-				console.log('https://github.com/Valve/fingerprintjs2')
-				console.log('https://github.com/JackSpirou/ClientJS')
-				console.groupEnd()
-				console.groupCollapsed(`📚Research Resources`)
-				console.log('https://plaperdr.github.io/')
-				console.log('https://docs.google.com/spreadsheets/d/1ZB1zINfGFcrcFzNg4eytRnBQN3nBoKHua2jhV_X6W80')
-				console.groupEnd()
-			console.groupEnd()
-			watching = false
+		if (!tracedScript) {
+			scripts.push({ url, fpRank, reads: [propDescription], all: { [propDescription]: 1 }, creep: false })
 		}
-		return newPropRead? trace: ()=>{}
+		else if (!itemInList(tracedScript.reads, propDescription)) {
+			tracedScript.fpRank += fpRank // update on 1st prop read
+			tracedScript.reads.push(propDescription)
+			tracedScript.all[propDescription]=1
+			// detect
+			if (!tracedScript.creep && tracedScript.fpRank >= warningRank) {
+				const warning = `Detected Fingerprinting!`
+				tracedScript.creep = true
+				console.log('%c'+warning, warnStyle)
+				console.log(`Creepy script: https:${url}`)
+				console.log(`Total property reads:`, tracedScript.all)
+				alert('🤮'+warning+'\n'+tracedScript.reads.join('\n')+'\n...')
+			}
+		}
+		else { tracedScript.all[propDescription]++ }
+		return options.traceFirstRead && newPropRead? traceFirstRead: ()=>{}
 	}
 	// difinify
 	function definify(struct) {
@@ -494,7 +518,7 @@ detectfp.js application/javascript
 		})
 		return redefinedProps
 	}
-	function redefine(root, typeOfAttempt = '') {
+	function redefine(root) {
 		Object.defineProperties(root.navigator, definify(navigatorProps))
 		Object.defineProperties(root.screen, definify(screenProps))
 		Object.defineProperties(root.Date.prototype, definify(dateProps))
@@ -519,4 +543,7 @@ detectfp.js application/javascript
 	const redefineTime = timer(`🔨Redefining properties...`)
 	redefine(window)
 	redefineTime(`⏱Redefining complete`)
+	domLoaded(() => {
+		;[...document.getElementsByTagName('iframe')].forEach(frame => redefine(frame.contentWindow))
+	})
 })()
