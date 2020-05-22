@@ -136,17 +136,18 @@ detectfp.js application/javascript
 		return () => dataURL
 	}
 	const audioBufferChannelData = () => {
-		const doubleSize = (arr) => arr.concat(arr) // helper
 		const context = new AudioContext()
 		const channels = 2
 		const frameCount = (context.sampleRate*2)/2000 // reduce initial size for randomization
 		const audioBuffer = context.createBuffer(2, frameCount, context.sampleRate)
 		let pcmData = audioBuffer.getChannelData(0)
 		for (let i = 0; i < frameCount; i++) { pcmData[i] = Math.random() * 2 - 1 } // randomize
-		let arr = Array.from(pcmData) // convert to Array
-		const randomChannelData = arr // store random data
-		for (let y = 0; y < 10; y++) { arr = doubleSize(arr) } // increase size
-		pcmData = new Float32Array(arr) // convert back to Float32Array
+		const cache = {}
+		cache.arr = Array.from(pcmData) // convert to Array
+		const randomChannelData = cache.arr // store random data
+		for (let y = 0; y < 10; y++) { cache.arr = cache.arr.concat(cache.arr) } // increase size
+		pcmData = new Float32Array(cache.arr) // convert back to Float32Array
+		delete cache.arr // free memory
 		randomized.browser.getChannelData = ['AudioBuffer.getChannelData', hashify(JSON.stringify(randomChannelData))]
 		return () => pcmData
 	}
@@ -499,12 +500,15 @@ detectfp.js application/javascript
 			tracedScript.all[propDescription]=1
 			// detect
 			if (!tracedScript.creep && tracedScript.fpRank >= warningRank) {
-				const warning = `Detected Fingerprinting!`
+				const warning = `Fingerprinting detected!`
+				const randStr = (Math.random() + 1).toString(36).substring(2,8)
+				const message = '🤮'+warning+' OK to allow or Cancel to try abort.\n\n'+tracedScript.reads.join('\n')+'\n...'
 				tracedScript.creep = true
 				console.log('%c'+warning, warnStyle)
 				console.log(`Creepy script: https:${url}`)
 				console.log(`Total property reads:`, tracedScript.all)
-				alert('🤮'+warning+'\n'+tracedScript.reads.join('\n')+'\n...')
+				//alert(message)
+				if (!confirm(message)) { throw new ReferenceError(randStr) }
 			}
 		}
 		else { tracedScript.all[propDescription]++ }
