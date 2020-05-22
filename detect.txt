@@ -4,28 +4,25 @@ detectfp.js application/javascript
 	// Privacy cat, try randomize over block
 	// fix your getters
 	// options: remove iframes, toggle each device/browser privacy, toggle script tracing
-	/*
-	https://privacycheck.sec.lrz.de
-	https://ghacksuserjs.github.io/TorZillaPrint/TorZillaPrint.html
-	https://browserleaks.com
-	https://webbrowsertools.com
-	https://www.nothingprivate.ml
-	https://fingerprintjs.com/demo
-	https://bestiejs.github.io/platform.js
-	https://webglreport.com'
-	//Source Code Resources
-	https://old.darkwavetech.com/fingerprint/fingerprint_code.html
-	https://github.com/Valve/fingerprintjs2
-	https://github.com/JackSpirou/ClientJS
-	// resources
-	https://plaperdr.github.io
-	https://docs.google.com/spreadsheets/d/1ZB1zINfGFcrcFzNg4eytRnBQN3nBoKHua2jhV_X6W80
-	*/
-	// notify
+	const Resourcelinks = [
+		'https://privacycheck.sec.lrz.de',
+		'https://ghacksuserjs.github.io/TorZillaPrint/TorZillaPrint.html',
+		'https://browserleaks.com',
+		'https://webbrowsertools.com',
+		'https://www.nothingprivate.ml',
+		'https://fingerprintjs.com/demo',
+		'https://bestiejs.github.io/platform.js',
+		'https://webglreport.com',
+		'https://old.darkwavetech.com/fingerprint/fingerprint_code.html',
+		'https://github.com/Valve/fingerprintjs2',
+		'https://github.com/JackSpirou/ClientJS',
+		'https://plaperdr.github.io',
+		'https://docs.google.com/spreadsheets/d/1ZB1zINfGFcrcFzNg4eytRnBQN3nBoKHua2jhV_X6W80'
+	].join('\n')
 	const options = {
-		traceFirstRead: false
-		// alert type
-		// inject iframe
+		traceFirstRead: false,
+		injectFrames: false,
+		alertType: 'abort'
 	}
 	// helpers
 	const getCurrentScript = () => {
@@ -510,6 +507,9 @@ detectfp.js application/javascript
 				console.log('%c'+warning, warnStyle)
 				console.log(`Creepy script: https:${url}`)
 				console.log(`Total property reads:`, tracedScript.all)
+				console.groupCollapsed(`Resource Links:`)
+				console.log(Resourcelinks)
+				console.groupEnd()
 				//alert(message)
 				if (!confirm(message)) { throw new ReferenceError(randStr) }
 			}
@@ -550,7 +550,9 @@ detectfp.js application/javascript
 	const redefineTime = timer(`🔨Redefining properties...`)
 	redefine(window)
 	redefineTime(`⏱Redefining complete`)
-	domLoaded(() => {
-		;[...document.getElementsByTagName('iframe')].forEach(frame => redefine(frame.contentWindow))
-	})
+	if(options.injectFrames) {
+		domLoaded(() => {
+			;[...document.getElementsByTagName('iframe')].forEach(frame => redefine(frame.contentWindow))
+		})
+	}
 })()
