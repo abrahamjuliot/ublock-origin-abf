@@ -349,7 +349,8 @@ detectfp.js application/javascript
 		createOscillator: AudioContext.prototype.createOscillator,
 	}
 	const audioBufferProps = {
-		getChannelData: () => cachedRandomized.audioBufferChannelData()
+		getChannelData: () => cachedRandomized.audioBufferChannelData(),
+		copyFromChannel: AudioBuffer.prototype.copyFromChannel
 	}
 	const webRTCProps = {
 		createDataChannel: () => cachedBlocked.createDataChannel(),
@@ -457,6 +458,7 @@ detectfp.js application/javascript
 		createAnalyser: ['AudioContext.prototype.createAnalyser', 6],
 		createOscillator: ['AudioContext.prototype.createOscillator', 6],
 		getChannelData: ['AudioBuffer.prototype.getChannelData', 6],
+		copyFromChannel: ['AudioBuffer.prototype.getChannelData', 6],
 		createDataChannel: ['RTCPeerConnection.prototype.createDataChannel', 6],
 		createOffer: ['RTCPeerConnection.prototype.createOffer', 6]
 	}
