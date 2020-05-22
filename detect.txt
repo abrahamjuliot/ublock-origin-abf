@@ -145,8 +145,7 @@ detectfp.js application/javascript
 		for (let y = 0; y < 10; y++) { cache.arr = cache.arr.concat(cache.arr) } // increase size
 		pcmData = new Float32Array(cache.arr) // convert back to Float32Array
 		delete cache.arr // free memory
-		//randomized.browser.getChannelData = ['AudioBuffer.getChannelData', hashify(JSON.stringify(randomChannelData))]
-		randomized.browser.getChannelData = ['AudioBuffer.getChannelData', hashify(JSON.stringify(randomChannelData[0]))]
+		randomized.browser.getChannelData = ['AudioBuffer.getChannelData', hashify(JSON.stringify(randomChannelData))]
 		return () => pcmData
 	}
 	const webglRenderer = () => {
