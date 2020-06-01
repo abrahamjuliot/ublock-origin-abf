@@ -1,12 +1,4 @@
-
 (function() {
-	const hashify = str => {
-		let i, len, hash = 0x811c9dc5
-		for (i = 0, len = str.length; i < len; i++) {
-			hash = Math.imul(31, hash) + str.charCodeAt(i)|0
-		}
-		return ("0000000" + (hash >>> 0).toString(16)).substr(-8)
-	}
 	const domLoaded = (fn) => document.readyState != 'loading'?
     	fn(): document.addEventListener('DOMContentLoaded', fn)
     const rand = (min, max) =>
@@ -36,7 +28,6 @@
 	const bufferData = WebGLRenderingContext.prototype.bufferData
 	
 	const randomCanvas = function () {
-		console.log(this._contextType)
 		if (this._contextType == '2d') {
 			const context = getContext.apply(this, ['2d'])
 			context.textBaseline = 'top'
@@ -51,8 +42,6 @@
 		else if (this._contextType == 'webgl') {
 			this.width += widthOffsetComputed 
 			this.height += heightOffsetComputed
-			const url = toDataURL.apply(this, arguments)
-			console.log(hashify(JSON.stringify(url)))
 			return toDataURL.apply(this, arguments)
 		}
 		return toDataURL.apply(this, arguments)
