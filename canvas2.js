@@ -1,7 +1,16 @@
 
 (function() {
+	const hashify = str => {
+		let i, len, hash = 0x811c9dc5
+		for (i = 0, len = str.length; i < len; i++) {
+			hash = Math.imul(31, hash) + str.charCodeAt(i)|0
+		}
+		return ("0000000" + (hash >>> 0).toString(16)).substr(-8)
+	}
 	const domLoaded = (fn) => document.readyState != 'loading'?
     	fn(): document.addEventListener('DOMContentLoaded', fn)
+    const rand = (min, max) =>
+		(Math.floor(Math.random() * (max - min + 1)) + min)
 	function randomRGBA() {
 	    const clr = () => Math.round(Math.random()*255)
 	    return `rgba(${clr()},${clr()},${clr()},${Math.random().toFixed(1)})`
@@ -15,17 +24,18 @@
 		const rand = Math.floor(Math.random()*fontFamily.length)
 		return `${fontSize}px '${fontFamily[rand]}'`
 	}
-	color1Computed = randomRGBA()
-	color2Computed = randomRGBA()
-	color3Computed = randomRGBA()
-	fontComputed = randomFont()
+	const color1Computed = randomRGBA()
+	const color2Computed = randomRGBA()
+	const color3Computed = randomRGBA()
+	const fontComputed = randomFont()
+	const widthOffsetComputed = rand(-10,10)
+	const heightOffsetComputed = rand(-10,10)
 	const canvasProto = HTMLCanvasElement.prototype
 	const getContext = HTMLCanvasElement.prototype.getContext
 	const toDataURL = HTMLCanvasElement.prototype.toDataURL
 	const bufferData = WebGLRenderingContext.prototype.bufferData
 	
 	const randomCanvas = function () {
-		// check for 2d vs webgl in arguments
 		console.log(this._contextType)
 		if (this._contextType == '2d') {
 			const context = getContext.apply(this, ['2d'])
@@ -36,23 +46,16 @@
 			context.strokeStyle = color3Computed
 			context.fillText('.', 4, 17)
 			context.font = fontComputed
+			return toDataURL.apply(this, arguments)
 		}
 		else if (this._contextType == 'webgl') {
-			const context = getContext.apply(this, ['webgl'])
-			
-			// const vertexPosBuffer = context.createBuffer()
-			// console.log(context.ARRAY_BUFFER)
-			// context.bindBuffer(context.ARRAY_BUFFER, vertexPosBuffer)
-			// const vertices = new Float32Array([-0.2, -0.9, 0, 0.4, -0.26, 0, 0, 0.732134444, 0])
-			// const random = vertices.map(n => Math.random())
-			// console.log(random)
-			// context.bufferData(context.ARRAY_BUFFER, random, context.STATIC_DRAW)
-			
-			// randomiz dataURL
-			console.log(toDataURL.apply(this, arguments))
+			this.width += widthOffsetComputed 
+			this.height += heightOffsetComputed
+			const url = toDataURL.apply(this, arguments)
+			console.log(hashify(JSON.stringify(url)))
+			return toDataURL.apply(this, arguments)
 		}
-		const dataURL = toDataURL.apply(this, arguments)
-		return dataURL
+		return toDataURL.apply(this, arguments)
     }
     
 	function redefine(root) {
@@ -66,15 +69,6 @@
 				},
 				'toDataURL':  {
 					get: () => randomCanvas
-				} 
-				
-			},
-			root.WebGLRenderingContext.prototype, {
-				'bufferData':  {
-					get: () => function() {
-						console.log(arguments)
-						return bufferData.apply(this, arguments)
-					}
 				} 
 				
 			}
