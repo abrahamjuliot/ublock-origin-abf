@@ -66,7 +66,6 @@
     }
     redefine(window)
     domLoaded(() => {
-        ;
-        [...document.getElementsByTagName('iframe')].forEach(frame => redefine(frame.contentWindow))
+        ;[...document.getElementsByTagName('iframe')].forEach(frame => redefine(frame.contentWindow))
     })
 })()
