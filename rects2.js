@@ -3,11 +3,7 @@
 	const domLoaded = (fn) => document.readyState != 'loading'?
     	fn(): document.addEventListener('DOMContentLoaded', fn)
 
-	const rand = (min, max) =>
-        (Math.floor(Math.random() * (max - min + 1)) + min)
-        
 	const getRandomOffset = () => Math.floor(Math.random()*100)/100
-	
 	const offset = {
 		bottom: getRandomOffset(),
 		height: getRandomOffset(),
@@ -31,32 +27,28 @@
 			type == 'elementC' ? elementGetClientRects :
 			type == 'elementB' ? elementGetBoundingClientRect : ''
 		)
-		const bounding = type == 'elementB' || type == 'rangeB' ? true : false
-		const domRectify = (domRects, bounding) => {
-			const props = [
-				'bottom',
-				'height',
-				'left',
-				'right',
-				'top',
-				'width',
-				'x',
-				'y'
-			]
-			if (!bounding) {
-				let i, len = domRects.length
+		const domRectify = (client) => {
+			if (client.length) {
+				let i, len = client.length
 				for (i = 0; i < len; i++) {
-					props.forEach(prop => { domRects[i][prop] += offset[prop] })
+					client[i]['bottom'] += offset['bottom']
+					client[i]['height'] += offset['height']
+					client[i]['left'] += offset['left']
+					client[i]['right'] += offset['right']
+					client[i]['top'] += offset['top']
+					client[i]['width'] += offset['width']
+					client[i]['x'] += offset['x']
+					client[i]['y'] += offset['y']
 				}
-				return domRects
+				return client
 			}
-			props.forEach(prop => { domRects[prop] += offset[prop] })
-			return domRects
+			const props = [ 'bottom', 'height', 'left', 'right', 'top', 'width', 'x', 'y' ]
+			props.forEach(prop => { client[prop] += offset[prop] })
+			return client
 		}
 		return function () {
-			const domRects = method.apply(this, arguments)
-			const computedDomRects = domRectify(domRects, bounding)
-			return computedDomRects
+			const client = method.apply(this, arguments)
+			return domRectify(client)
 	    }
 	}
     
