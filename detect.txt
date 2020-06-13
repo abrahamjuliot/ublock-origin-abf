@@ -1,5 +1,5 @@
 # detect fingerprinting
-detectfp.js application/javascript
+detect.js application/javascript
 (function() {
 	const Resourcelinks = [
 		'https://privacycheck.sec.lrz.de',
