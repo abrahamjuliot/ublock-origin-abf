@@ -1,5 +1,0 @@
-🔒 HTTP Nowhere
-|http:$document
-
-🧪 Spoof
-*##+js(detectfp)
