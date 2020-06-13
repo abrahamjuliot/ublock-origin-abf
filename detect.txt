@@ -1,9 +1,6 @@
 # detect fingerprinting
 detectfp.js application/javascript
 (function() {
-	// Privacy cat, try randomize over block
-	// fix your getters
-	// options: remove iframes, toggle each device/browser privacy, toggle script tracing
 	const Resourcelinks = [
 		'https://privacycheck.sec.lrz.de',
 		'https://ghacksuserjs.github.io/TorZillaPrint/TorZillaPrint.html',
