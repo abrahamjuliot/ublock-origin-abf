@@ -46,10 +46,10 @@
 
     function randomCopy(destination, channel) {
         // if pcm data is not yet computed to this AudioBuffer Channel then compute it
-        if (!this._pcmDataComputed) {
+        if (!(this._pcmDataComputed && this._pcmDataComputedChannel == channel)) {
             computePCMData(this, [channel])
         }
-        // else make no changes to this AudioBuffer Channel
+        // else make no changes to this AudioBuffer Channel (seeing it is already computed)
         return copyFromChannel.apply(this, arguments)
     }
 
