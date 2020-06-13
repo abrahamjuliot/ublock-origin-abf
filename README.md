@@ -1,4 +1,4 @@
-Spoof Fingerprinting Scripts via uBlock Origin
+Spoof Browser Fingerprinting Scripts via uBlock Origin
 
 Recommended Setup:
 ```
