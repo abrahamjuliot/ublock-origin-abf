@@ -124,7 +124,6 @@
             copyFromChannel: 'copyFromChannel',
             getByteFrequencyData: 'getByteFrequencyData',
             getFloatFrequencyData: 'getFloatFrequencyData'
-
         }
         const {
             toString: fnToStr
@@ -140,8 +139,6 @@
             }
         })
         root.Function.prototype.toString = toStringProxy
-        root.Function.prototype.toString.toString = toStringProxy
-
     }
 
     redefine(window)
