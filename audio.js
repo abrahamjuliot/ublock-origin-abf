@@ -127,17 +127,16 @@
 
         }
         const { toString: fnToStr } = Function.prototype
-        const toStringProxy = new Proxy(fnToStr, {
-			apply: function (target, thisArg, args) {
+		const toStringProxy = new Proxy(fnToStr, {
+			apply: function(target, thisArg, args) {
 				const name = thisArg.name
 				return (
 					thisArg === fnToStr.toString ? 'function toString() { [native code] }' :
-					name === library[name] ? `function ${library[name]}() { [native code] }`:
+					name === library[name] ? `function ${library[name]}() { [native code] }` :
 					target.call(thisArg, ...args)
 				)
 			}
 		})
-
         root.Function.prototype.toString = toStringProxy
         root.Function.prototype.toString.toString = toStringProxy
 
