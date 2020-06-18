@@ -24,7 +24,7 @@
 
     function computePCMData(obj, args) {
         const data = getChannelData.apply(obj, args)
-        let i, len = data.length
+        let i, len = data ? data.length : 0
         for (i = 0; i < len; i++) {
             // ensure audio is within range of -1 and 1
             const audio = data[i]
@@ -106,6 +106,7 @@
         )
 
         // Resist lie detection 
+        // The idea of using a proxy is inspired by https://adtechmadness.wordpress.com/2019/03/23/javascript-tampering-detection-and-stealth/
         function setApiName(api, name) {
             Object.defineProperty(api, 'name', {
                 writable: true
@@ -125,19 +126,20 @@
             getFloatFrequencyData: 'getFloatFrequencyData'
 
         }
-        const {
-            toString: fnToStr
-        } = Function.prototype
+        const { toString: fnToStr } = Function.prototype
+        const toStringProxy = new Proxy(fnToStr, {
+			apply: function (target, thisArg, args) {
+				const name = thisArg.name
+				return (
+					thisArg === fnToStr.toString ? 'function toString() { [native code] }' :
+					name === library[name] ? `function ${library[name]}() { [native code] }`:
+					target.call(thisArg, ...args)
+				)
+			}
+		})
 
-        function toString() {
-            const name = this.name
-            if (name === library[name]) {
-                return `function ${library[name]}() { [native code] }`
-            }
-            return fnToStr.apply(this, arguments)
-        }
-        root.Function.prototype.toString = toString
-        root.Function.prototype.toString.toString = () => 'function toString() { [native code] }'
+        root.Function.prototype.toString = toStringProxy
+        root.Function.prototype.toString.toString = toStringProxy
 
     }
 
@@ -172,24 +174,16 @@ function hasLiedAPI(api, name) {
     const fnStr = String
     const fnStringify = JSON.stringify
     if (fnToStr != native('toString')) {
-        lieTypes.push({
-            fnToStr
-        })
+        lieTypes.push({ fnToStr })
     }
     if (fnToLStr != native('toLocaleString')) {
-        lieTypes.push({
-            fnToLStr
-        })
+        lieTypes.push({ fnToLStr })
     }
     if (fnStr != native('String')) {
-        lieTypes.push({
-            fnStr
-        })
+        lieTypes.push({ fnStr  })
     }
     if (fnStringify != native('stringify')) {
-        lieTypes.push({
-            fnStringify
-        })
+        lieTypes.push({ fnStringify })
     }
 
     // detect attempts to rename the API and/or rewrite string conversion APIs on this API object
@@ -199,21 +193,29 @@ function hasLiedAPI(api, name) {
         toLocaleString: apiToLocaleString
     } = api
     if (apiName != name) {
-        lieTypes.push({
-            apiName
-        })
+        lieTypes.push({ apiName })
     }
-    if (apiToString !== fnToStr) {
-        lieTypes.push({
-            apiToString
-        })
+    if (apiToString !== fnToStr || apiToString.toString !== fnToStr) {
+        lieTypes.push({ apiToString })
     }
     if (apiToLocaleString !== fnToLStr) {
-        lieTypes.push({
-            apiToLocaleString
-        })
+        lieTypes.push({ apiToLocaleString })
     }
-
+    // The idea of checking new is inspired by https://adtechmadness.wordpress.com/2019/03/23/javascript-tampering-detection-and-stealth/
+    try {
+    	const str_1 = new Function.prototype.toString
+    	const str_2 = new Function.prototype.toString()
+    	const str_3 = new Function.prototype.toString.toString
+    	const str_4 = new Function.prototype.toString.toString()
+    	lieTypes.push({ str_1, str_2, str_3, str_4 })
+    }
+    catch (err) {
+    	const nativeTypeError = 'TypeError: Function.prototype.toString is not a constructor'
+    	if (''+err != nativeTypeError) {
+    		lieTypes.push({ newErr: ''+err })
+    	}
+    }
+    
     // collect string conversion result
     const result = '' + api
 
@@ -222,7 +224,7 @@ function hasLiedAPI(api, name) {
         fingerprint = result
     }
 
-    //console.log({ lieTypes, fingerprint })
+    //console.log(JSON.stringify(lieTypes, null, '\t'))
 
     return {
         lied: lieTypes.length || fingerprint ? true : false,
@@ -238,10 +240,12 @@ function lieDetect(api, name) {
         lied,
         hash
     } = hasLiedAPI(api, name)
-    return lied && console.log(`API Lie Detected: ${hash}`)
+    return lied && console.log(`API Lie Detected (${name}): ${hash}`)
 }
 
 lieDetect(AudioBuffer.prototype.getChannelData, 'getChannelData')
 lieDetect(AudioBuffer.prototype.copyFromChannel, 'copyFromChannel')
 lieDetect(AnalyserNode.prototype.getByteFrequencyData, 'getByteFrequencyData')
 lieDetect(AnalyserNode.prototype.getFloatFrequencyData, 'getFloatFrequencyData')
+
+//Refactor: extract Function string checks into global fingerprint (seperate from API checks)
