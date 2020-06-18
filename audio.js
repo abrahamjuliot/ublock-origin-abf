@@ -126,17 +126,19 @@
             getFloatFrequencyData: 'getFloatFrequencyData'
 
         }
-        const { toString: fnToStr } = Function.prototype
-		const toStringProxy = new Proxy(fnToStr, {
-			apply: function(target, thisArg, args) {
-				const name = thisArg.name
-				return (
-					thisArg === fnToStr.toString ? 'function toString() { [native code] }' :
-					name === library[name] ? `function ${library[name]}() { [native code] }` :
-					target.call(thisArg, ...args)
-				)
-			}
-		})
+        const {
+            toString: fnToStr
+        } = Function.prototype
+        const toStringProxy = new Proxy(fnToStr, {
+            apply: function(target, thisArg, args) {
+                const name = thisArg.name
+                return (
+                    thisArg === fnToStr.toString ? 'function toString() { [native code] }' :
+                    name === library[name] ? `function ${library[name]}() { [native code] }` :
+                    target.call(thisArg, ...args)
+                )
+            }
+        })
         root.Function.prototype.toString = toStringProxy
         root.Function.prototype.toString.toString = toStringProxy
 
@@ -147,7 +149,8 @@
     const domLoaded = (fn) => document.readyState != 'loading' ?
         fn() : document.addEventListener('DOMContentLoaded', fn)
     domLoaded(() => {
-        ;[...document.getElementsByTagName('iframe')].forEach(frame => redefine(frame.contentWindow))
+        ;
+        [...document.getElementsByTagName('iframe')].forEach(frame => redefine(frame.contentWindow))
     })
     //audioTest()
 })()
@@ -173,16 +176,24 @@ function hasLiedAPI(api, name) {
     const fnStr = String
     const fnStringify = JSON.stringify
     if (fnToStr != native('toString')) {
-        lieTypes.push({ fnToStr })
+        lieTypes.push({
+            fnToStr
+        })
     }
     if (fnToLStr != native('toLocaleString')) {
-        lieTypes.push({ fnToLStr })
+        lieTypes.push({
+            fnToLStr
+        })
     }
     if (fnStr != native('String')) {
-        lieTypes.push({ fnStr  })
+        lieTypes.push({
+            fnStr
+        })
     }
     if (fnStringify != native('stringify')) {
-        lieTypes.push({ fnStringify })
+        lieTypes.push({
+            fnStringify
+        })
     }
 
     // detect attempts to rename the API and/or rewrite string conversion APIs on this API object
@@ -192,29 +203,41 @@ function hasLiedAPI(api, name) {
         toLocaleString: apiToLocaleString
     } = api
     if (apiName != name) {
-        lieTypes.push({ apiName })
+        lieTypes.push({
+            apiName
+        })
     }
     if (apiToString !== fnToStr || apiToString.toString !== fnToStr) {
-        lieTypes.push({ apiToString })
+        lieTypes.push({
+            apiToString
+        })
     }
     if (apiToLocaleString !== fnToLStr) {
-        lieTypes.push({ apiToLocaleString })
+        lieTypes.push({
+            apiToLocaleString
+        })
     }
     // The idea of checking new is inspired by https://adtechmadness.wordpress.com/2019/03/23/javascript-tampering-detection-and-stealth/
     try {
-    	const str_1 = new Function.prototype.toString
-    	const str_2 = new Function.prototype.toString()
-    	const str_3 = new Function.prototype.toString.toString
-    	const str_4 = new Function.prototype.toString.toString()
-    	lieTypes.push({ str_1, str_2, str_3, str_4 })
+        const str_1 = new Function.prototype.toString
+        const str_2 = new Function.prototype.toString()
+        const str_3 = new Function.prototype.toString.toString
+        const str_4 = new Function.prototype.toString.toString()
+        lieTypes.push({
+            str_1,
+            str_2,
+            str_3,
+            str_4
+        })
+    } catch (err) {
+        const nativeTypeError = 'TypeError: Function.prototype.toString is not a constructor'
+        if ('' + err != nativeTypeError) {
+            lieTypes.push({
+                newErr: '' + err
+            })
+        }
     }
-    catch (err) {
-    	const nativeTypeError = 'TypeError: Function.prototype.toString is not a constructor'
-    	if (''+err != nativeTypeError) {
-    		lieTypes.push({ newErr: ''+err })
-    	}
-    }
-    
+
     // collect string conversion result
     const result = '' + api
 
