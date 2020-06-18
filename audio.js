@@ -130,7 +130,7 @@
             toString: fnToStr
         } = Function.prototype
         const toStringProxy = new Proxy(fnToStr, {
-            apply: function(target, thisArg, args) {
+            apply: (target, thisArg, args) => {
                 const name = thisArg.name
                 return (
                     thisArg === fnToStr.toString ? 'function toString() { [native code] }' :
