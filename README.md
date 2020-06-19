@@ -1,3 +1,5 @@
+[Pre-alpha]
+
 Spoof Browser Fingerprinting Scripts via uBlock Origin
 
 - Scriplet injection: https://github.com/gorhill/uBlock/wiki/Static-filter-syntax#scriptlet-injection
