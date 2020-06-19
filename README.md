@@ -6,7 +6,7 @@ Spoof Browser Fingerprinting Scripts via uBlock Origin
 - Adding resources: https://github.com/gorhill/uBlock/wiki/Advanced-settings#userresourceslocation
 - uBlock Origin's Resource Library: https://github.com/gorhill/uBlock/wiki/Resources-Library
 - If you use scripts in this repo, I recommend self-hosting (via github) to ensure you have full control
-- Feel free to copy, rewrite, makes this your own, etc
+- Feel free to copy, rewrite, make this your own, do as you wish, etc.
 
 Recommended Setup:
 ```
