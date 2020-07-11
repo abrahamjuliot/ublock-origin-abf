@@ -16,8 +16,3 @@ Recommended Setup:
 🧪 Spoof
 *##+js(detect)
 ```
-
-Whitelist domains:
-```
-*##+js(detect), domain=~youtube.com|~google.com
-```
