@@ -14,5 +14,5 @@ Recommended Setup:
 |http:$document
 
 🧪 Spoof
-*##+js(detectfp)
+*##+js(detect)
 ```
