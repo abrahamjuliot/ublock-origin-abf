@@ -439,7 +439,8 @@
             const fingerprintingDetected = tracedScript.fpRank >= warningRank
             const alreadyCaught = tracedScript.creep
             if (!alreadyCaught && fingerprintingDetected) {
-                const randomMessage = (Math.random() + 1).toString(36).substring(2, 8)
+                const randomString = () => (Math.random() + 1).toString(36).substring(2, 8)
+                const randomMessage = `${randomString()} ${randomString()} ${randomString()}`
                 const warning = 'Fingerprinting detected!'
                 tracedScript.creep = true // caught!
                 fingerprintScripts.push(url)
