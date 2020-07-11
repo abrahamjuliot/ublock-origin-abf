@@ -449,10 +449,17 @@
                 	+ Object.keys(tracedScript.all).map(prop => prop.replace(/\.prototype/, '')).join(', ')+'...'+ '\n\n'
                 	+ sessionProtection
             	)
-                if (!sessionStorage.getItem(sessionName + 'permission')) {
+                const sessionPermission = sessionStorage.getItem(sessionName + 'permission')
+            	if (sessionPermission == 'deny') {
+            		throw new ReferenceError(randomMessage)
+            	}
+                if (!sessionPermission) {
                     const permission = confirm(message)
-                    sessionStorage.setItem(sessionName + 'permission', permission)
-                    if (!permission) {
+                    if (permission) {
+                    	sessionStorage.setItem(sessionName + 'permission', 'allow')
+                    }
+                    else {
+                    	sessionStorage.setItem(sessionName + 'permission', 'deny')
                         throw new ReferenceError(randomMessage)
                     }
                 }
