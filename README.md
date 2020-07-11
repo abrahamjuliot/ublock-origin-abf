@@ -1,7 +1,8 @@
 [Pre-alpha]
+![image](https://user-images.githubusercontent.com/6946045/87213182-f2791480-c2d7-11ea-95e8-ff272b5b809a.png)
 
-![image](https://user-images.githubusercontent.com/6946045/87213055-e2ad0080-c2d6-11ea-986b-5f6a5680c83d.png)
 ![image](https://user-images.githubusercontent.com/6946045/87213150-ba71d180-c2d7-11ea-9af5-8580de0a4f91.png)
+
 ![image](https://user-images.githubusercontent.com/6946045/87213139-9f9f5d00-c2d7-11ea-9d54-20cfb3e9d2ac.png)
 
 Spoof Browser Fingerprinting Scripts via uBlock Origin
