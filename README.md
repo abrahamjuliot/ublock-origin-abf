@@ -1,4 +1,5 @@
-[Pre-alpha]
+Pre-alpha
+
 ![image](https://user-images.githubusercontent.com/6946045/87213182-f2791480-c2d7-11ea-95e8-ff272b5b809a.png)
 
 ![image](https://user-images.githubusercontent.com/6946045/87213150-ba71d180-c2d7-11ea-9af5-8580de0a4f91.png)
