@@ -446,7 +446,7 @@
                 const message = (
                 	warning + '\n\n'
                 	+ url + '\n\n'
-                	+ Object.keys(tracedScript.all).map(prop => prop.replace(/\.prototype/, '')).join(', ')+ '\n\n'
+                	+ Object.keys(tracedScript.all).map(prop => prop.replace(/\.prototype/, '')).join(', ')+'...'+ '\n\n'
                 	+ sessionProtection
             	)
                 if (!sessionStorage.getItem(sessionName + 'permission')) {
