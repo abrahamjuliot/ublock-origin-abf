@@ -1,3 +1,5 @@
+/// detect.js
+/// alias detect.js
 (function() {
 	const Resourcelinks = [
 		'https://privacycheck.sec.lrz.de',
