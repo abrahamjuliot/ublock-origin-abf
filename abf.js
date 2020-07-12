@@ -674,12 +674,16 @@
                 watch(prop);
                 return struct[prop]
             }
-            Object.defineProperties(fn, {
-                name: {
-                    value: 'get ' + prop,
-                    configurable: true
-                }
-            })
+			try {
+				Object.defineProperties(fn, {
+					name: {
+						value: 'get ' + prop,
+						configurable: true
+					}
+				})
+			} catch (error) {
+				console.log(error)
+			}
             redefinedProps[prop] = {
                 get: fn
             }
@@ -694,13 +698,9 @@
                 proto,
                 struct
             } = api
-            try {
-                return Object.defineProperties(
-                    (proto ? root[name].prototype : root[name]), definify(struct)
-                )
-            } catch (error) {
-                console.error(error)
-            }
+			return Object.defineProperties(
+				(proto ? root[name].prototype : root[name]), definify(struct)
+			)
         })
         // Deep calls
         Object.defineProperties(root.Intl.DateTimeFormat.prototype, definify(intlProps))
