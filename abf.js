@@ -129,8 +129,12 @@
     const sessionProtection = `uBlock Origin ABF Session: ${hash} @${timestamp}`
     console.log(sessionProtection)
     // webgl
-    function computeGetParameter() {
-        const nativeGetParameter = WebGLRenderingContext.prototype.getParameter
+    function computeGetParameter(type) {
+        const nativeGetParameter = (
+			type == 'webgl2' ?
+			WebGL2RenderingContext.prototype.getParameter :
+			WebGLRenderingContext.prototype.getParameter
+		)
         return function getParameter(x) {
             return (
                 webglExtensionComputed === false ? nativeGetParameter.apply(this, arguments) :
@@ -592,8 +596,18 @@
             struct: {
                 shaderSource: WebGLRenderingContext.prototype.shaderSource,
                 getExtension: WebGLRenderingContext.prototype.getExtension,
-                getParameter: computeGetParameter(),
+                getParameter: computeGetParameter('webgl'),
                 getSupportedExtensions: WebGLRenderingContext.prototype.getSupportedExtensions
+            }
+        },
+		{
+            name: 'WebGL2RenderingContext',
+            proto: true,
+            struct: {
+                shaderSource: WebGL2RenderingContext.prototype.shaderSource,
+                getExtension: WebGL2RenderingContext.prototype.getExtension,
+                getParameter: computeGetParameter('webgl2'),
+                getSupportedExtensions: WebGL2RenderingContext.prototype.getSupportedExtensions
             }
         },
         {
