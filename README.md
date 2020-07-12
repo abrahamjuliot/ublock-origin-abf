@@ -14,7 +14,7 @@ Features include:
 5. Defensive: api tampering is protected with a [proxy](https://adtechmadness.wordpress.com/2019/03/23/javascript-tampering-detection-and-stealth/) to prevent detection
 
 uBlock Origin Setup:
-1. Select the adnvanced user icon in Settings
+1. Select the advanced user icon in Settings
 
 ![image](https://user-images.githubusercontent.com/6946045/87236337-eb680a00-c39c-11ea-8806-cb20e4f55896.png)
 
