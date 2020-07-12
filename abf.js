@@ -447,7 +447,7 @@
                 const message = (
                 	'🤮 '+ warning + '\n'
                 	+ '🛡 '+ sessionProtection + '\n'
-                	+ '💩 '+url + '\n'
+                	+ '💩 Creepy script: '+url + '\n'
                 	+ '🧐 '+Object.keys(tracedScript.all).map(prop => prop.replace(/\.prototype/, '')).join(', ')+'...'+ '\n'
             	)
                 const sessionPermission = sessionStorage.getItem(sessionName + 'permission')
