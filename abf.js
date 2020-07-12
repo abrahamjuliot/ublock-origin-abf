@@ -150,7 +150,7 @@
     const nativeToBlob = HTMLCanvasElement.prototype.toBlob
     const nativeGetImageData = CanvasRenderingContext2D.prototype.getImageData
     function getContext(contextType, contextAttributes) {
-        this._contextType = contextType
+        canvasProto._contextType = contextType
         return nativeGetContext.apply(this, arguments)
     }
     function randomizeContext2D(context) {
@@ -171,13 +171,14 @@
     }
     function randomizeContextWebgl(canvas) {
 		const context = canvas.getContext(canvas._contextType)
-		console.log(context)
-        const {
-            widthOffset,
-            heightOffset
-        } = canvasContextComputed
-        context.width += widthOffset
-        context.height += heightOffset
+		if (context) {
+			const {
+				widthOffset,
+				heightOffset
+			} = canvasContextComputed
+			context.width += widthOffset
+			context.height += heightOffset
+		}
         return context
     }
     function toDataURL() {
