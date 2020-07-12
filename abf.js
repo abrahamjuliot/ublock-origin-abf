@@ -384,6 +384,70 @@
         createOffer: ['RTCPeerConnection.prototype.createOffer', 3],
         setRemoteDescription: ['RTCPeerConnection.prototype.setRemoteDescription', 3]
     }
+	const randomChar = () => String.fromCharCode(97+Math.floor(Math.random() * 26))
+	const listRand = (list) => list[Math.floor(Math.random() * list.length)]
+	const letter = randomChar()
+	const errorStruct = {
+		'RangeError': {
+			firefox: [
+				'invalid array length',
+				'repeat count must be non-negative'
+			],
+			chrome: [
+				'Invalid array length',
+				'Invalid count value'
+			]
+		},
+		'ReferenceError': {
+			firefox: [
+				`${letter} is not defined`,
+				`assignment to undeclared variable ${letter}`,
+				`can't access lexical declaration ${letter} before initialization`,
+				'invalid assignment left-hand side'
+				
+			],
+			chrome: [
+				`${letter} is not defined`,
+				'invalid assignment left-hand side'
+			]
+		},
+		'SyntaxError': {
+			firefox: [
+				'function is a reserved identifier',
+				'function statement requires a name',
+				'identifier starts immediately after numeric literal',
+				'illegal character',
+				`invalid regular expression flag ${letter}`,
+				'expected expression, got end of script',
+				`redeclaration of formal parameter ${letter}`
+			],
+			chrome: [
+				'Unexpected reserved word',
+				'Unexpected token',
+				'Unexpected number',
+				'Invalid or unexpected token',
+				'Invalid regular expression flags',
+				'Unexpected end of input',
+				`Identifier ${letter} has already been declared`
+			]
+		},
+		'TypeError': {
+			firefox: [
+				`${letter} is not a function`,
+				`${letter} is not iterable`,
+				`${letter} is null`
+				
+			],
+			chrome: [
+				`${letter} is not a function`,
+				`${letter} is not iterable`,
+				`Cannot read property ${letter} of null`
+			]
+		},
+		
+	}
+	const firefox = (navigator.userAgent.indexOf('Firefox') != -1)
+	const errorType = listRand(Object.keys(errorStruct))
     // https://stackoverflow.com/questions/2255689/how-to-get-the-file-path-of-the-currently-executing-javascript-code
     const getCurrentScript = () => {
         const jsURL = /(\/.+\.js)/gi
@@ -454,7 +518,13 @@
                 	+ '🧐\n'+Object.keys(tracedScript.all).map(prop => prop.replace(/\.prototype/, '')).join('\n')+'...'+ '\n'
             	)
                 const sessionPermission = sessionStorage.getItem(sessionName + 'permission')
-                const error = new ReferenceError(randomMessage)
+                const randomError = listRand(errorStruct[errorType][(firefox ? 'firefox' : 'chrome')])
+                const error = (
+            		errorType == 'RangeError' ? new RangeError(randomError) : 
+            		errorType == 'ReferenceError' ? new ReferenceError(randomError) : 
+            		errorType == 'SyntaxError' ? new SyntaxError(randomError) : 
+            		new TypeError(randomError)
+        		)
             	if (sessionPermission == 'deny') {
             		console.error(error)
                     throw error
