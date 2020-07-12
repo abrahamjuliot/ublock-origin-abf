@@ -633,7 +633,8 @@
                 }
             })
             redefinedProps[prop] = {
-                get: fn
+                get: fn,
+                configurable: false
             }
         })
         return redefinedProps
