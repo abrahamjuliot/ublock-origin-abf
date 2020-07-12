@@ -537,7 +537,7 @@
             		if (secondsPassed < -30) {
             			sessionStorage.setItem(sessionName + 'error', JSON.stringify({ timestamp: +(new Date()), type: errorType, message: randomError }))
             			const error = trap(errorType, randomError)
-                    	console.error(error)
+                    	//console.error(error)
                         throw error	
             		}
             		else {
