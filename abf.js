@@ -168,6 +168,7 @@
         return context
     }
     function randomizeContextWebgl(canvas) {
+		console.log(canvas, canvas._contextType)
 		const context = canvas.getContext(canvas._contextType)
         const {
             clearColor
