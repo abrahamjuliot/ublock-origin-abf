@@ -26,7 +26,7 @@
 
 3. inject the global scriplet to My Filters.
 ```
-##+js(abf)
+*##+js(abf)
 ```
 
 ### uBlock Origin Guides:
