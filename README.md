@@ -1,6 +1,6 @@
 # uBlock Origin Abort Browser Fingerprinting (ABF)
 
-![image](https://user-images.githubusercontent.com/6946045/87235585-53652300-c392-11ea-8b26-769072600f99.png)
+![image](https://user-images.githubusercontent.com/6946045/87236128-0ab16800-c39a-11ea-8ce2-109ed7878dc9.png)
 
 ![image](https://user-images.githubusercontent.com/6946045/87235602-8c9d9300-c392-11ea-9ccc-7be79702df13.png)
 
