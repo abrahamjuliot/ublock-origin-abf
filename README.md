@@ -2,8 +2,6 @@
 
 ![image](https://user-images.githubusercontent.com/6946045/87236288-2ae22680-c39c-11ea-8b35-5db24e6f19b6.png)
 
-![image](https://user-images.githubusercontent.com/6946045/87235602-8c9d9300-c392-11ea-9ccc-7be79702df13.png)
-
 Abort Browser Fingerprinting Scripts via uBlock Origin
 
 Features include:
