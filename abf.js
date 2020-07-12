@@ -676,7 +676,8 @@
             }
             Object.defineProperties(fn, {
                 name: {
-                    value: 'get ' + prop
+                    value: 'get ' + prop,
+                    configurable: true
                 }
             })
             redefinedProps[prop] = {
