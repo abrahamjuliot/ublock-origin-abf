@@ -198,7 +198,7 @@
             const context = nativeGetContext.apply(this, ['2d'])
             randomizeContext2D(context)
             return nativeToBlob.apply(this, arguments)
-        } else if (this._contextType == 'webgl') {
+        } else if (this._contextType == 'webgl' || this._contextType == 'webgl2') {
             randomizeContextWebgl(this)
             return nativeToBlob.apply(this, arguments)
         }
