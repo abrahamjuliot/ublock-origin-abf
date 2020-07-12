@@ -172,6 +172,8 @@
             clearColor
         } = canvasContextComputed
         context.clearColor(...clearColor)
+		const x = context.getParameter(context.COLOR_CLEAR_VALUE)
+		console.log(x)
         return context
     }
     function toDataURL() {
