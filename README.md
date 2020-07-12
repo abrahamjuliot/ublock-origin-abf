@@ -13,7 +13,7 @@
 6. **Genuine**: random output does not contain gibberish
 7. **Minimal**: to avoid site breakage, APIs are not blocked and only a few are altered
 
-<sup>1</sup> If cancel (abort) is selected, a random error will be thrown at the script and at any additional fingerpinting scripts during the session. To avoid detection, the error randomization is reset only after a 30 second delay. Since scripts may yield different results, use this option with caution: [1] the error may [break the script](https://www.nothingprivate.ml/) (the goal), [2] the error may be [computed as random output](https://panopticlick.eff.org/), [3] the error may be [properly handled](https://ghacksuserjs.github.io/TorZillaPrint/TorZillaPrint.html), or [4] the collection of random errors may be traced per session and then used to fingerprint your browser and link mulitple sessions to the same browser.
+<sup>1</sup> If cancel (abort) is selected, a random error will be thrown at the script and at any additional fingerpinting scripts during the session. To avoid detection, the error randomization is reset only after a 30 second delay. Since scripts may yield different results, use this option with caution: [1] the error may [break the script](https://www.nothingprivate.ml/) (the goal), [2] in the case of muliple sessions, the error may be [computed as random output](https://panopticlick.eff.org/), [3] the error may be [properly handled](https://ghacksuserjs.github.io/TorZillaPrint/TorZillaPrint.html), or [4] the collection of random errors may be traced per session and then used to fingerprint your browser and link your sessions.
 
 ### uBlock Origin Setup:
 1. Select the advanced user icon in Settings
