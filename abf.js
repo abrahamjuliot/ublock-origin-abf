@@ -360,9 +360,6 @@
         expm1: ['Math.expm1', 1],
         sinh: ['Math.sinh', 1],
         enumerateDevices: ['navigator.mediaDevices.enumerateDevices', 1],
-        canPlayType: ['prototype.canPlayType', 1],
-        isTypeSupported: ['isTypeSupported', 1],
-        getVoices: ['speechSynthesis.getVoices', 1],
         now: ['Performance.prototype.now', 1],
         getBoundingClientRect: ['prototype.getBoundingClientRect', 1],
         getClientRects: ['prototype.getClientRects', 3],
@@ -379,8 +376,6 @@
         isPointInPath: ['CanvasRenderingContext2D.prototype.isPointInPath', 1],
         isPointInStroke: ['CanvasRenderingContext2D.prototype.isPointInStroke', 1],
         measureText: ['CanvasRenderingContext2D.prototype.measureText', 2],
-        createAnalyser: ['AudioContext.prototype.createAnalyser', 4],
-        createOscillator: ['AudioContext.prototype.createOscillator', 4],
         getChannelData: ['AudioBuffer.prototype.getChannelData', 8],
         copyFromChannel: ['AudioBuffer.prototype.copyFromChannel', 8],
         getByteFrequencyData: ['AnalyserNode.prototype.getByteFrequencyData', 8],
@@ -537,41 +532,6 @@
             }
         },
         {
-            name: 'HTMLVideoElement',
-            proto: true,
-            struct: {
-                canPlayType: HTMLVideoElement.prototype.canPlayType
-            }
-        },
-        {
-            name: 'HTMLMediaElement',
-            proto: true,
-            struct: {
-                canPlayType: HTMLMediaElement.prototype.canPlayType
-            }
-        },
-        {
-            name: 'MediaSource',
-            proto: false,
-            struct: {
-                isTypeSupported: MediaSource.isTypeSupported
-            }
-        },
-        {
-            name: 'MediaRecorder',
-            proto: false,
-            struct: {
-                isTypeSupported: MediaRecorder.isTypeSupported
-            }
-        },
-        {
-            name: 'speechSynthesis',
-            proto: false,
-            struct: {
-                getVoices: speechSynthesis.getVoices
-            }
-        },
-        {
             name: 'Performance',
             proto: true,
             struct: {
@@ -631,14 +591,6 @@
                 isPointInPath: CanvasRenderingContext2D.prototype.isPointInPath,
                 isPointInStroke: CanvasRenderingContext2D.prototype.isPointInStroke,
                 measureText: CanvasRenderingContext2D.prototype.measureText
-            }
-        },
-        {
-            name: 'AudioContext',
-            proto: true,
-            struct: {
-                createAnalyser: AudioContext.prototype.createAnalyser,
-                createOscillator: AudioContext.prototype.createOscillator
             }
         },
         {
@@ -740,9 +692,6 @@
             expm1: 'expm1',
             sinh: 'sinh',
             enumerateDevices: 'enumerateDevices',
-            canPlayType: 'canPlayType',
-            isTypeSupported: 'isTypeSupported',
-            getVoices: 'getVoices',
             now: 'now',
             getBoundingClientRect: 'getBoundingClientRect',
             getClientRects: 'getClientRects',
@@ -759,8 +708,6 @@
             isPointInPath: 'isPointInPath',
             isPointInStroke: 'isPointInStroke',
             measureText: 'measureText',
-            createAnalyser: 'createAnalyser',
-            createOscillator: 'createOscillator',
             getChannelData: 'getChannelData',
             copyFromChannel: 'copyFromChannel',
             getByteFrequencyData: 'getByteFrequencyData',
