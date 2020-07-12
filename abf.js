@@ -612,7 +612,7 @@
             struct: {
                 getContext: getContext,
                 toDataURL: toDataURL,
-                toBlob: toBlob,
+                toBlob: toBlob
             }
         },
         {
