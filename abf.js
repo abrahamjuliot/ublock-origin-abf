@@ -464,7 +464,9 @@
                     }
                     else {
                     	sessionStorage.setItem(sessionName + 'permission', 'deny')
-                        throw new ReferenceError(randomMessage)
+                    	const error = new ReferenceError(randomMessage)
+                    	console.error(error)
+                        throw error
                     }
                 }
             }
