@@ -667,26 +667,29 @@
             }
         }
     ]
-    function definify(struct) {
+    function definify(struct, type = 'get') {
         const redefinedProps = {}
         Object.keys(struct).forEach(prop => {
             const fn = () => {
                 watch(prop);
                 return struct[prop]
             }
-			try {
-				Object.defineProperties(fn, {
-					name: {
-						value: 'get ' + prop,
-						configurable: true
-					}
-				})
-			} catch (error) {
-				console.log(error)
+            Object.defineProperties(fn, {
+                name: {
+                    value: 'get ' + prop,
+                    configurable: true
+                }
+            })
+			if (type == 'get') {
+				redefinedProps[prop] = {
+					get: fn
+				}
 			}
-            redefinedProps[prop] = {
-                get: fn
-            }
+			else {
+				redefinedProps[prop] = {
+					value: fn
+				}
+			}
         })
         return redefinedProps
     }
@@ -698,9 +701,20 @@
                 proto,
                 struct
             } = api
-			return Object.defineProperties(
-				(proto ? root[name].prototype : root[name]), definify(struct)
-			)
+            try {
+				try {
+					return Object.defineProperties(
+						(proto ? root[name].prototype : root[name]), definify(struct)
+					)
+				}
+				catch (error) {}
+
+				return Object.defineProperties(
+                    (proto ? root[name].prototype : root[name]), definify(struct, 'value')
+                )
+            } catch (error) {
+                console.error(error)
+            }
         })
         // Deep calls
         Object.defineProperties(root.Intl.DateTimeFormat.prototype, definify(intlProps))
