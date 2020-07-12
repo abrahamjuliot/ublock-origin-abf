@@ -13,12 +13,13 @@ Features include:
 4b. if permission is denied, a [random error](https://user-images.githubusercontent.com/6946045/87235934-164f5f80-c397-11ea-8df9-1468ecf872f1.png) will be thrown at the script and future attempts per site session. API protection will continue.
 5. Defensive: api tampering is protected with a [proxy](https://adtechmadness.wordpress.com/2019/03/23/javascript-tampering-detection-and-stealth/) to prevent detection
 
-Recommended Setup:
+uBlock Origin Setup:
+1. Select the adnvanced user icon in Settings
+![image](https://user-images.githubusercontent.com/6946045/87236337-eb680a00-c39c-11ea-8806-cb20e4f55896.png)
+2. Add the abf.js scriplet url to `userResourcesLocation`
+![image](https://user-images.githubusercontent.com/6946045/87236365-72b57d80-c39d-11ea-9ad9-462ddffa19aa.png)
+3. inject the scriplet to My Filters. Use `*` to apply to sites globally.
 ```
-🔒 HTTP Nowhere
-|http:$document
-
-🧪 Spoof
 *##+js(abf)
 ```
 
