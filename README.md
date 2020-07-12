@@ -8,9 +8,9 @@
 1. **[API protection](https://user-images.githubusercontent.com/6946045/87235868-ff5c3d80-c395-11ea-87b1-56f759419043.png)**: canvas, audio, webgl, and clientRects
 2. **Session Based**: randomization is stored in site session and resets only on a new session
 3. **Detection**: fingerprinting behavior is detected in real time
-4. **Permission**: script execution is paused and your permission is required to allow fingerprinting (per session)<sup>1</sup>.
-5. **Defensive**: api tampering is protected with a [proxy](https://adtechmadness.wordpress.com/2019/03/23/javascript-tampering-detection-and-stealth/) to prevent detection.
-6. **Genuine**: random output does not contain gibberish.
+4. **Permission**: script execution is paused and your permission is required to allow fingerprinting (per session)<sup>1</sup>
+5. **Defensive**: api tampering is protected with a [proxy](https://adtechmadness.wordpress.com/2019/03/23/javascript-tampering-detection-and-stealth/) to prevent detection
+6. **Genuine**: random output does not contain gibberish
 
 <sup>1</sup> If permission is denied, a random error will be thrown at the script and at any additional fingerpinting scripts during the session. Since the error is randomized on each new request and scripts may yield different results, use this option with caution: [1] the error may [break the script](https://www.nothingprivate.ml/) (the goal), [2] the error may be [computed as random output](https://panopticlick.eff.org/), [3] the error may be [properly handled](https://ghacksuserjs.github.io/TorZillaPrint/TorZillaPrint.html), or [4] the collection of random errors may be traced per session and then used to fingerprint your browser and link your sessions.
 
