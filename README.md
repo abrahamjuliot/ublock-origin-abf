@@ -11,8 +11,7 @@ Features include:
 4. Permission: script execution is paused and your permission is required to allow fingerprinting (per session)
 4a. if permission is allowed, you will not be alerted when fingerprinting is detected per site session. API protection will continue.
 4b. if permission is denied, a [random error](https://user-images.githubusercontent.com/6946045/87235934-164f5f80-c397-11ea-8df9-1468ecf872f1.png) will be thrown at the script and future attempts per site session. API protection will continue.
-5. Genuine: random output does not include random strings of gibberish characters
-6. Defensive: api tampering is protected with a [proxy](https://adtechmadness.wordpress.com/2019/03/23/javascript-tampering-detection-and-stealth/) to prevent detection
+5. Defensive: api tampering is protected with a [proxy](https://adtechmadness.wordpress.com/2019/03/23/javascript-tampering-detection-and-stealth/) to prevent detection
 
 Recommended Setup:
 ```
