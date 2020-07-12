@@ -435,7 +435,6 @@
 				`${letter} is not a function`,
 				`${letter} is not iterable`,
 				`${letter} is null`
-
 			],
 			chrome: [
 				`${letter} is not a function`,
