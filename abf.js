@@ -177,12 +177,16 @@
         return context
     }
     function toDataURL() {
-		console.log(this._contextType)
         if (this._contextType == '2d') {
             const context = nativeGetContext.apply(this, ['2d'])
             randomizeContext2D(context)
             return nativeToDataURL.apply(this, arguments)
-        } else if (this._contextType == 'webgl') {
+        }
+		else if (this._contextType == 'webgl') {
+            randomizeContextWebgl(this)
+            return nativeToDataURL.apply(this, arguments)
+        }
+		else if (this._contextType == 'webgl2') {
             randomizeContextWebgl(this)
             return nativeToDataURL.apply(this, arguments)
         }
