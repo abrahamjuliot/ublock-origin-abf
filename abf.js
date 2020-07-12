@@ -167,8 +167,8 @@
         context.font = font
         return context
     }
-    function randomizeContextWebgl(canvas) {
-		console.log(canvas, contextType)
+    function randomizeContextWebgl(canvas, contextType) {
+		console.log(canvas)
 		const context = canvas.getContext(contextType)
         const {
             clearColor
