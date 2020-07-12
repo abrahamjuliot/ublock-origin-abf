@@ -15,9 +15,13 @@ Features include:
 
 uBlock Origin Setup:
 1. Select the adnvanced user icon in Settings
+
 ![image](https://user-images.githubusercontent.com/6946045/87236337-eb680a00-c39c-11ea-8806-cb20e4f55896.png)
-2. Add the abf.js scriplet url to `userResourcesLocation`
+
+2. Add the abf.js scriplet url to `userResourcesLocation`. Host the file in your own repo for full control and security.
+
 ![image](https://user-images.githubusercontent.com/6946045/87236365-72b57d80-c39d-11ea-9ad9-462ddffa19aa.png)
+
 3. inject the scriplet to My Filters. Use `*` to apply to sites globally.
 ```
 *##+js(abf)
