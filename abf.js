@@ -700,6 +700,7 @@
                 )
             } catch (error) {
                 console.error(error)
+				console.log(api)
             }
         })
         // Deep calls
