@@ -12,6 +12,7 @@
 4a. if permission is allowed, you will not be alerted when fingerprinting is detected per site session. API protection will continue.
 4b. if permission is denied, a [random error](https://user-images.githubusercontent.com/6946045/87235934-164f5f80-c397-11ea-8df9-1468ecf872f1.png) will be thrown at the script and any future attempts during the site session. API protection will continue. <sup>1</sup>
 5. **Defensive**: api tampering is protected with a [proxy](https://adtechmadness.wordpress.com/2019/03/23/javascript-tampering-detection-and-stealth/) to prevent detection
+6. **Genuine**: random output does not include random strings of gibberish characters
 
 <sup>1</sup> If permission is denied, a new random error will be thrown on each fingerprinting attempt during the session. Use this option with caution as it yields different results depending on the script: [1] the error may [break the script](https://www.nothingprivate.ml/) (the goal), [2] the error may be [computed as a random value](https://panopticlick.eff.org/) (even better), [3] the error may be [properly handled](https://ghacksuserjs.github.io/TorZillaPrint/TorZillaPrint.html) by the script, or [4] the error may be rendered an invalid browser error and then used to fingerprint your browser.
 
