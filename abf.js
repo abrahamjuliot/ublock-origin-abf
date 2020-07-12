@@ -73,15 +73,13 @@
             const shadowColor = randomRGBA()
             const strokeStyle = randomRGBA()
             const font = randomFont()
-            const widthOffset = rand(-10, 10)
-            const heightOffset = rand(-10, 10)
+			const clearColor = [...Array(4)].map(() => Math.random().toFixed(1))
             return {
                 fillStyle,
                 shadowColor,
                 strokeStyle,
                 font,
-                widthOffset,
-                heightOffset
+                clearColor
             }
         }
         const canvasContextComputed = canvas()
@@ -171,11 +169,9 @@
     }
     function randomizeContextWebgl(context) {
         const {
-            widthOffset,
-            heightOffset
+            clearColor
         } = canvasContextComputed
-        context.width += widthOffset
-        context.height += heightOffset
+        context.clearColor(...clearColor)
         return context
     }
     function toDataURL() {
