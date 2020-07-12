@@ -15,6 +15,8 @@ Features include:
 2. Session Storage: randomization is stored in site session and resets only on a new session
 3. Detection: fingerprinting behavior is detected in real time
 4. Permission: script execution is paused and your permission is required to allow fingerprinting (per session)
+4a. Allow: if permission is allowed, you will not be alerted when fingerprinting is detected per site session. API protection will continue.
+4b. Deny: if permission is denied, a random error will be thrown at the script and future attempts per site session
 5. Genuine: random output does not include random strings of gibberish characters
 6. Defensive: api tampering is protected with a [proxy](https://adtechmadness.wordpress.com/2019/03/23/javascript-tampering-detection-and-stealth/) to prevent detection
 
