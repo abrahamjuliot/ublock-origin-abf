@@ -168,8 +168,8 @@
         return context
     }
     function randomizeContextWebgl(canvas) {
-		console.log(canvas, canvas._contextType)
-		const context = canvas.getContext(canvas._contextType)
+		console.log(canvas, contextType)
+		const context = canvas.getContext(contextType)
         const {
             clearColor
         } = canvasContextComputed
@@ -185,11 +185,11 @@
             return nativeToDataURL.apply(this, arguments)
         }
 		else if (this._contextType == 'webgl') {
-            randomizeContextWebgl(this)
+            randomizeContextWebgl(this, 'webgl')
             return nativeToDataURL.apply(this, arguments)
         }
 		else if (this._contextType == 'webgl2') {
-            randomizeContextWebgl(this)
+            randomizeContextWebgl(this, 'webgl2')
             return nativeToDataURL.apply(this, arguments)
         }
         return nativeToDataURL.apply(this, arguments)
