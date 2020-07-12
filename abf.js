@@ -404,7 +404,6 @@
 				`assignment to undeclared variable ${letter}`,
 				`can't access lexical declaration ${letter} before initialization`,
 				'invalid assignment left-hand side'
-
 			],
 			chrome: [
 				`${letter} is not defined`,
