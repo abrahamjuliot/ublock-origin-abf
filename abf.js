@@ -510,7 +510,10 @@
                 fingerprintScripts.push(url)
 				console.groupCollapsed(`Fingerprinting detected!`)
 					console.log(`Creepy script: ${url}`)
-					console.log(`Detection triggered by ${Object.keys(tracedScript.all).length} property reads:`, '\n'+tracedScript.reads.join('\n'))
+					console.log(
+						`Detection triggered by ${Object.keys(tracedScript.all).length} property reads:`,
+						'\n'+tracedScript.reads.map(prop => prop.replace(/\.prototype/, '')).join('\n')
+					)
 				console.groupEnd()
                 const message = (
                 	'🤮 '+ warning + '\n'
