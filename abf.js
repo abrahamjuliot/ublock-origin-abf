@@ -702,17 +702,14 @@
                 struct
             } = api
             try {
-				try {
-					return Object.defineProperties(
-						(proto ? root[name].prototype : root[name]), definify(struct)
-					)
-				}
-				catch (error) {}
-
+				return Object.defineProperties(
+					(proto ? root[name].prototype : root[name]), definify(struct)
+				)
+				
+            } catch (error) {
 				return Object.defineProperties(
                     (proto ? root[name].prototype : root[name]), definify(struct, 'value')
                 )
-            } catch (error) {
                 console.error(error)
             }
         })
