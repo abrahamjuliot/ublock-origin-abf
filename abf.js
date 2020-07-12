@@ -445,10 +445,10 @@
                 tracedScript.creep = true // caught!
                 fingerprintScripts.push(url)
                 const message = (
-                	warning + '\n\n'
+                	warning + '\n'
+                	+ sessionProtection + '\n\n'
                 	+ url + '\n\n'
                 	+ Object.keys(tracedScript.all).map(prop => prop.replace(/\.prototype/, '')).join(', ')+'...'+ '\n\n'
-                	+ sessionProtection
             	)
                 const sessionPermission = sessionStorage.getItem(sessionName + 'permission')
             	if (sessionPermission == 'deny') {
