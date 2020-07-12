@@ -24,9 +24,9 @@
 
 ![image](https://user-images.githubusercontent.com/6946045/87236365-72b57d80-c39d-11ea-9ad9-462ddffa19aa.png)
 
-3. inject the scriplet to My Filters. Use `*` to apply to sites globally.
+3. inject the global scriplet to My Filters.
 ```
-*##+js(abf)
+##+js(abf)
 ```
 
 ### uBlock Origin Guides:
