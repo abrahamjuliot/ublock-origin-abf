@@ -4,10 +4,6 @@
 
 ![image](https://user-images.githubusercontent.com/6946045/87235602-8c9d9300-c392-11ea-9ccc-7be79702df13.png)
 
-![image](https://user-images.githubusercontent.com/6946045/87235868-ff5c3d80-c395-11ea-87b1-56f759419043.png)
-
-![image](https://user-images.githubusercontent.com/6946045/87235934-164f5f80-c397-11ea-8df9-1468ecf872f1.png)
-
 Abort Browser Fingerprinting Scripts via uBlock Origin
 
 Features include:
@@ -19,6 +15,10 @@ Features include:
 4b. if permission is denied, a random error will be thrown at the script and future attempts per site session
 5. Genuine: random output does not include random strings of gibberish characters
 6. Defensive: api tampering is protected with a [proxy](https://adtechmadness.wordpress.com/2019/03/23/javascript-tampering-detection-and-stealth/) to prevent detection
+
+![image](https://user-images.githubusercontent.com/6946045/87235868-ff5c3d80-c395-11ea-87b1-56f759419043.png)
+
+![image](https://user-images.githubusercontent.com/6946045/87235934-164f5f80-c397-11ea-8df9-1468ecf872f1.png)
 
 Recommended Setup:
 ```
