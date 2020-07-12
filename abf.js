@@ -73,13 +73,15 @@
             const shadowColor = randomRGBA()
             const strokeStyle = randomRGBA()
             const font = randomFont()
-			const clearColor = [...Array(4)].map(() => Math.random().toFixed(1))
+            const widthOffset = rand(-10, 10)
+            const heightOffset = rand(-10, 10)
             return {
                 fillStyle,
                 shadowColor,
                 strokeStyle,
                 font,
-                clearColor
+                widthOffset,
+                heightOffset
             }
         }
         const canvasContextComputed = canvas()
@@ -167,12 +169,13 @@
         context.font = font
         return context
     }
-    function randomizeContextWebgl(canvas, contextType) {
-		const context = canvas.getContext(contextType)
+    function randomizeContextWebgl(context) {
         const {
-            clearColor
+            widthOffset,
+            heightOffset
         } = canvasContextComputed
-        context && context.clearColor(...clearColor)
+        context.width += widthOffset
+        context.height += heightOffset
         return context
     }
     function toDataURL() {
@@ -180,13 +183,8 @@
             const context = nativeGetContext.apply(this, ['2d'])
             randomizeContext2D(context)
             return nativeToDataURL.apply(this, arguments)
-        }
-		else if (this._contextType == 'webgl') {
-            randomizeContextWebgl(this, 'webgl')
-            return nativeToDataURL.apply(this, arguments)
-        }
-		else if (this._contextType == 'webgl2') {
-            randomizeContextWebgl(this, 'webgl2')
+        } else if (this._contextType == 'webgl') {
+            randomizeContextWebgl(this)
             return nativeToDataURL.apply(this, arguments)
         }
         return nativeToDataURL.apply(this, arguments)
