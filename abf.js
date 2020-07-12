@@ -517,15 +517,29 @@
             	)
                 const sessionPermission = sessionStorage.getItem(sessionName + 'permission')
                 const randomError = listRand(errorStruct[errorType][(firefox ? 'firefox' : 'chrome')])
-                const error = (
-            		errorType == 'RangeError' ? new RangeError(randomError) : 
-            		errorType == 'ReferenceError' ? new ReferenceError(randomError) : 
-            		errorType == 'SyntaxError' ? new SyntaxError(randomError) : 
-            		new TypeError(randomError)
-        		)
+                const trap = (errorType, randomError) => {
+            		return (
+            			errorType == 'RangeError' ? new RangeError(randomError) : 
+	            		errorType == 'ReferenceError' ? new ReferenceError(randomError) : 
+	            		errorType == 'SyntaxError' ? new SyntaxError(randomError) : 
+	            		new TypeError(randomError)
+            		)
+                }
             	if (sessionPermission == 'deny') {
-            		console.error(error)
-                    throw error
+            		const { timestamp } = JSON.parse(sessionStorage.getItem(sessionName + 'error'))
+            		const secondsPassed = (timestamp - new Date()) / 1000
+            		if (secondsPassed < -30) {
+            			sessionStorage.setItem(sessionName + 'error', JSON.stringify({ timestamp: +(new Date()), type: errorType, message: randomError }))
+            			const error = trap(errorType, randomError)
+                    	console.error(error)
+                        throw error	
+            		}
+            		else {
+            			const { type, message } = JSON.parse(sessionStorage.getItem(sessionName + 'error'))
+            			const error = trap(type, message)
+                    	console.error(error)
+                        throw error	
+            		}
             	}
                 if (!sessionPermission) {
                     const permission = confirm(message)
@@ -534,6 +548,8 @@
                     }
                     else {
                     	sessionStorage.setItem(sessionName + 'permission', 'deny')
+                    	sessionStorage.setItem(sessionName + 'error', JSON.stringify({ timestamp: +(new Date()), type: errorType, message: randomError }))
+                    	const error = trap(errorType, randomError)
                     	console.error(error)
                         throw error
                     }

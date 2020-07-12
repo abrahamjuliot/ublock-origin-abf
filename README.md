@@ -12,11 +12,7 @@
 5. **Defensive**: api tampering is protected with a [proxy](https://adtechmadness.wordpress.com/2019/03/23/javascript-tampering-detection-and-stealth/) to prevent detection
 6. **Genuine**: random output does not contain gibberish
 
-<sup>1</sup> If permission is denied, a random error will be thrown at the script and at any additional fingerpinting scripts during the session. Since the error is randomized on each new request and scripts may yield different results, use this option with caution: [1] the error may [break the script](https://www.nothingprivate.ml/) (the goal), [2] the error may be [computed as random output](https://panopticlick.eff.org/), [3] the error may be [properly handled](https://ghacksuserjs.github.io/TorZillaPrint/TorZillaPrint.html), or [4] the collection of random errors may be traced per session and then used to fingerprint your browser and link your sessions.
-
-If a script renders the error message result as fingerprint entropy, then this option serves to randomize your fingerprint on each request during the session.
-
-![err](https://user-images.githubusercontent.com/6946045/87255223-a6e07b00-c43d-11ea-9c33-2dac628635ef.gif)
+<sup>1</sup> If cancel (abort) is selected, a random error will be thrown at the script and at any additional fingerpinting scripts during the session. To avoid detection, the error randomization is reset only after a 30 second delay. Since scripts may yield different results, use this option with caution: [1] the error may [break the script](https://www.nothingprivate.ml/) (the goal), [2] the error may be [computed as random output](https://panopticlick.eff.org/), [3] the error may be [properly handled](https://ghacksuserjs.github.io/TorZillaPrint/TorZillaPrint.html), or [4] the collection of random errors may be traced per session and then used to fingerprint your browser and link mulitple sessions to the same browser.
 
 ### uBlock Origin Setup:
 1. Select the advanced user icon in Settings
