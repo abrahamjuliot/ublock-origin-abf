@@ -443,8 +443,7 @@
 				`${letter} is not iterable`,
 				`Cannot read property ${letter} of null`
 			]
-		},
-
+		}
 	}
 	const firefox = (navigator.userAgent.indexOf('Firefox') != -1)
 	const errorType = listRand(Object.keys(errorStruct))
