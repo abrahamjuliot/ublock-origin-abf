@@ -169,7 +169,9 @@
         context.font = font
         return context
     }
-    function randomizeContextWebgl(context) {
+    function randomizeContextWebgl(canvas) {
+		const context = canvas.getContext(canvas._contextType)
+		console.log(context)
         const {
             widthOffset,
             heightOffset
@@ -183,7 +185,8 @@
             const context = nativeGetContext.apply(this, ['2d'])
             randomizeContext2D(context)
             return nativeToDataURL.apply(this, arguments)
-        } else if (this._contextType == 'webgl') {
+        }
+		else if (this._contextType == 'webgl' || this._contextType == 'webgl2') {
             randomizeContextWebgl(this)
             return nativeToDataURL.apply(this, arguments)
         }
