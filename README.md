@@ -14,6 +14,8 @@
 
 <sup>1</sup> If permission is denied, a random error will be thrown at the script and at any additional fingerpinting scripts during the session. Since the error is randomized on each new request and scripts may yield different results, use this option with caution: [1] the error may [break the script](https://www.nothingprivate.ml/) (the goal), [2] the error may be [computed as random output](https://panopticlick.eff.org/), [3] the error may be [properly handled](https://ghacksuserjs.github.io/TorZillaPrint/TorZillaPrint.html), or [4] the collection of random errors may be traced per session and then used to fingerprint your browser and link your sessions.
 
+![err](https://user-images.githubusercontent.com/6946045/87255223-a6e07b00-c43d-11ea-9c33-2dac628635ef.gif)
+
 ### uBlock Origin Setup:
 1. Select the advanced user icon in Settings
 
