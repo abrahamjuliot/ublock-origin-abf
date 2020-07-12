@@ -461,6 +461,7 @@
         }
     }
     const itemInList = (list, item) => list.indexOf(item) > -1
+    let rankCounter = 0
     const warningRank = 14 // total rank that triggers fingerprinting detected warning
     const propsRead = [] // collect each property read
     const propsReadAll = {} // collects how many times each property is read
@@ -507,6 +508,10 @@
                 const warning = 'Fingerprinting detected! OK to allow or CANCEL to abort'
                 tracedScript.creep = true // caught!
                 fingerprintScripts.push(url)
+				console.groupCollapsed(`Fingerprinting detected!`)
+					console.log(`Creepy script: ${url}`)
+					console.log(`Detection triggered by ${Object.keys(tracedScript.all).length} property reads:`, '\n'+tracedScript.reads.join('\n'))
+				console.groupEnd()
                 const message = (
                 	'🤮 '+ warning + '\n'
                 	+ '🛡 '+ sessionProtection + '\n'
