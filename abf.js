@@ -454,8 +454,10 @@
                 	+ '🧐\n'+Object.keys(tracedScript.all).map(prop => prop.replace(/\.prototype/, '')).join('\n')+'...'+ '\n'
             	)
                 const sessionPermission = sessionStorage.getItem(sessionName + 'permission')
+                const error = new ReferenceError(randomMessage)
             	if (sessionPermission == 'deny') {
-            		throw new ReferenceError(randomMessage)
+            		console.error(error)
+                    throw error
             	}
                 if (!sessionPermission) {
                     const permission = confirm(message)
@@ -464,7 +466,6 @@
                     }
                     else {
                     	sessionStorage.setItem(sessionName + 'permission', 'deny')
-                    	const error = new ReferenceError(randomMessage)
                     	console.error(error)
                         throw error
                     }
