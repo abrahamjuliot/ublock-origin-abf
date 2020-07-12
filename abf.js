@@ -676,13 +676,11 @@
             }
             Object.defineProperties(fn, {
                 name: {
-                    value: 'get ' + prop,
-                    configurable: true
+                    value: 'get ' + prop
                 }
             })
             redefinedProps[prop] = {
-                get: fn,
-                configurable: true
+                get: fn
             }
         })
         return redefinedProps
