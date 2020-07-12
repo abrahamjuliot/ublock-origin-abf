@@ -667,7 +667,7 @@
             }
         }
     ]
-    function definify(struct, type = 'get') {
+    function definify(struct) {
         const redefinedProps = {}
         Object.keys(struct).forEach(prop => {
             const fn = () => {
@@ -680,16 +680,9 @@
                     configurable: true
                 }
             })
-			if (type == 'get') {
-				redefinedProps[prop] = {
-					get: fn
-				}
-			}
-			else {
-				redefinedProps[prop] = {
-					value: fn
-				}
-			}
+            redefinedProps[prop] = {
+                get: fn
+            }
         })
         return redefinedProps
     }
@@ -702,14 +695,10 @@
                 struct
             } = api
             try {
-				return Object.defineProperties(
-					(proto ? root[name].prototype : root[name]), definify(struct)
-				)
-				
-            } catch (error) {
-				return Object.defineProperties(
-                    (proto ? root[name].prototype : root[name]), definify(struct, 'value')
+                return Object.defineProperties(
+                    (proto ? root[name].prototype : root[name]), definify(struct)
                 )
+            } catch (error) {
                 console.error(error)
             }
         })
