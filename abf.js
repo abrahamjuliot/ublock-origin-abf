@@ -150,7 +150,7 @@
     const nativeToBlob = HTMLCanvasElement.prototype.toBlob
     const nativeGetImageData = CanvasRenderingContext2D.prototype.getImageData
     function getContext(contextType, contextAttributes) {
-        canvasProto._contextType = contextType
+        this._contextType = contextType
         return nativeGetContext.apply(this, arguments)
     }
     function randomizeContext2D(context) {
