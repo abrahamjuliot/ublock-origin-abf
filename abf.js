@@ -461,8 +461,6 @@
         }
     }
     const itemInList = (list, item) => list.indexOf(item) > -1
-    let listenForExcessivePropReads = true
-    let rankCounter = 0
     const warningRank = 14 // total rank that triggers fingerprinting detected warning
     const propsRead = [] // collect each property read
     const propsReadAll = {} // collects how many times each property is read
