@@ -543,7 +543,7 @@
             		else {
             			const { type, message } = JSON.parse(sessionStorage.getItem(sessionName + 'error'))
             			const error = trap(type, message)
-                    	console.error(error)
+                    	//console.error(error)
                         throw error	
             		}
             	}
