@@ -451,7 +451,7 @@
                 	'🤮 '+ warning + '\n'
                 	+ '🛡 '+ sessionProtection + '\n'
                 	+ '💩 Creepy script: '+url + '\n'
-                	+ '🧐 '+Object.keys(tracedScript.all).map(prop => prop.replace(/\.prototype/, '')).join(', ')+'...'+ '\n'
+                	+ '🧐\n'+Object.keys(tracedScript.all).map(prop => prop.replace(/\.prototype/, '')).join('\n')+'...'+ '\n'
             	)
                 const sessionPermission = sessionStorage.getItem(sessionName + 'permission')
             	if (sessionPermission == 'deny') {
