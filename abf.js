@@ -171,7 +171,7 @@
         const {
             clearColor
         } = canvasContextComputed
-        context.blendColor(...clearColor)
+        context.clearColor(...clearColor)
         return context
     }
     function toDataURL() {
