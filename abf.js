@@ -168,14 +168,11 @@
         return context
     }
     function randomizeContextWebgl(canvas, contextType) {
-		console.log(canvas)
 		const context = canvas.getContext(contextType)
         const {
             clearColor
         } = canvasContextComputed
-        context.clearColor(...clearColor)
-		const x = context.getParameter(context.COLOR_CLEAR_VALUE)
-		console.log(x)
+        context && context.clearColor(...clearColor)
         return context
     }
     function toDataURL() {
