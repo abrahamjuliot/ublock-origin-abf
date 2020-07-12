@@ -441,14 +441,14 @@
             if (!alreadyCaught && fingerprintingDetected) {
                 const randomString = () => (Math.random() + 1).toString(36).substring(2, 8)
                 const randomMessage = `${randomString()} ${randomString()} ${randomString()}`
-                const warning = 'Fingerprinting detected!'
+                const warning = 'Fingerprinting detected! OK to allow or CANCEL to abort'
                 tracedScript.creep = true // caught!
                 fingerprintScripts.push(url)
                 const message = (
-                	warning + '\n'
-                	+ sessionProtection + '\n\n'
-                	+ url + '\n\n'
-                	+ Object.keys(tracedScript.all).map(prop => prop.replace(/\.prototype/, '')).join(', ')+'...'+ '\n\n'
+                	'🤮 '+ warning + '\n'
+                	+ '🛡 '+ sessionProtection + '\n'
+                	+ '💩 '+url + '\n'
+                	+ '🧐 '+Object.keys(tracedScript.all).map(prop => prop.replace(/\.prototype/, '')).join(', ')+'...'+ '\n'
             	)
                 const sessionPermission = sessionStorage.getItem(sessionName + 'permission')
             	if (sessionPermission == 'deny') {
