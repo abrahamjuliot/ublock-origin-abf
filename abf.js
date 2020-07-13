@@ -457,7 +457,6 @@
 			return '[unknown source]'
 		}
 	}
-	const itemInList = (list, item) => list.indexOf(item) > -1
 	const warningRank = 14 // total rank that triggers fingerprinting warning
 	const scripts = {}
 	const watch = prop => {
