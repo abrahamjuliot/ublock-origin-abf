@@ -17,6 +17,8 @@
 
 [![image](https://user-images.githubusercontent.com/6946045/87260252-a0fe9000-c465-11ea-8e67-a7af969508a3.png)](https://www.nothingprivate.ml)
 
+![image](https://user-images.githubusercontent.com/6946045/87278150-a32e1200-c498-11ea-8a32-0431c656adce.png)
+
 ### uBlock Origin Setup:
 1. Select the advanced user icon in Settings
 
