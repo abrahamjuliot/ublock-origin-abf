@@ -479,12 +479,12 @@
 			const secondsPassed = (timestamp - new Date()) / 1000
 			if (secondsPassed < -30) {
 				sessionStorage.setItem(sessionName + 'error', JSON.stringify({ timestamp: +(new Date()), type: errorType, message: randomError }))
-				const error = trap(errorType, randomError)
+				const error = abort(errorType, randomError)
 				throw error
 			}
 			else {
 				const { type, message } = JSON.parse(sessionStorage.getItem(sessionName + 'error'))
-				const error = trap(type, message)
+				const error = abort(type, message)
 				throw error
 			}
 		}
