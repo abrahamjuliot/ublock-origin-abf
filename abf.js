@@ -483,7 +483,8 @@
 				console.log(`Creepy script: ${url}`)
 				console.log(
 					`Detection triggered by ${reads.length} property reads:`,
-					'\n' + readsFormatted
+					'\n' + readsFormatted,
+					capturedScript.reads
 				)
 				console.groupEnd()
 				const message = (
