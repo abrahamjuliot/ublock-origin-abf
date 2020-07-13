@@ -447,7 +447,7 @@
 	const errorType = listRand(Object.keys(errorStruct))
 	// https://stackoverflow.com/questions/2255689/how-to-get-the-file-path-of-the-currently-executing-javascript-code
 	const getCurrentScript = () => {
-		const jsURL = /(\/.+\.js)/gi
+		const jsURL = /(\/.+\.(js|html|htm))/gi
 		const error = new Error()
 		let path
 		try {
@@ -458,74 +458,49 @@
 		}
 	}
 	const itemInList = (list, item) => list.indexOf(item) > -1
-	let rankCounter = 0
-	const warningRank = 14 // total rank that triggers fingerprinting detected warning
-	const propsRead = [] // collect each property read
-	const propsReadAll = {} // collects how many times each property is read
-	const fingerprintScripts = []
-	const scripts = []
+	const warningRank = 14 // total rank that triggers fingerprinting warning
+	const scripts = {}
 	const watch = prop => {
 		const url = getCurrentScript()
 		const propDescription = propAPI[prop][0]
-		const fpRank = propAPI[prop][1]
-		const tracedScript = scripts.filter(s => s.url == url)[0] // previously traced script?
-		const newPropRead = !itemInList(propsRead, propDescription)
-		// count how many times each prop is read
-		if (propsReadAll[propDescription]) {
-			propsReadAll[propDescription]++
-		} else {
-			propsReadAll[propDescription] = 1
-		}
-		// if new property is read, increase the rank counter and add it to collection of props read 
-		if (newPropRead) {
-			rankCounter += fpRank
-			propsRead.push(propDescription)
-		}
-		// if the script is not yet in the traced scripts collection, add it
-		if (!tracedScript) {
-			scripts.push({
+		const rank = propAPI[prop][1]
+		const capturedScript = scripts[url]
+		if (!capturedScript) {
+			scripts[url] = {
 				creep: false,
-				url,
-				fpRank,
-				reads: [propDescription],
-				all: {
-					[propDescription]: 1
-				}
-			})
+				rank,
+				reads: { [propDescription]: true }
+			}
 		}
-		// else if this is not the first time the prop was read (in this previously traced script)
-		else if (!itemInList(tracedScript.reads, propDescription)) {
-			tracedScript.fpRank += fpRank // increase the rank (update only on first prop read)
-			tracedScript.reads.push(propDescription)
-			tracedScript.all[propDescription] = 1
-			// detect
-			const fingerprintingDetected = tracedScript.fpRank >= warningRank
-			const alreadyCaught = tracedScript.creep
-			if (!alreadyCaught && fingerprintingDetected) {
-				const warning = 'Fingerprinting detected! OK to allow or CANCEL to abort'
-				tracedScript.creep = true // caught!
-				fingerprintScripts.push(url)
+		else if (!capturedScript.reads[propDescription]) {
+			capturedScript.rank += rank
+			capturedScript.reads[propDescription] = true
+			// detect 
+			if (!capturedScript.creep && capturedScript.rank >= warningRank) {
+				capturedScript.creep = true
+				const reads = Object.keys(capturedScript.reads)
+				const readsFormatted = reads.map(prop => prop.replace(/\.prototype/, '')).join('\n')
 				console.groupCollapsed(`Fingerprinting detected!`)
 				console.log(`Creepy script: ${url}`)
 				console.log(
-					`Detection triggered by ${Object.keys(tracedScript.all).length} property reads:`,
-					'\n' + tracedScript.reads.map(prop => prop.replace(/\.prototype/, '')).join('\n')
+					`Detection triggered by ${reads.length} property reads:`,
+					'\n' + readsFormatted
 				)
 				console.groupEnd()
 				const message = (
-					'🤮 ' + warning + '\n'
+					'🤮 Fingerprinting detected! OK to allow or CANCEL to abort\n'
 					+ '🛡 ' + sessionProtection + '\n'
 					+ '💩 Creepy script: ' + url + '\n'
-					+ '🧐\n' + Object.keys(tracedScript.all).map(prop => prop.replace(/\.prototype/, '')).join('\n') + '...' + '\n'
+					+ '🧐\n' + readsFormatted + '\n...' + '\n'
 				)
 				const sessionPermission = sessionStorage.getItem(sessionName + 'permission')
 				const randomError = listRand(errorStruct[errorType][(firefox ? 'firefox' : 'chrome')])
 				const trap = (errorType, randomError) => {
 					return (
 						errorType == 'RangeError' ? new RangeError(randomError) :
-							errorType == 'ReferenceError' ? new ReferenceError(randomError) :
-								errorType == 'SyntaxError' ? new SyntaxError(randomError) :
-									new TypeError(randomError)
+						errorType == 'ReferenceError' ? new ReferenceError(randomError) :
+						errorType == 'SyntaxError' ? new SyntaxError(randomError) :
+						new TypeError(randomError)
 					)
 				}
 				if (sessionPermission == 'deny') {
@@ -555,8 +530,6 @@
 					}
 				}
 			}
-		} else {
-			tracedScript.all[propDescription]++
 		}
 		return
 	}
