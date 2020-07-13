@@ -24,9 +24,13 @@
 
 ![image](https://user-images.githubusercontent.com/6946045/87236365-72b57d80-c39d-11ea-9ad9-462ddffa19aa.png)
 
-3. inject the global scriplet to My Filters.
+3. inject the scriplet in My Filters
 ```
+! apply globally
 *##+js(abf)
+
+! except on these domains
+google.com, youtube.com#@#+js(abf)
 ```
 
 ### uBlock Origin Guides:
