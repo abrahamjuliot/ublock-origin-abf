@@ -521,7 +521,7 @@
 					+ '💩 Creepy script: ' + url + '\n'
 					+ '🧐\n' + readsFormatted + '\n...' + '\n'
 				)
-				if (!sessionPermission) {
+				if ((creeps && !creeps[url]) || !sessionPermission) {
 					const permission = confirm(message)
 					if (permission) {
 						sessionStorage.setItem(sessionName + 'permission', 'allow')
@@ -529,11 +529,10 @@
 					else {
 						sessionStorage.setItem(sessionName + 'permission', 'deny')
 						sessionStorage.setItem(sessionName + 'error', JSON.stringify({ timestamp: +(new Date()), type: errorType, message: randomError }))
-						const creepURLs = JSON.parse(sessionStorage.getItem(sessionName + 'creeps'))
 						const unknown = url == unknownSource
-						if (creepURLs && !unknown) {
-							creepURLs[url] = true
-							sessionStorage.setItem(sessionName + 'creeps', JSON.stringify({ creepURLs }))
+						if (creeps && !unknown) {
+							creeps[url] = true
+							sessionStorage.setItem(sessionName + 'creeps', JSON.stringify({ creeps }))
 						}
 						else if (!unknown) {
 							sessionStorage.setItem(sessionName + 'creeps', JSON.stringify({ [url]: true }))
