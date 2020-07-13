@@ -538,7 +538,7 @@
 						else if (!unknown) {
 							sessionStorage.setItem(sessionName + 'creeps', JSON.stringify({ [url]: true }))
 						}
-						const error = trap(errorType, randomError)
+						const error = abort(errorType, randomError)
 						throw error
 					}
 				}
