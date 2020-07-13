@@ -484,7 +484,7 @@
 				console.log(
 					`Detection triggered by ${reads.length} property reads:`,
 					'\n' + readsFormatted,
-					capturedScript.reads
+					'\n\n All property reads:\n' + capturedScript.reads
 				)
 				console.groupEnd()
 				const message = (
