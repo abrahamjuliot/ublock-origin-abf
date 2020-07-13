@@ -551,7 +551,6 @@
 						sessionStorage.setItem(sessionName + 'permission', 'deny')
 						sessionStorage.setItem(sessionName + 'error', JSON.stringify({ timestamp: +(new Date()), type: errorType, message: randomError }))
 						const error = trap(errorType, randomError)
-						console.error(error)
 						throw error
 					}
 				}
