@@ -446,6 +446,7 @@
 	const firefox = (navigator.userAgent.indexOf('Firefox') != -1)
 	const errorType = listRand(Object.keys(errorStruct))
 	// https://stackoverflow.com/questions/2255689/how-to-get-the-file-path-of-the-currently-executing-javascript-code
+	const unknownSource = '[unknown source]'
 	const getCurrentScript = () => {
 		const jsURL = /(\/.+\.(js|html|htm))/gi
 		const error = new Error()
@@ -454,13 +455,39 @@
 			path = error.stack.match(jsURL)[0]
 			return 'https:' + path
 		} catch (err) {
-			return '[unknown source]'
+			return unknownSource
 		}
 	}
 	const warningRank = 14 // total rank that triggers fingerprinting warning
 	const scripts = {}
 	const watch = prop => {
 		const url = getCurrentScript()
+		const sessionPermission = sessionStorage.getItem(sessionName + 'permission')
+		const randomError = listRand(errorStruct[errorType][(firefox ? 'firefox' : 'chrome')])
+		const abort = (errorType, randomError) => {
+			return (
+				errorType == 'RangeError' ? new RangeError(randomError) :
+				errorType == 'ReferenceError' ? new ReferenceError(randomError) :
+				errorType == 'SyntaxError' ? new SyntaxError(randomError) :
+				new TypeError(randomError)
+			)
+		}
+		// abort creepy url if permission denied
+		const creeps = JSON.parse(sessionStorage.getItem(sessionName + 'creeps'))
+		if (sessionPermission == 'deny' && creeps && creeps[url]) {
+			const { timestamp } = JSON.parse(sessionStorage.getItem(sessionName + 'error'))
+			const secondsPassed = (timestamp - new Date()) / 1000
+			if (secondsPassed < -30) {
+				sessionStorage.setItem(sessionName + 'error', JSON.stringify({ timestamp: +(new Date()), type: errorType, message: randomError }))
+				const error = trap(errorType, randomError)
+				throw error
+			}
+			else {
+				const { type, message } = JSON.parse(sessionStorage.getItem(sessionName + 'error'))
+				const error = trap(type, message)
+				throw error
+			}
+		}
 		const propDescription = propAPI[prop][0]
 		const rank = propAPI[prop][1]
 		const capturedScript = scripts[url]
@@ -494,30 +521,6 @@
 					+ '💩 Creepy script: ' + url + '\n'
 					+ '🧐\n' + readsFormatted + '\n...' + '\n'
 				)
-				const sessionPermission = sessionStorage.getItem(sessionName + 'permission')
-				const randomError = listRand(errorStruct[errorType][(firefox ? 'firefox' : 'chrome')])
-				const trap = (errorType, randomError) => {
-					return (
-						errorType == 'RangeError' ? new RangeError(randomError) :
-						errorType == 'ReferenceError' ? new ReferenceError(randomError) :
-						errorType == 'SyntaxError' ? new SyntaxError(randomError) :
-						new TypeError(randomError)
-					)
-				}
-				if (sessionPermission == 'deny') {
-					const { timestamp } = JSON.parse(sessionStorage.getItem(sessionName + 'error'))
-					const secondsPassed = (timestamp - new Date()) / 1000
-					if (secondsPassed < -30) {
-						sessionStorage.setItem(sessionName + 'error', JSON.stringify({ timestamp: +(new Date()), type: errorType, message: randomError }))
-						const error = trap(errorType, randomError)
-						throw error
-					}
-					else {
-						const { type, message } = JSON.parse(sessionStorage.getItem(sessionName + 'error'))
-						const error = trap(type, message)
-						throw error
-					}
-				}
 				if (!sessionPermission) {
 					const permission = confirm(message)
 					if (permission) {
@@ -526,6 +529,15 @@
 					else {
 						sessionStorage.setItem(sessionName + 'permission', 'deny')
 						sessionStorage.setItem(sessionName + 'error', JSON.stringify({ timestamp: +(new Date()), type: errorType, message: randomError }))
+						const creepURLs = JSON.parse(sessionStorage.getItem(sessionName + 'creeps'))
+						const unknown = url == unknownSource
+						if (creepURLs && !unknown) {
+							creepURLs[url] = true
+							sessionStorage.setItem(sessionName + 'creeps', JSON.stringify({ creepURLs }))
+						}
+						else if (!unknown) {
+							sessionStorage.setItem(sessionName + 'creeps', JSON.stringify({ [url]: true }))
+						}
 						const error = trap(errorType, randomError)
 						throw error
 					}
