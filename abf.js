@@ -532,7 +532,7 @@
 						const unknown = url == unknownSource
 						if (creeps && !unknown) {
 							creeps[url] = true
-							sessionStorage.setItem(sessionName + 'creeps', JSON.stringify({ creeps }))
+							sessionStorage.setItem(sessionName + 'creeps', JSON.stringify(creeps))
 						}
 						else if (!unknown) {
 							sessionStorage.setItem(sessionName + 'creeps', JSON.stringify({ [url]: true }))
