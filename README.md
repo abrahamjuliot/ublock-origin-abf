@@ -1,6 +1,6 @@
 # uBlock Origin Abort Browser Fingerprinting (ABF)
 
-![image](https://user-images.githubusercontent.com/6946045/87236288-2ae22680-c39c-11ea-8b35-5db24e6f19b6.png)
+<a title="https://fingerprintjs.com/demo" href="https://fingerprintjs.com/demo" target="_blank"><image alt="example image" src="https://user-images.githubusercontent.com/6946045/87260830-8ed22100-c468-11ea-86ec-a9c730deb89e.gif"/></a>
 
 ## Abort Browser Fingerprinting Scripts via uBlock Origin
 
