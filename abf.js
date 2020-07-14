@@ -455,7 +455,6 @@
 			path = error.stack.match(jsURL)[0]
 			return 'https:' + path
 		} catch (err) {
-			console.log(stack)
 			console.log('unknownSource', JSON.stringify(err.stack))
 			return unknownSource
 		}
