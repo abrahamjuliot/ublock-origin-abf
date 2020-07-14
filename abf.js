@@ -522,21 +522,29 @@
 					capturedScript.reads
 				)
 				console.groupEnd()
-				const message = (
-					'🤮 Fingerprinting detected! OK to allow or CANCEL to abort\n'
+				const message = confirm => {
+					return '🤮 Fingerprinting detected!'
+					+(confirm ? ' OK to allow or Cancel to abort\n' : '\n')
 					+ '🛡 ' + sessionProtection + '\n'
 					+ '💩 Creepy script: ' + url + '\n'
 					+ '🧐\n' + readsFormatted + '\n...' + '\n'
-				)
+				}
 				if ((creeps && !creeps[url]) || !sessionPermission) {
-					const permission = confirm(message)
+					const unknown = url == unknownSource
+					let permission
+					if (unknown) {
+						alert(message(false))
+						permission = true
+					}
+					else {
+						permission = confirm(message(true))
+					}
 					if (permission) {
 						sessionStorage.setItem(sessionName + 'permission', 'allow')
 					}
 					else {
 						sessionStorage.setItem(sessionName + 'permission', 'deny')
 						sessionStorage.setItem(sessionName + 'error', JSON.stringify({ timestamp: +(new Date()), type: errorType, message: randomError }))
-						const unknown = url == unknownSource
 						if (creeps && !unknown) {
 							creeps[url] = true
 							sessionStorage.setItem(sessionName + 'creeps', JSON.stringify(creeps))
