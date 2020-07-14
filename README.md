@@ -20,15 +20,13 @@
 ![image](https://user-images.githubusercontent.com/6946045/87278150-a32e1200-c498-11ea-8a32-0431c656adce.png)
 
 ### uBlock Origin Setup:
-1. Select the advanced user icon in Settings
+1. **Inject**: Select the advanced user icon in Settings and add the `.../abf.js` scriplet url to `userResourcesLocation`. Host the file in your own repo for full control and security.
 
 ![image](https://user-images.githubusercontent.com/6946045/87236337-eb680a00-c39c-11ea-8806-cb20e4f55896.png)
 
-2. Add the `.../abf.js` scriplet url to `userResourcesLocation`. Host the file in your own repo for full control and security.
-
 ![image](https://user-images.githubusercontent.com/6946045/87236365-72b57d80-c39d-11ea-9ad9-462ddffa19aa.png)
 
-3. Apply the script globally in My Filters and disable on your preferred domains
+2. **Apply**: add the script to My Filters and disable on your preferred domains
 ```
 ! apply globally
 *##+js(abf)
