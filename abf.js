@@ -446,6 +446,7 @@
 	const firefox = (navigator.userAgent.indexOf('Firefox') != -1)
 	const errorType = listRand(Object.keys(errorStruct))
 	// https://stackoverflow.com/questions/2255689/how-to-get-the-file-path-of-the-currently-executing-javascript-code
+	const unknownSource = '[unknown source]'
 	const getCurrentScript = () => {
 		const jsURL = /(\/.+\.(js|html|htm))/gi
 		const url = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi
@@ -459,7 +460,7 @@
 				new URL(path[0]).origin
 			)
 		} catch (err) {
-			return location.origin
+			return unknownSource
 		}
 	}
 	const warningRank = 14 // total rank that triggers fingerprinting warning
@@ -535,11 +536,12 @@
 					else {
 						sessionStorage.setItem(sessionName + 'permission', 'deny')
 						sessionStorage.setItem(sessionName + 'error', JSON.stringify({ timestamp: +(new Date()), type: errorType, message: randomError }))
-						if (creeps) {
+						const unknown = url == unknownSource
+						if (creeps && !unknown) {
 							creeps[url] = true
 							sessionStorage.setItem(sessionName + 'creeps', JSON.stringify(creeps))
 						}
-						else {
+						else if (!unknown) {
 							sessionStorage.setItem(sessionName + 'creeps', JSON.stringify({ [url]: true }))
 						}
 						const error = abort(errorType, randomError)
