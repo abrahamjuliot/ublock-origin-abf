@@ -454,7 +454,11 @@
 		const jsPath = error.stack.match(jsURL)
 		const path = error.stack.match(url)
 		try {
-			return jsPath ? 'https:' + jsPath[0] : new URL(path[0]).origin
+			return (
+				jsPath ? 'https:' + jsPath[0] :
+				document.currentScript ? document.currentScript.src :
+				new URL(path[0]).origin
+			)
 		} catch (err) {
 			console.log(unknownSource, JSON.stringify(err.stack))
 			return unknownSource
