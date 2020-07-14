@@ -532,7 +532,7 @@
 					+ '🧐\n' + readsFormatted + '\n...' + '\n'
 				)
 				if ((creeps && !creeps[url]) || !sessionPermission) {
-					const permission = confirm(message(true))
+					const permission = confirm(message)
 					if (permission) {
 						sessionStorage.setItem(sessionName + 'permission', 'allow')
 					}
