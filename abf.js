@@ -449,13 +449,13 @@
 	const unknownSource = '[unknown source]'
 	const getCurrentScript = () => {
 		const jsURL = /(\/.+\.(js|html|htm))/gi
+		const url = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi
 		const error = new Error()
-		let path
+		const jsPath = error.stack.match(jsURL)
+		const path = error.stack.match(url)
 		try {
-			path = error.stack.match(jsURL)[0]
-			return 'https:' + path
+			return jsPath ? 'https:' + jsPath[0] : new URL(path[0]).origin
 		} catch (err) {
-			console.log('unknownSource', JSON.stringify(err.stack))
 			return unknownSource
 		}
 	}
