@@ -372,7 +372,7 @@
 		getContext: ['HTMLCanvasElement.prototype.getContext', 1],
 		toDataURL: ['HTMLCanvasElement.prototype.toDataURL', 8],
 		toBlob: ['HTMLCanvasElement.prototype.toBlob', 4],
-		getImageData: ['CanvasRenderingContext2D.prototype.getImageData', 8],
+		getImageData: ['CanvasRenderingContext2D.prototype.getImageData', 4],
 		isPointInPath: ['CanvasRenderingContext2D.prototype.isPointInPath', 1],
 		isPointInStroke: ['CanvasRenderingContext2D.prototype.isPointInStroke', 1],
 		measureText: ['CanvasRenderingContext2D.prototype.measureText', 2],
@@ -456,6 +456,7 @@
 		try {
 			return jsPath ? 'https:' + jsPath[0] : new URL(path[0]).origin
 		} catch (err) {
+			console.log(unknownSource, JSON.stringify(err.stack))
 			return unknownSource
 		}
 	}
