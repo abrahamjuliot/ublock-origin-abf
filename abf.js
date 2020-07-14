@@ -465,6 +465,7 @@
 	}
 	const warningRank = 14 // total rank that triggers fingerprinting warning
 	const scripts = {}
+	const aborts = {}
 	const watch = prop => {
 		const url = getCurrentScript()
 		const propDescription = propAPI[prop][0]
@@ -486,13 +487,15 @@
 			if (secondsPassed > 30) {
 				sessionStorage.setItem(sessionName + 'error', JSON.stringify({ timestamp: +(new Date()), type: errorType, message: randomError }))
 				const error = abort(errorType, randomError)
-				console.log(`Aborting ${propDescription}...`)
+				aborts[propDescription] = true
+				console.log('Aborting...', aborts)
 				throw error
 			}
 			else {
 				const { type, message } = JSON.parse(sessionStorage.getItem(sessionName + 'error'))
 				const error = abort(type, message)
-				console.log(`Aborting ${propDescription}...`)
+				aborts[propDescription] = true
+				console.log('Aborting...', aborts)
 				throw error
 			}
 		}
@@ -522,29 +525,21 @@
 					capturedScript.reads
 				)
 				console.groupEnd()
-				const message = confirm => {
-					return '🤮 Fingerprinting detected!'
-					+(confirm ? ' OK to allow or Cancel to abort\n' : '\n')
+				const message = (
+					'🤮 Fingerprinting detected! OK to allow or Cancel to abort\n'
 					+ '🛡 ' + sessionProtection + '\n'
 					+ '💩 Creepy script: ' + url + '\n'
 					+ '🧐\n' + readsFormatted + '\n...' + '\n'
-				}
+				)
 				if ((creeps && !creeps[url]) || !sessionPermission) {
-					const unknown = url == unknownSource
-					let permission
-					if (unknown) {
-						alert(message(false))
-						permission = true
-					}
-					else {
-						permission = confirm(message(true))
-					}
+					const permission = confirm(message(true))
 					if (permission) {
 						sessionStorage.setItem(sessionName + 'permission', 'allow')
 					}
 					else {
 						sessionStorage.setItem(sessionName + 'permission', 'deny')
 						sessionStorage.setItem(sessionName + 'error', JSON.stringify({ timestamp: +(new Date()), type: errorType, message: randomError }))
+						const unknown = url == unknownSource
 						if (creeps && !unknown) {
 							creeps[url] = true
 							sessionStorage.setItem(sessionName + 'creeps', JSON.stringify(creeps))
@@ -553,7 +548,8 @@
 							sessionStorage.setItem(sessionName + 'creeps', JSON.stringify({ [url]: true }))
 						}
 						const error = abort(errorType, randomError)
-						console.log(`Aborting ${propDescription}...`)
+						aborts[propDescription] = true
+						console.log('Aborting...', aborts)
 						throw error
 					}
 				}
