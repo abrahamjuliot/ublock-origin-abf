@@ -138,8 +138,8 @@
 		return function getParameter(x) {
 			return (
 				webglExtensionComputed === false ? nativeGetParameter.apply(this, arguments) :
-					webglExtensionComputed[x] ? webglExtensionComputed[x] :
-						nativeGetParameter.apply(this, arguments)
+				webglExtensionComputed[x] ? webglExtensionComputed[x] :
+				nativeGetParameter.apply(this, arguments)
 			)
 		}
 	}
@@ -231,9 +231,9 @@
 		}
 		const method = (
 			type == 'rangeRects' ? nativeRangeGetClientRects :
-				type == 'rangeBounding' ? nativeRangeGetBoundingClientRect :
-					type == 'elementRects' ? nativeElementGetClientRects :
-						type == 'elementBounding' ? nativeElementGetBoundingClientRect : ''
+			type == 'rangeBounding' ? nativeRangeGetBoundingClientRect :
+			type == 'elementRects' ? nativeElementGetClientRects :
+			type == 'elementBounding' ? nativeElementGetBoundingClientRect : ''
 		)
 		const domRectify = (client) => {
 			const props = ['bottom', 'height', 'left', 'right', 'top', 'width', 'x', 'y']
@@ -266,7 +266,7 @@
 		}
 		return (
 			type == 'rangeRects' || type == 'elementRects' ? getClientRects :
-				getBoundingClientRect
+			getBoundingClientRect
 		)
 	}
 	// audioData
@@ -455,6 +455,8 @@
 			path = error.stack.match(jsURL)[0]
 			return 'https:' + path
 		} catch (err) {
+			console.log(stack)
+			console.log('unknownSource', JSON.stringify(err.stack))
 			return unknownSource
 		}
 	}
