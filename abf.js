@@ -460,7 +460,6 @@
 				new URL(path[0]).origin
 			)
 		} catch (err) {
-			console.log(unknownSource, JSON.stringify(err.stack))
 			return unknownSource
 		}
 	}
