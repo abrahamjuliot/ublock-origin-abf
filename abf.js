@@ -465,7 +465,6 @@
 	}
 	const warningRank = 14 // total rank that triggers fingerprinting warning
 	const scripts = {}
-	const aborts = {}
 	const watch = prop => {
 		const url = getCurrentScript()
 		const propDescription = propAPI[prop][0]
@@ -487,15 +486,11 @@
 			if (secondsPassed > 30) {
 				sessionStorage.setItem(sessionName + 'error', JSON.stringify({ timestamp: +(new Date()), type: errorType, message: randomError }))
 				const error = abort(errorType, randomError)
-				aborts[propDescription] = true
-				console.log('Aborting...', aborts)
 				throw error
 			}
 			else {
 				const { type, message } = JSON.parse(sessionStorage.getItem(sessionName + 'error'))
 				const error = abort(type, message)
-				aborts[propDescription] = true
-				console.log('Aborting...', aborts)
 				throw error
 			}
 		}
@@ -548,8 +543,6 @@
 							sessionStorage.setItem(sessionName + 'creeps', JSON.stringify({ [url]: true }))
 						}
 						const error = abort(errorType, randomError)
-						aborts[propDescription] = true
-						console.log('Aborting...', aborts)
 						throw error
 					}
 				}
