@@ -463,6 +463,7 @@
 	const scripts = {}
 	const watch = prop => {
 		const url = getCurrentScript()
+		const propDescription = propAPI[prop][0]
 		const sessionPermission = sessionStorage.getItem(sessionName + 'permission')
 		const randomError = listRand(errorStruct[errorType][(firefox ? 'firefox' : 'chrome')])
 		const abort = (errorType, randomError) => {
@@ -481,15 +482,16 @@
 			if (secondsPassed > 30) {
 				sessionStorage.setItem(sessionName + 'error', JSON.stringify({ timestamp: +(new Date()), type: errorType, message: randomError }))
 				const error = abort(errorType, randomError)
+				console.log(`Aborting ${propDescription}...`)
 				throw error
 			}
 			else {
 				const { type, message } = JSON.parse(sessionStorage.getItem(sessionName + 'error'))
 				const error = abort(type, message)
+				console.log(`Aborting ${propDescription}...`)
 				throw error
 			}
 		}
-		const propDescription = propAPI[prop][0]
 		const rank = propAPI[prop][1]
 		const capturedScript = scripts[url]
 		if (!capturedScript) {
@@ -539,6 +541,7 @@
 							sessionStorage.setItem(sessionName + 'creeps', JSON.stringify({ [url]: true }))
 						}
 						const error = abort(errorType, randomError)
+						console.log(`Aborting ${propDescription}...`)
 						throw error
 					}
 				}
