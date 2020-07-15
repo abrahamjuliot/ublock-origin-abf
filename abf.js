@@ -500,18 +500,20 @@
 			// detect 
 			if (!capturedScript.creep && capturedScript.rank >= warningRank) {
 				capturedScript.creep = true
+				const unknown = url == unknownSource
+				const { origin } = location
 				const reads = Object.keys(capturedScript.reads)
 				const readsFormatted = reads.map(prop => prop.replace(/\.prototype/, '')).join('\n')
 				console.groupCollapsed(`Fingerprinting detected!`)
-				console.log(`Creepy script: ${url}`)
 				console.log(
+					`Creepy script: ${!unknown ? url: origin}`,
 					`Detection triggered by ${reads.length} property reads:`,
-					'\n' + readsFormatted,
-					'\n\nAll property reads:\n',
-					capturedScript.reads
+					'\n' + readsFormatted
 				)
+				if (!unknown) {
+					console.log('\n\nAll property reads:\n', capturedScript.reads)
+				}
 				console.groupEnd()
-				const unknown = url == unknownSource
 				const message = (confirmPermission, [url, session, reads]) => {
 					return '🤮 Fingerprinting detected!'
 					+ (confirmPermission ? 'OK to allow or Cancel to abort\n' : '\n')
@@ -522,7 +524,7 @@
 				if ((creeps && !creeps[url]) || !sessionPermission) {
 					let permission = null
 					if (unknown) {
-						alert(message(false, [location.origin, sessionProtection, readsFormatted]))
+						alert(message(false, [origin, sessionProtection, readsFormatted]))
 					}
 					else {
 						permission = confirm(message(true, [url, sessionProtection, readsFormatted]))
