@@ -507,7 +507,7 @@
 				console.groupCollapsed(`Fingerprinting detected!`)
 				console.log(
 					`Creepy script: ${!unknown ? url: origin}`,
-					`Detection triggered by ${reads.length} property reads:`,
+					`\nDetection triggered by ${reads.length} property reads:`,
 					'\n' + readsFormatted
 				)
 				if (!unknown) {
