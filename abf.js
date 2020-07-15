@@ -528,7 +528,7 @@
 						sessionStorage.setItem(sessionName + 'creepyOrigin', true)
 						alert(message(false, [origin, sessionProtection, readsFormatted]))
 					}
-					else {
+					else if (!unknown) {
 						permission = confirm(message(true, [url, sessionProtection, readsFormatted]))
 					} 
 					if (permission) {
