@@ -505,8 +505,8 @@
 				const reads = Object.keys(capturedScript.reads)
 				const readsFormatted = reads.map(prop => prop.replace(/\.prototype/, '')).join('\n')
 				console.groupCollapsed(`Fingerprinting detected!`)
+				console.log(`Creepy script: ${!unknown ? url: origin}`)
 				console.log(
-					`Creepy script: ${!unknown ? url: origin}\n`,
 					`Detection triggered by ${reads.length} property reads:`,
 					'\n' + readsFormatted
 				)
