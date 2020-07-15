@@ -512,20 +512,20 @@
 				)
 				console.groupEnd()
 				const unknown = url == unknownSource
-				const message = confirmPermission => {
+				const message = (confirmPermission, [url, session, reads]) => {
 					return '🤮 Fingerprinting detected!'
 					+ (confirmPermission ? 'OK to allow or Cancel to abort\n' : '\n')
-					+ '🛡 ' + sessionProtection + '\n'
+					+ '🛡 ' + session + '\n'
 					+ '💩 Creepy script: ' + url + '\n'
-					+ '🧐\n' + readsFormatted + '\n...' + '\n'
+					+ '🧐\n' + reads + '\n...' + '\n'
 				}
 				if ((creeps && !creeps[url]) || !sessionPermission) {
 					let permission = null
 					if (unknown) {
-						alert(message(false))
+						alert(message(false, [location.origin, sessionProtection, readsFormatted]))
 					}
 					else {
-						permission = confirm(message(true))
+						permission = confirm(message(true, [url, sessionProtection, readsFormatted]))
 					} 
 					if (permission) {
 						sessionStorage.setItem(sessionName + 'permission', 'allow')
