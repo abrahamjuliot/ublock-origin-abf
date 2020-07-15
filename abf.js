@@ -494,6 +494,7 @@
 				throw error
 			}
 		}
+		// capture script
 		const rank = propAPI[prop][1]
 		const capturedScript = scripts[url]
 		if (!capturedScript) {
@@ -520,21 +521,28 @@
 					capturedScript.reads
 				)
 				console.groupEnd()
-				const message = (
-					'🤮 Fingerprinting detected! OK to allow or Cancel to abort\n'
+				const unknown = url == unknownSource
+				const message = confirmPermission => {
+					return '🤮 Fingerprinting detected!'
+					+ (confirmPermission ? 'OK to allow or Cancel to abort\n' : '\n')
 					+ '🛡 ' + sessionProtection + '\n'
 					+ '💩 Creepy script: ' + url + '\n'
 					+ '🧐\n' + readsFormatted + '\n...' + '\n'
-				)
+				}
 				if ((creeps && !creeps[url]) || !sessionPermission) {
-					const permission = confirm(message)
+					let permission = null
+					if (unknown) {
+						alert(message(false))
+					}
+					else {
+						permission = confirm(message(true))
+					} 
 					if (permission) {
 						sessionStorage.setItem(sessionName + 'permission', 'allow')
 					}
-					else {
+					else if (permission === false) {
 						sessionStorage.setItem(sessionName + 'permission', 'deny')
 						sessionStorage.setItem(sessionName + 'error', JSON.stringify({ timestamp: +(new Date()), type: errorType, message: randomError }))
-						const unknown = url == unknownSource
 						if (creeps && !unknown) {
 							creeps[url] = true
 							sessionStorage.setItem(sessionName + 'creeps', JSON.stringify(creeps))
