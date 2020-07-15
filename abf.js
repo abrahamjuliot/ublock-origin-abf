@@ -523,7 +523,9 @@
 				}
 				if ((creeps && !creeps[url]) || !sessionPermission) {
 					let permission = null
-					if (unknown) {
+					const creepyOrigin = sessionStorage.getItem(sessionName + 'creepyOrigin')
+					if (unknown && !creepyOrigin) {
+						sessionStorage.setItem(sessionName + 'creepyOrigin', true)
 						alert(message(false, [origin, sessionProtection, readsFormatted]))
 					}
 					else {
