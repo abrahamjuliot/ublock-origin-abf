@@ -449,19 +449,9 @@
 	const unknownSource = '[unknown source]'
 	const getCurrentScript = () => {
 		const jsURL = /(\/.+\.(js|html|htm))/gi
-		const url = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi
 		const error = new Error()
 		const jsPath = error.stack.match(jsURL)
-		const path = error.stack.match(url)
-		try {
-			return (
-				jsPath ? 'https:' + jsPath[0] :
-				document.currentScript ? document.currentScript.src :
-				new URL(path[0]).origin
-			)
-		} catch (err) {
-			return unknownSource
-		}
+		return jsPath ? 'https:' + jsPath[0] : unknownSource
 	}
 	const warningRank = 14 // total rank that triggers fingerprinting warning
 	const scripts = {}
