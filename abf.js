@@ -495,27 +495,28 @@
 				reads: { [propDescription]: true }
 			}
 		}
+		// if new prop, add it to already captured script
 		else if (!capturedScript.reads[propDescription]) {
+			capturedScript.reads[propDescription] = true
+			// compute rank increase
 			const { lowRankCounter } = capturedScript
 			if (rank == 1) {
 				capturedScript.lowRankCounter += 1
 			}
-			// compute rank increase
 			capturedScript.rank += (
 				rank == 1 && lowRankCounter >= 8 ? 4 :
 				rank == 1 && lowRankCounter >= 6 ? 3 :
 				rank == 1 && lowRankCounter >= 4 ? 2 :
 				rank
 			)
-			capturedScript.reads[propDescription] = true
-			// detect 
+			// detect fingerprinting
 			if (!capturedScript.creep && capturedScript.rank >= warningRank) {
 				capturedScript.creep = true
 				const unknown = url == unknownSource
 				const { origin } = location
 				const reads = Object.keys(capturedScript.reads)
 				const readsFormatted = reads.map(prop => prop.replace(/\.prototype/, '')).join('\n')
-				console.groupCollapsed(`Fingerprinting detected!`)
+				console.groupCollapsed(`Fingerprinting detected! (rank: ${capturedScript.rank})`)
 				console.log(`Creepy script: ${!unknown ? url: origin}`)
 				console.log(
 					`Detection triggered by ${reads.length} property reads:`,
