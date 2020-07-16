@@ -340,6 +340,7 @@
 		userAgent: ['Navigator.prototype.userAgent', 1],
 		vendor: ['Navigator.prototype.vendor', 1],
 		connection: ['Navigator.prototype.connection', 1],
+		cookieEnabled: ['Navigator.prototype.cookieEnabled', 1],
 		getBattery: ['Navigator.prototype.getBattery', 1],
 		getGamepads: ['Navigator.prototype.getGamepads', 1],
 		width: ['Screen.prototype.width', 1],
@@ -584,6 +585,7 @@
 			mimeTypes: navigator.mimeTypes,
 			plugins: navigator.plugins,
 			connection: navigator.connection,
+			cookieEnabled: navigator.cookieEnabled,
 			getBattery: navigator.getBattery,
 			getGamepads: navigator.getGamepads
 		}
@@ -760,6 +762,7 @@
 			userAgent: 'userAgent',
 			vendor: 'vendor',
 			connection: 'connection',
+			cookieEnabled: 'cookieEnabled',
 			getBattery: 'getBattery',
 			getGamepads: 'getGamepads',
 			width: 'width',
