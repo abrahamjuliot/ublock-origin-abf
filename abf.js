@@ -513,7 +513,6 @@
 			if (!capturedScript.creep && capturedScript.rank >= warningRank) {
 				capturedScript.creep = true
 				const unknown = url == unknownSource
-				const { origin } = location
 				const reads = Object.keys(capturedScript.reads)
 				const readsFormatted = reads.map(prop => prop.replace(/\.prototype/, '')).join('\n')
 				if (!unknown) {
@@ -539,6 +538,7 @@
 					const creepyOrigin = sessionStorage.getItem(sessionName + 'creepyOrigin')
 					if (unknown && !creepyOrigin) {
 						sessionStorage.setItem(sessionName + 'creepyOrigin', true)
+						//const { origin } = location
 						//alert(message(false, [origin, sessionProtection, readsFormatted]))
 					}
 					else if (!unknown) {
