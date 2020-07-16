@@ -516,17 +516,17 @@
 				const { origin } = location
 				const reads = Object.keys(capturedScript.reads)
 				const readsFormatted = reads.map(prop => prop.replace(/\.prototype/, '')).join('\n')
-				console.groupCollapsed(`Fingerprinting detected!`)
-				console.log(`Creepy script: ${!unknown ? url: origin}`)
-				console.log(
-					`Detection triggered by ${reads.length} property reads:`,
-					'\n' + readsFormatted
-				)
 				if (!unknown) {
+					console.groupCollapsed(`Fingerprinting detected!`)
+					console.log(`Creepy script: ${url}`)
+					console.log(
+						`Detection triggered by ${reads.length} property reads:`,
+						'\n' + readsFormatted
+					)
 					console.log('\n\nRank:\n', capturedScript.rank)
 					console.log('\n\nAll property reads:\n', capturedScript.reads)
+					console.groupEnd()
 				}
-				console.groupEnd()
 				const message = (confirmPermission, [url, session, reads]) => {
 					return '🤮 Fingerprinting detected!'
 					+ (confirmPermission ? ' OK to allow or Cancel to abort\n' : '\n')
@@ -539,7 +539,7 @@
 					const creepyOrigin = sessionStorage.getItem(sessionName + 'creepyOrigin')
 					if (unknown && !creepyOrigin) {
 						sessionStorage.setItem(sessionName + 'creepyOrigin', true)
-						alert(message(false, [origin, sessionProtection, readsFormatted]))
+						//alert(message(false, [origin, sessionProtection, readsFormatted]))
 					}
 					else if (!unknown) {
 						permission = confirm(message(true, [url, sessionProtection, readsFormatted]))
