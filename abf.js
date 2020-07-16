@@ -516,13 +516,14 @@
 				const { origin } = location
 				const reads = Object.keys(capturedScript.reads)
 				const readsFormatted = reads.map(prop => prop.replace(/\.prototype/, '')).join('\n')
-				console.groupCollapsed(`Fingerprinting detected! (rank: ${capturedScript.rank})`)
+				console.groupCollapsed(`Fingerprinting detected!`)
 				console.log(`Creepy script: ${!unknown ? url: origin}`)
 				console.log(
 					`Detection triggered by ${reads.length} property reads:`,
 					'\n' + readsFormatted
 				)
 				if (!unknown) {
+					console.log('\n\nRank:\n', capturedScript.rank)
 					console.log('\n\nAll property reads:\n', capturedScript.reads)
 				}
 				console.groupEnd()
