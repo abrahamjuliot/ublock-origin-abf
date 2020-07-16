@@ -329,14 +329,14 @@
 	// Property API and Fingerprint Rank
 	const propAPI = {
 		appVersion: ['Navigator.prototype.appVersion', 1],
-		deviceMemory: ['Navigator.prototype.deviceMemory', 1],
+		deviceMemory: ['Navigator.prototype.deviceMemory', 3],
 		doNotTrack: ['Navigator.prototype.doNotTrack', 1],
-		hardwareConcurrency: ['Navigator.prototype.hardwareConcurrency', 1],
+		hardwareConcurrency: ['Navigator.prototype.hardwareConcurrency', 3],
 		languages: ['Navigator.prototype.languages', 1],
 		maxTouchPoints: ['Navigator.prototype.maxTouchPoints', 1],
-		mimeTypes: ['Navigator.prototype.mimeTypes', 3],
+		mimeTypes: ['Navigator.prototype.mimeTypes', 6],
 		platform: ['Navigator.prototype.platform', 1],
-		plugins: ['Navigator.prototype.plugins', 3],
+		plugins: ['Navigator.prototype.plugins', 6],
 		userAgent: ['Navigator.prototype.userAgent', 1],
 		vendor: ['Navigator.prototype.vendor', 1],
 		connection: ['Navigator.prototype.connection', 1],
