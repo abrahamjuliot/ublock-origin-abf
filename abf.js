@@ -372,7 +372,7 @@
 		getContext: ['HTMLCanvasElement.prototype.getContext', 1],
 		toDataURL: ['HTMLCanvasElement.prototype.toDataURL', 6],
 		toBlob: ['HTMLCanvasElement.prototype.toBlob', 4],
-		getImageData: ['CanvasRenderingContext2D.prototype.getImageData', 4],
+		getImageData: ['CanvasRenderingContext2D.prototype.getImageData', 2],
 		isPointInPath: ['CanvasRenderingContext2D.prototype.isPointInPath', 1],
 		isPointInStroke: ['CanvasRenderingContext2D.prototype.isPointInStroke', 1],
 		measureText: ['CanvasRenderingContext2D.prototype.measureText', 2],
