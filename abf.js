@@ -499,7 +499,7 @@
 			capturedScript.reads[propDescription] = true
 			// compute rank increase
 			const { reads } = capturedScript
-			const readsLen = reads.length
+			const readsLen = Object.keys(reads).length
 			capturedScript.rank += (
 				rank == 1 && readsLen >= 8 ? 4 :
 				rank == 1 && readsLen >= 6 ? 3 :
