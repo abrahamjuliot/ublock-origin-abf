@@ -491,11 +491,22 @@
 			scripts[url] = {
 				creep: false,
 				rank,
+				lowRankCounter: rank == 1 ? 1 : 0,
 				reads: { [propDescription]: true }
 			}
 		}
 		else if (!capturedScript.reads[propDescription]) {
-			capturedScript.rank += rank
+			const { lowRankCounter } = capturedScript
+			if (rank == 1) {
+				capturedScript.lowRankCounter += 1
+			}
+			// compute rank increase
+			capturedScript.rank += (
+				rank == 1 && lowRankCounter >= 8 ? 4 :
+				rank == 1 && lowRankCounter >= 6 ? 3 :
+				rank == 1 && lowRankCounter >= 4 ? 2 :
+				rank
+			)
 			capturedScript.reads[propDescription] = true
 			// detect 
 			if (!capturedScript.creep && capturedScript.rank >= warningRank) {
