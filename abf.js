@@ -362,7 +362,7 @@
 		enumerateDevices: ['navigator.mediaDevices.enumerateDevices', 1],
 		now: ['Performance.prototype.now', 1],
 		getBoundingClientRect: ['prototype.getBoundingClientRect', 1],
-		getClientRects: ['prototype.getClientRects', 4],
+		getClientRects: ['prototype.getClientRects', 3],
 		offsetWidth: ['HTMLElement.prototype.offsetWidth', 1],
 		offsetHeight: ['HTMLElement.prototype.offsetHeight', 1],
 		shaderSource: ['WebGLRenderingContext.prototype.shaderSource', 4],
@@ -372,7 +372,7 @@
 		getContext: ['HTMLCanvasElement.prototype.getContext', 1],
 		toDataURL: ['HTMLCanvasElement.prototype.toDataURL', 6],
 		toBlob: ['HTMLCanvasElement.prototype.toBlob', 4],
-		getImageData: ['CanvasRenderingContext2D.prototype.getImageData', 2],
+		getImageData: ['CanvasRenderingContext2D.prototype.getImageData', 1],
 		isPointInPath: ['CanvasRenderingContext2D.prototype.isPointInPath', 1],
 		isPointInStroke: ['CanvasRenderingContext2D.prototype.isPointInStroke', 1],
 		measureText: ['CanvasRenderingContext2D.prototype.measureText', 2],
@@ -453,7 +453,7 @@
 		const jsPath = error.stack.match(jsURL)
 		return jsPath ? 'https:' + jsPath[0] : unknownSource
 	}
-	const warningRank = 14 // total rank that triggers fingerprinting warning
+	const warningRank = 16 // total rank that triggers fingerprinting warning
 	const scripts = {}
 	const watch = prop => {
 		const url = getCurrentScript()
