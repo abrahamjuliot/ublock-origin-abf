@@ -491,7 +491,6 @@
 			scripts[url] = {
 				creep: false,
 				rank,
-				lowRankCounter: rank == 1 ? 1 : 0,
 				reads: { [propDescription]: true }
 			}
 		}
@@ -499,14 +498,12 @@
 		else if (!capturedScript.reads[propDescription]) {
 			capturedScript.reads[propDescription] = true
 			// compute rank increase
-			const { lowRankCounter } = capturedScript
-			if (rank == 1) {
-				capturedScript.lowRankCounter += 1
-			}
+			const { reads } = capturedScript
+			const readsLen = reads.length
 			capturedScript.rank += (
-				rank == 1 && lowRankCounter >= 8 ? 4 :
-				rank == 1 && lowRankCounter >= 6 ? 3 :
-				rank == 1 && lowRankCounter >= 4 ? 2 :
+				rank == 1 && readsLen >= 8 ? 4 :
+				rank == 1 && readsLen >= 6 ? 3 :
+				rank == 1 && readsLen >= 4 ? 2 :
 				rank
 			)
 			// detect fingerprinting
