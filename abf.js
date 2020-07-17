@@ -74,12 +74,25 @@
 			const strokeStyle = randomRGBA()
 			const font = randomFont()
 			const clearColor = [...Array(4)].map(() => Math.random().toFixed(1))
+			const randomChar = () => {
+				const capitalize = Math.random() < 0.5
+				const str = String.fromCharCode(97 + Math.floor(Math.random() * 26))
+				return capitalize ? str.toUpperCase() : str
+			}
+			const randomChars = [
+				randomChar(),
+				randomChar(),
+				randomChar(),
+				randomChar(),
+				randomChar(),
+			]
 			return {
 				fillStyle,
 				shadowColor,
 				strokeStyle,
 				font,
-				clearColor
+				clearColor,
+				randomChars
 			}
 		}
 		const canvasContextComputed = canvas()
@@ -176,6 +189,22 @@
 		}
 		return context
 	}
+	function randomizeWebgl(dataURI) {
+		const chunks = dataURI.split('+')
+		const lastChunk = chunks[chunks.length-1]
+		const [rand1, rand2, rand3, rand4, rand5] = canvasContextComputed.randomChars
+		const chunkRandomized = lastChunk.replace(/./g, (char, i) => {
+			return (
+				i == lastChunk.length-1 ? rand1 : 
+				i == lastChunk.length-3 ? rand2 :
+				i == lastChunk.length-5 ? rand3 :
+				i == lastChunk.length-7 ? rand4 :
+				i == lastChunk.length-9 ? rand5 :
+				char
+			)
+		})
+		return chunks.splice((chunks.length-1), 1, chunkRandomized).join('+')
+	}
 	function toDataURL() {
 		if (this._contextType == '2d') {
 			const context = nativeGetContext.apply(this, ['2d'])
@@ -183,8 +212,8 @@
 			return nativeToDataURL.apply(this, arguments)
 		}
 		else if (this._contextType == 'webgl' || this._contextType == 'webgl2') {
-			randomizeContextWebgl(this)
-			return nativeToDataURL.apply(this, arguments)
+			const dataURI = nativeToDataURL.apply(this, arguments)
+			return randomizeWebgl(dataURI)
 		}
 		return nativeToDataURL.apply(this, arguments)
 	}
