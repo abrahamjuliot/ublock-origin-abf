@@ -453,7 +453,6 @@
 	const watch = prop => {
 		const url = getCurrentScript()
 		const propDescription = propAPI[prop][0]
-		const sessionPermission = sessionStorage.getItem(sessionName + 'permit')
 		const randomError = listRand(errorStruct[errorType][(firefox ? 'firefox' : 'chrome')])
 		const abort = (errorType, randomError) => {
 			return (
@@ -464,6 +463,7 @@
 			)
 		}
 		// abort creepy url if permission denied
+		const sessionPermission = sessionStorage.getItem(sessionName + 'permit')
 		const creeps = JSON.parse(sessionStorage.getItem(sessionName + 'creeps'))
 		if (sessionPermission === false && creeps && creeps[url]) {
 			const { timestamp } = JSON.parse(sessionStorage.getItem(sessionName + 'error'))
