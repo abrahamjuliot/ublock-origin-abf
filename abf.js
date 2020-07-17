@@ -633,7 +633,9 @@
 		proto: true,
 		struct: {
 			getBoundingClientRect: randomClient('elementBounding'),
-			getClientRects: randomClient('elementRects')
+			getClientRects: randomClient('elementRects'),
+			offsetWidth: HTMLElement.prototype.offsetWidth,
+			offsetHeight: HTMLElement.prototype.offsetHeight
 		}
 	},
 	{
@@ -642,14 +644,6 @@
 		struct: {
 			getBoundingClientRect: randomClient('rangeBounding'),
 			getClientRects: randomClient('rangeRects')
-		}
-	},
-	{
-		name: 'HTMLElement',
-		proto: true,
-		struct: {
-			offsetWidth: HTMLElement.prototype.offsetWidth,
-			offsetHeight: HTMLElement.prototype.offsetHeight
 		}
 	},
 	{
