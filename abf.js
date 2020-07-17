@@ -465,8 +465,8 @@
 		// abort creepy url if permission denied
 		const sessionPermission = sessionStorage.getItem(sessionName + 'permit')
 		const creeps = JSON.parse(sessionStorage.getItem(sessionName + 'creeps'))
-		console.log(sessionPermission)
 		if (sessionPermission === false && creeps && creeps[url]) {
+			console.log('aborting...')
 			const { timestamp } = JSON.parse(sessionStorage.getItem(sessionName + 'error'))
 			const secondsPassed = (new Date() - timestamp) / 1000
 			if (secondsPassed > 30) {
