@@ -457,7 +457,7 @@
 	const watch = prop => {
 		const url = getCurrentScript()
 		const propDescription = propAPI[prop][0]
-		const sessionPermission = sessionStorage.getItem(sessionName + 'permission')
+		const sessionPermission = sessionStorage.getItem(sessionName + 'permit')
 		const randomError = listRand(errorStruct[errorType][(firefox ? 'firefox' : 'chrome')])
 		const abort = (errorType, randomError) => {
 			return (
@@ -469,7 +469,7 @@
 		}
 		// abort creepy url if permission denied
 		const creeps = JSON.parse(sessionStorage.getItem(sessionName + 'creeps'))
-		if (sessionPermission == 'deny' && creeps && creeps[url]) {
+		if (sessionPermission == false && creeps && creeps[url]) {
 			const { timestamp } = JSON.parse(sessionStorage.getItem(sessionName + 'error'))
 			const secondsPassed = (new Date() - timestamp) / 1000
 			if (secondsPassed > 30) {
@@ -528,7 +528,7 @@
 					+ '💩 Creepy script: ' + url + '\n'
 					+ '🧐\n' + reads + '\n...' + '\n'
 				}
-				if ((creeps && !creeps[url]) || !sessionPermission) {
+				if ((creeps && !creeps[url]) || sessionPermission == null) {
 					let permission = null
 					const creepyOrigin = sessionStorage.getItem(sessionName + 'creepyOrigin')
 					if (unknown && !creepyOrigin) {
@@ -540,10 +540,10 @@
 						permission = confirm(message(true, [url, sessionProtection, readsFormatted]))
 					} 
 					if (permission) {
-						sessionStorage.setItem(sessionName + 'permission', 'allow')
+						sessionStorage.setItem(sessionName + 'permit', true)
 					}
 					else if (permission === false) {
-						sessionStorage.setItem(sessionName + 'permission', 'deny')
+						sessionStorage.setItem(sessionName + 'permit', false)
 						sessionStorage.setItem(sessionName + 'error', JSON.stringify({ timestamp: +(new Date()), type: errorType, message: randomError }))
 						if (creeps && !unknown) {
 							creeps[url] = true
