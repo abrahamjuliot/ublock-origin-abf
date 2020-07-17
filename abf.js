@@ -633,9 +633,7 @@
 		proto: true,
 		struct: {
 			getBoundingClientRect: randomClient('elementBounding'),
-			getClientRects: randomClient('elementRects'),
-			offsetWidth: HTMLElement.prototype.offsetWidth,
-			offsetHeight: HTMLElement.prototype.offsetHeight
+			getClientRects: randomClient('elementRects')
 		}
 	},
 	{
