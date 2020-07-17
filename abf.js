@@ -194,12 +194,13 @@
 		const lastChunk = chunks[chunks.length-1]
 		const [rand1, rand2, rand3, rand4, rand5] = canvasContextComputed.randomChars
 		const chunkRandomized = lastChunk.replace(/./g, (char, i) => {
+			const len = lastChunk.length
 			return (
-				i == lastChunk.length-1 ? rand1 : 
-				i == lastChunk.length-3 ? rand2 :
-				i == lastChunk.length-5 ? rand3 :
-				i == lastChunk.length-7 ? rand4 :
-				i == lastChunk.length-9 ? rand5 :
+				i == len-1 ? rand1 : 
+				i == len-3 ? rand2 :
+				i == len-5 ? rand3 :
+				i == len-7 ? rand4 :
+				i == len-9 ? rand5 :
 				char
 			)
 		})
