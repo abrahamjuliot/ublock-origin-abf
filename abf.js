@@ -465,8 +465,7 @@
 		// abort creepy url if permission denied
 		const sessionPermission = sessionStorage.getItem(sessionName + 'permit')
 		const creeps = JSON.parse(sessionStorage.getItem(sessionName + 'creeps'))
-		if (sessionPermission === false && creeps && creeps[url]) {
-			console.log('aborting...')
+		if (sessionPermission == 'deny' && creeps && creeps[url]) {
 			const { timestamp } = JSON.parse(sessionStorage.getItem(sessionName + 'error'))
 			const secondsPassed = (new Date() - timestamp) / 1000
 			if (secondsPassed > 30) {
@@ -525,7 +524,7 @@
 					+ '💩 Creepy script: ' + url + '\n'
 					+ '🧐\n' + reads + '\n...' + '\n'
 				}
-				if ((creeps && !creeps[url]) || sessionPermission === null) {
+				if ((creeps && !creeps[url]) || !sessionPermission) {
 					let permission = null
 					const creepyOrigin = sessionStorage.getItem(sessionName + 'creepyOrigin')
 					if (unknown && !creepyOrigin) {
@@ -537,10 +536,10 @@
 						permission = confirm(message(true, [url, sessionProtection, readsFormatted]))
 					} 
 					if (permission) {
-						sessionStorage.setItem(sessionName + 'permit', true)
+						sessionStorage.setItem(sessionName + 'permit', 'allow')
 					}
 					else if (permission === false) {
-						sessionStorage.setItem(sessionName + 'permit', false)
+						sessionStorage.setItem(sessionName + 'permit', 'deny')
 						sessionStorage.setItem(sessionName + 'error', JSON.stringify({ timestamp: +(new Date()), type: errorType, message: randomError }))
 						if (creeps && !unknown) {
 							creeps[url] = true
