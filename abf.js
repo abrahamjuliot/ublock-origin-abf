@@ -645,6 +645,14 @@
 		}
 	},
 	{
+		name: 'HTMLElement',
+		proto: true,
+		struct: {
+			offsetWidth: HTMLElement.prototype.offsetWidth,
+			offsetHeight: HTMLElement.prototype.offsetHeight
+		}
+	},
+	{
 		name: 'WebGLRenderingContext',
 		proto: true,
 		struct: {
