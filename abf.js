@@ -203,7 +203,8 @@
 				char
 			)
 		})
-		return chunks.splice((chunks.length-1), 1, chunkRandomized).join('+')
+		chunks.splice(-1, 1, chunkRandomized)
+		return chunks.join('+')
 	}
 	function toDataURL() {
 		if (this._contextType == '2d') {
