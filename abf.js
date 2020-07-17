@@ -520,8 +520,7 @@
 						`Detection triggered by ${reads.length} property reads:`,
 						'\n' + readsFormatted
 					)
-					console.log('\n\nRank:\n', capturedScript.rank)
-					console.log('\n\nAll property reads:\n', capturedScript.reads)
+					console.log('\n\nScript Data:\n', capturedScript)
 					console.groupEnd()
 				}
 				const message = (confirmPermission, [url, session, reads]) => {
