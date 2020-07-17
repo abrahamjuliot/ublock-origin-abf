@@ -144,7 +144,6 @@
 		}
 	}
 	// canvas
-	const canvasProto = HTMLCanvasElement.prototype
 	const nativeGetContext = HTMLCanvasElement.prototype.getContext
 	const nativeToDataURL = HTMLCanvasElement.prototype.toDataURL
 	const nativeToBlob = HTMLCanvasElement.prototype.toBlob
