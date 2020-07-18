@@ -497,6 +497,7 @@
 		const sessionPermission = sessionStorage.getItem(sessionName + 'permit')
 		const creeps = JSON.parse(sessionStorage.getItem(sessionName + 'creeps'))
 		if (sessionPermission == 'deny' && creeps && creeps[url]) {
+			console.log('aborting '+propDescription)
 			const { timestamp } = JSON.parse(sessionStorage.getItem(sessionName + 'error'))
 			const secondsPassed = (new Date() - timestamp) / 1000
 			if (secondsPassed > 30) {
