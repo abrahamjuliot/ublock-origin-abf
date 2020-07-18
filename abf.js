@@ -599,6 +599,7 @@
 		proto: true,
 		struct: {
 			platform: navigator.platform,
+			vendor: navigator.vendor,
 			appVersion: navigator.appVersion,
 			userAgent: navigator.userAgent,
 			maxTouchPoints: navigator.maxTouchPoints,
