@@ -737,13 +737,14 @@
 	function definify(struct) {
 		const redefinedProps = {}
 		Object.keys(struct).forEach(prop => {
+			const firefox = (navigator.userAgent.indexOf('Firefox') != -1)
 			const fn = () => {
 				watch(prop)
 				return struct[prop]
 			}
 			Object.defineProperties(fn, {
 				name: {
-					value: 'get ' + prop,
+					value: `${!firefox ? 'get ' : ''}${prop}`,
 					configurable: true
 				}
 			})
