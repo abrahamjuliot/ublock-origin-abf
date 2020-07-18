@@ -829,19 +829,20 @@
 			createOffer: 'createOffer',
 			setRemoteDescription: 'setRemoteDescription',
 		}
-		// create Chrome Proxy
+		// create Proxy
 		const {
 			toString
 		} = Function.prototype
 		const toStringProxy = new Proxy(toString, {
 			apply: (target, thisArg, args) => {
+				const firefox = (navigator.userAgent.indexOf('Firefox') != -1)
 				const name = thisArg.name
 				const propName = name.replace('get ', '')
 				if (thisArg === toString.toString) {
-					return 'function toString() { [native code] }'
+					return `function toString() {${!firefox ? ' [native code] ' : '\n    [native code]\n'}}`
 				}
 				if (propName === library[propName]) {
-					return 'function ' + name + '() { [native code] }'
+					return `function ${name}() {${!firefox ? ' [native code] ' : '\n    [native code]\n'}}`
 				}
 				return target.call(thisArg, ...args)
 			}
