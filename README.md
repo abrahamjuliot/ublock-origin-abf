@@ -44,7 +44,7 @@ google.com, youtube.com#@#+js(abf)
 
 ### Broswer support
 - [X]  Chromium
-- [ ]  Firefox
+- [X]  Firefox
 - [ ]  Chromium Android
 - [ ]  Firefox Android
 
