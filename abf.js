@@ -739,7 +739,6 @@
 	function definify(struct) {
 		const redefinedProps = {}
 		Object.keys(struct).forEach(prop => {
-			const firefox = (navigator.userAgent.indexOf('Firefox') != -1)
 			const fn = () => {
 				watch(prop)
 				return struct[prop]
@@ -839,7 +838,6 @@
 		const toStringProxy = new Proxy(toString, {
 			apply: (target, thisArg, args) => {
 				const native = name => {
-					const firefox = (navigator.userAgent.indexOf('Firefox') != -1)
 					return `function ${name}() {${!firefox ? ' [native code] ' : '\n    [native code]\n'}}`
 				}
 				const name = thisArg.name
