@@ -32,7 +32,8 @@
 *##+js(abf)
 
 ! except on these domains
-google.com, youtube.com#@#+js(abf)
+youtube.com#@#+js(abf)
+google.com#@#+js(abf)
 ```
 
 ### uBlock Origin Guides:
@@ -46,7 +47,7 @@ google.com, youtube.com#@#+js(abf)
 - [X]  Chromium
 - [X]  Firefox
 - [ ]  Chromium Android
-- [ ]  Firefox Android
+- [X]  Firefox Android
 
 ### Test site
 [https://creepjs-live.abrahamjuliot.repl.co](https://creepjs-live.abrahamjuliot.repl.co)
