@@ -50,4 +50,4 @@ google.com#@#+js(abf)
 - [X]  Firefox Android
 
 ### Test site
-[https://creepjs-live.abrahamjuliot.repl.co](https://creepjs-live.abrahamjuliot.repl.co)
+[https://abrahamjuliot.github.io/creepjs](https://abrahamjuliot.github.io/creepjs)
