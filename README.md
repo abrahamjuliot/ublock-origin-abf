@@ -43,7 +43,7 @@ google.com#@#+js(abf)
 - If you use scripts in this repo, I recommend self-hosting (via github) to ensure you have full control
 - Feel free to copy, rewrite, make this your own, do as you wish, etc.
 
-### Broswer support
+### Browser support
 - [X]  Chromium
 - [X]  Firefox
 - [ ]  Chromium Android
